@@ -1,10 +1,15 @@
 import { CART_KEY_LIST, CART_VALUE_LIST } from "./const.js";
 import { chageNumberToLocaleString } from "../utils/index.js";
 
-// 장바구니 데이터 API 통신
-// renderCarts에 async 부여하고, 여기서는 cartData를 null로 한 뒤에
-// renderCarts 내에서 await fetch로 할당하는 것도 괜찮을듯.
-// let cartData = await fetch("url");
+// let cartData = null;
+
+/**
+ * 로그인한 유저의 장바구니 데이터를 얻기 위한 API 통신 함수
+ */
+async function getCartData() {
+  // 장바구니 데이터 API 통신
+  // cartData = await fetch("url");
+}
 
 let cartData = [
   {
@@ -41,6 +46,11 @@ let cartData = [
   },
 ];
 
+// 생각해보니까 비회원 유저도 장바구니를 쓸 수 있잖아?
+// localStorage에 담겨져 있는 장바구니에 대해서 프론트 팀과 논의 필요
+// renderCarts()에서 로그인/비로그인 분기 처리 필요
+// 로그인은 fetch로 데이터 가져오고, 비로그인은 localStorage에서 데이터 가져오고
+
 /**
  * 로그인 유저의 장바구니 데이터를 받아와서 렌더링하는 함수
  */
@@ -49,6 +59,14 @@ async function renderCarts() {
 
   // 리렌더링이 트리거된 경우 자식 노드를 모두 삭제하고 새로운 데이터로 다시 렌더링.
   cartsDiv.replaceChildren();
+
+  // 로그인/비로그인 분기 처리를 통한 장바구니 데이터 할당
+  // const isLoggedIn = false;
+  // if (isLoggedIn) {
+  //   getCartData();
+  // } else {
+  //   cartData = localStorage.getItem("cartData");
+  // }
 
   for (let i = 0; i < cartData.length; i++) {
     const cartDiv = document.createElement("div");
