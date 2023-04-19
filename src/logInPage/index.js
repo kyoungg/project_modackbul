@@ -4,7 +4,7 @@ const loginBtn = document.querySelector("#loginBtn");
 const nonmemberBtn = document.querySelector("#nonmemberBtn");
 
 // 로그인버튼 이벤트
-loginBtn.addEventListener("click", loginSubmit);
+loginBtn.addEventListener("click", loginSubmit); 
 
 async function loginSubmit(e) {
     // preventDefault 안 하면 새로고침됨.
@@ -51,6 +51,6 @@ async function loginSubmit(e) {
   }
 
   //취소버튼 이벤트
-  loginBtn.addEventListener("click", ()=>{
+  nonmemberBtn.addEventListener("click", ()=>{
     window.location.href = '/adminMypage';
   });
