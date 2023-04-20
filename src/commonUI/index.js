@@ -1,6 +1,6 @@
 // 회원가입, 회원 정보 수정 폼
 export function userForm() {
-  const field = `<class="userInfo">
+  const field = `
   <div class="field">
   <label class="label" for="emailInput">이메일</label>
   <input class="input" id="emailInput" type="text" />
