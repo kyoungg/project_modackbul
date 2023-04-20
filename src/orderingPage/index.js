@@ -37,7 +37,7 @@ function renderOrder() {
   summaryDiv.appendChild(ul);
 
   // 로그인 여부에 따라 getUserData를 할지 말지 분기 처리
-  const isLoggedIn = false; // 목업 로그인
+  const isLoggedIn = true; // 목업 로그인
   if (isLoggedIn) {
     // 로그인 유저의 경우 DB에서 가져온 유저 데이터를 보여주고, 해당 데이터들의 input 태그는 disabled 처리
     // 휴대폰 번호와 주소의 경우, 회원가입 시 등록하지 않는다.
@@ -87,14 +87,6 @@ function getUserData() {
   const { email, id, phoneNumber, name } = data;
 
   return { email, id, phoneNumber, name };
-}
-
-const cancelBtn = document.getElementsByClassName("cancel_btn")[0];
-
-cancelBtn.addEventListener("click", cancelHandler);
-
-function cancelHandler() {
-  // 뒤로 이동?
 }
 
 const orderBtn = document.getElementsByClassName("order_btn")[0];
@@ -149,7 +141,7 @@ function orderHandler() {
   // });
 
   // 주문 완료 페이지로 이동
-  window.location.href = "orderedPage.html";
+  // window.location.href = "orderedPage.html";
 }
 
 /**
@@ -165,6 +157,8 @@ function createDateYYMMDD() {
   return `${year}${month}${day}`;
 }
 
+// 그런데 이렇게 하면 이 페이지를 새로 들어올 때마다 num이 1이 되지 않나?
+// 24시간 체크 함수가 의미가 없잖아....
 let num = 1;
 
 /**
@@ -211,6 +205,14 @@ function createOrderNumber() {
   const THREE_DIGIT_NUM = createThreeDigitNumber();
 
   return `${YYMMDD}${THREE_DIGIT_NUM}`;
+}
+
+const cancelBtn = document.getElementsByClassName("cancel_btn")[0];
+
+cancelBtn.addEventListener("click", cancelHandler);
+
+function cancelHandler() {
+  // 뒤로 이동?
 }
 
 renderOrder();
