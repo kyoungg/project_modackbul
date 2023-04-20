@@ -25,28 +25,32 @@ const data = [
 function getProduct() {
   const productData = data[0];
 
+  // 수량 바뀔 때 마다 가격 변동
+  function updateTotalPrice() {
+    const count = qty.value;
+    totalPrice.innerHTML = `${(productData.price * count).toLocaleString()}원`;
+  }
+
   productImg.src = productData.imageUrl;
   productSeller.innerHTML = productData.seller;
   productName.innerHTML = productData.name;
   productDesc.innerHTML = productData.desc;
-  productPrice.innerHTML = `${productData.price}원`;
-  totalPrice.innerHTML = `${productData.price}원`;
+  productPrice.innerHTML = `${productData.price.toLocaleString()}원`;
+  totalPrice.innerHTML = `${productData.price.toLocaleString()}원`;
 
-  // 수량 바뀔 때 마다 가격 변동
-  qty.addEventListener("change", () => {
-    const count = qty.value;
-    totalPrice.innerHTML = `${productData.price * count}원`;
-  });
+  qty.addEventListener("input", updateTotalPrice);
 }
 
 getProduct();
 
 // 로컬 스토리지에 장바구니 데이터 넣기?
 function addCart() {
-  const quantity = qty.value;
-  let cart = { ...data, quantity };
+  const quantity = Number(qty.value);
+  let cart = { ...data[0], quantity };
+
   localStorage.setItem("cartData", JSON.stringify(cart));
   alert("상품을 장바구니에 담았습니다.");
+  console.log(localStorage);
 }
 
 // 장바구니 버튼 클릭
@@ -54,8 +58,8 @@ cartBtn.addEventListener("click", addCart);
 
 // 구매하기
 buyBtn.addEventListener("click", () => {
-  const quantity = qty.value;
-  let cart = { ...data, quantity };
+  const quantity = Number(qty.value);
+  let cart = { ...data[0], quantity };
   localStorage.setItem("cartData", JSON.stringify(cart));
 
   // 구매 페이지 이동
