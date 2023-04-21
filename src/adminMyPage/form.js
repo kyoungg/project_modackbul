@@ -2,7 +2,6 @@ export function productForm() {
     const field =
     `<div class="addproduct-form-container">
         <form id="productForm">
-            <h3>상품 수정 페이지</h3>
             <div>
                 <label for="nameInput">상품이름</label>
                 <div>
