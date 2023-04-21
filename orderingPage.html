@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="./style/reset.css" />
+    <title>🏕️모닥불</title>
+  </head>
+  <body>
+    <h1>주문 진행</h1>
+
+    <div class="order_summary"></div>
+
+    <form>
+      <label for="email_input">이메일</label>
+      <input
+        type="email"
+        placeholder="이메일을 입력해주세요."
+        id="email_input"
+        required
+      />
+
+      <label for="name_input">이름</label>
+      <input
+        type="text"
+        placeholder="이름을 입력해주세요."
+        id="name_input"
+        required
+      />
+
+      <label for="phone_input">휴대전화</label>
+      <input
+        type="text"
+        placeholder="휴대전화 번호를 입력해주세요.(- 없이)"
+        id="phone_input"
+        required
+      />
+
+      <label for="address_input">주소</label>
+      <input
+        type="text"
+        placeholder="주소를 입력해주세요."
+        id="address_input"
+        required
+      />
+
+      <button type="button" class="order_btn">주문하기</button>
+      <button type="button" class="cancel_btn">취소하기</button>
+    </form>
+
+    <script src="./src/orderingPage/index.js" type="module"></script>
+  </body>
+</html>
