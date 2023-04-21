@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="./style/reset.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="./style/loginPage/index.css"
+    />
+    <title>🏕️모닥불</title>
+  </head>
+
+  <body>
+    <div class="login-container">
+        <h3>WELCOME</h3>
+          <div>
+            <label for="emailInput">Email</label>
+            <div>
+              <input
+                type="email"
+                id="emailInput"
+                class="form_input member"
+                placeholder="modak@gmail.com"
+                >
+            </div>
+          </div>
+          <div>
+            <label for="passwordInput">password</label>
+            <div>
+              <input
+                type="password"
+                id="passwordInput"
+                class="form_input member"
+                placeholder="******"
+                >
+            </div>
+          </div>
+        <div><button id="loginBtn" type="submit">Login</div>
+    </div>
+    <div><button id="nonmemberBtn" type="button">비회원 주문조회</div>
+    <script src="./src/loginPage/index.js" type="module"></script>
+  </body>
+</html>
