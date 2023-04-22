@@ -7,12 +7,14 @@ insertProductElement()
 
 const editBtn = document.querySelector("#editBtn")
 const deletBtn = document.querySelector("#deletBtn")
+const addproductBtn = document.querySelector("#addproductBtn")
 
 //해당 상품의 수정 페이지로 이동 -> 상품 name을 넘겨줘야함
 //버튼들 중에서, 특정 버튼을 어떻게 구분하지 -> name으로 구분해야지
 //근데 그 name을 버튼에 어떻게 할당하지..
 //for문을 돌려서 "#deledBtn-${name}" 이런식으로 만들어야 하나..?
-editBtn.addEventListener("click", () => {window.location.href = "admin-editPage.html";});
+editBtn.addEventListener("click", () => {window.location.href = "admin-editProductPage.html";});
+addproductBtn.addEventListener("click", () => {window.location.href = "admin-addProuctPage.html";});
 deletBtn.addEventListener("click", deleteProduct)
 
 function insertProductElement() {
