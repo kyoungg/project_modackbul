@@ -1,7 +1,5 @@
-//Btn clik 이벤트가 하나의 머튼에만 적용되고 있습니다..
-//이벤트 위임 옵션 확인하고 적용시켜봅시다.
-
-const oderList = document.querySelector('#oderList-container')
+const orderBox = document.querySelector('.orderBox')
+const orderList = document.querySelector("#oderList-container")
 
 // 데이터를 받아 요소를 만든 후, html에 삽입
 insertOderElement()
@@ -13,8 +11,18 @@ const orderCancelBtn = document.querySelector("#orderCancelBtn")
 //버튼들 중에서, 특정 버튼을 어떻게 구분하지 -> name으로 구분해야지
 //근데 그 name을 버튼에 어떻게 할당하지..
 //for문을 돌려서 "#deledBtn-${name}" 이런식으로 만들어야 하나..?
-editStatusBtn.addEventListener("click", () => {window.location.href = "admin-editPage.html";})
-orderCancelBtn.addEventListener("click", deleteOrder)
+
+const ActionFunctions = {
+  save: () => window.location.href = "admin-editPage.html",
+  cancel: () => { deleteOrder() },
+}
+
+orderList.addEventListener('click', e => {
+  const action = e.target.dataset.action
+  if (action) {
+    ActionFunctions[action]()
+  }
+})
 
 function insertOderElement() {
   // const res = await fetch(`/api/products`) //GET요청으로 사용
@@ -48,13 +56,13 @@ function insertOderElement() {
   const status = orderData.orderStatus
 
   //요소 만들기
-  oderList.insertAdjacentHTML('beforeend',`
+  orderList.insertAdjacentHTML('beforeend',`
     <h3 class="orderNumber">${orderNumber}</h3>
     <div class="orderid">${id}</div>
     <div class="totalprice">${totalprice}</div>
     <div class="orderStatus">${status}</div>
-    <div id="editStatusBtn"><button type="button">등록</div>
-    <div id="orderCancelBtn"><button type="button">주문취소</div>
+    <button type="button" data-action="save">등록</div>
+    <button type="button" data-action="cancel">주문취소</div>
   `)
   }
 }
