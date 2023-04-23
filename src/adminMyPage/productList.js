@@ -1,4 +1,5 @@
-//Btn clik 이벤트가 하나의 머튼에만 적용되고 있습니다..
+const productBox = document.querySelector(".productBox")
+const productList = document.querySelector("#productList-container")
 
 const productcontainer = document.querySelector('#productList-container')
 
@@ -6,16 +7,24 @@ const productcontainer = document.querySelector('#productList-container')
 insertProductElement()
 
 const editBtn = document.querySelector("#editBtn")
-const deletBtn = document.querySelector("#deletBtn")
+const deleteBtn = document.querySelector("#deleteBtn")
 const addproductBtn = document.querySelector("#addproductBtn")
 
 //해당 상품의 수정 페이지로 이동 -> 상품 name을 넘겨줘야함
 //버튼들 중에서, 특정 버튼을 어떻게 구분하지 -> name으로 구분해야지
 //근데 그 name을 버튼에 어떻게 할당하지..
 //for문을 돌려서 "#deledBtn-${name}" 이런식으로 만들어야 하나..?
-editBtn.addEventListener("click", () => {window.location.href = "admin-editProductPage.html";});
-addproductBtn.addEventListener("click", () => {window.location.href = "admin-addProuctPage.html";});
-deletBtn.addEventListener("click", deleteProduct)
+const ActionFunctions = {
+  edit: () => window.location.href = "admin-editProductPage.html",
+  delete: () => { deleteProduct() },
+}
+
+productList.addEventListener('click', e => {
+  const action = e.target.dataset.action
+  if (action) {
+    ActionFunctions[action]()
+  }
+})
 
 function insertProductElement() {
   // const res = await fetch(`/api/products`) //GET요청으로 사용
@@ -60,8 +69,8 @@ function insertProductElement() {
     <div>소분류</div>
     <div class="price">${price}</div>
     <div class="stock">${stock}</div>
-    <div id="editBtn"><button type="button">수정</div>
-    <div id="deletBtn"><button type="button">삭제</div>
+    <button type="button" data-action="edit">수정</div>
+    <button type="button" data-action="delete">삭제</div>
   `)
   }
 }
