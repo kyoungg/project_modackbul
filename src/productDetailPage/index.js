@@ -12,7 +12,8 @@ const buyBtn = document.querySelector(".buy_btn");
 
 // 상품 데이터 가져오기
 async function getProduct() {
-  // const data = await Api.get(`/api/products/${name}`);
+  // const data = await Api.fetch(`/api/products/${name}`);
+  // /api/products/:name
 
   // mock data
   const data = {
@@ -43,32 +44,39 @@ async function getProduct() {
     totalPrice.innerHTML = `${chageNumberToLocaleString(price * count)}원`;
   }
 
+  let cartData = [];
+
+  function addCartItem(cartItem) {
+    cartData.push(cartItem);
+  }
+
   // 장바구니 버튼 클릭 시 (클래스로 구현하기...)
   function addToCart() {
     try {
       const quantity = Number(qty.value);
-      const cart = { ...data, quantity };
+      const cartItem = { ...data, quantity };
+      addCartItem(cartItem);
 
-      localStorage.setItem("cartData", JSON.stringify(cart));
+      localStorage.setItem("cartData", JSON.stringify(cartData));
       alert("상품을 장바구니에 담았습니다.");
+      console.log(cartData);
     } catch (err) {
       console.err(err);
     }
   }
 
-  // 구매하기 버튼 클릭 시
   function buyNow() {
     try {
       const quantity = Number(qty.value);
-      const cart = { ...data, quantity };
+      const cartItem = { ...data, quantity };
+      addCartItem(cartItem);
 
-      localStorage.setItem("cartData", JSON.stringify(cart));
+      localStorage.setItem("cartData", JSON.stringify(cartData));
       window.location.href = "orderingPage.html";
     } catch (err) {
       console.err(err);
     }
   }
-
   // 각 데이터를 요소에 삽입하여 화면에 보여주기 (단순 텍스트만 교체할 땐 textContent 사용)
   productImg.src = imageUrl;
   productSeller.textContent = seller;
