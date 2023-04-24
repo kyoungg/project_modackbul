@@ -95,8 +95,8 @@ function insertProductElement() {
         </div>
       </div>
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button type="button" data-action="edit" class="btn btn-secondary">수정</button>
-        <button type="button" data-action="delete" class="btn btn-danger">삭제</button>
+        <button type="button" data-action="edit" class="btn btn-secondary">Edit</button>
+        <button type="button" data-action="delete" class="btn btn-danger">Delete</button>
       </div>
       </div>
   `)
