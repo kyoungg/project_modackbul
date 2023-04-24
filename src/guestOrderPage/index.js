@@ -18,17 +18,16 @@ async function handleSubmit(e) {
   }
 
   try {
-    const res = await fetch(`/api/orders/`);
-    const order = await res.json();
-
-    // 주문자 정보 비교
-    if (order.orderNumber === orderNo && order.name === name) {
-      // 주문 조회 페이지로 이동
-      window.location.href = checkOrderPage.html;
-    } else {
+    const res = await fetch(`/api/orders?name=${name}&orderNumber=${orderNo}`);
+    if (!res.ok) {
       alert("요청하신 주문 내역이 없습니다.");
+      return;
     }
-  } catch (error) {
-    console.error(error);
+
+    const order = await res.json();
+    // 페이지 이동 시 주문번호 포함해서 보내기
+    window.location.href = `/orders/${order.orderNumber}`;
+  } catch (err) {
+    console.error(err);
   }
 }
