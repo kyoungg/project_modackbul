@@ -11,16 +11,11 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="./style/orderingPage/index.css"
-    />
-    <title>🏕️모닥불</title>
+    <title>Document</title>
   </head>
   <body>
-    <main class="ordering_main">
-      <h1>주문 진행</h1>
+    <main class="modify_main">
+      <h1>주문 수정</h1>
 
       <div class="order_summary"></div>
 
@@ -31,7 +26,7 @@
             type="email"
             placeholder="이메일을 입력해주세요."
             id="email_input"
-            class="form-control mb-3"
+            class="form-control"
             required
           />
 
@@ -40,7 +35,7 @@
             type="text"
             placeholder="이름을 입력해주세요."
             id="name_input"
-            class="form-control mb-3"
+            class="form-control"
             required
           />
 
@@ -49,41 +44,17 @@
             type="text"
             placeholder="휴대전화 번호를 입력해주세요.(- 없이)"
             id="phone_input"
-            class="form-control mb-3"
+            class="form-control"
             required
           />
 
-          <label class="form-label" for="address_input">주소</label>
-          <div class="d-flex justify-content-between">
-            <input
-              type="text"
-              class="form-control w-25 mb-3"
-              placeholder="우편번호"
-              id="postNumber"
-              readonly
-            />
-
-            <input
-              type="button"
-              id="address_input"
-              class="find_address_btn btn btn-outline-primary w-25 mb-3"
-              value="주소 검색"
-            />
-          </div>
-
+          <label for="address_input" class="form-label">주소</label>
           <input
             type="text"
-            class="form-control mb-3"
-            placeholder="주소"
-            id="addInput1"
-            readonly
-          />
-
-          <input
-            type="text"
+            placeholder="주소를 입력해주세요."
+            id="address_input"
             class="form-control"
-            id="addInput2"
-            placeholder="상세주소"
+            required
           />
         </div>
 
@@ -103,7 +74,6 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script src="./src/orderingPage/index.js" type="module"></script>
+    <script src="./src/modifyOrderPage/index.js" type="module"></script>
   </body>
 </html>
