@@ -1,4 +1,4 @@
-import { checkEmail } from "../utils/index.js"
+import { checkEmail } from "../utils/index.js";
 
 const emailInput = document.querySelector("#emailInput")
 const passwordInput = document.querySelector("#passwordInput")
