@@ -1,3 +1,9 @@
+import { productForm } from "./form.js";
+
+const main = document.querySelector('.common')
+
+main.innerHTML = productForm();
+
 const nameInput = document.querySelector("#nameInput")
 const priceInput = document.querySelector("#priceInput");
 const summaryInput = document.querySelector("#summaryInput");
@@ -6,7 +12,7 @@ const companyInput = document.querySelector("#companyInput");
 const stockInput = document.querySelector("#stockInput");
 const descriptionInput = document.querySelector("#descriptionInput");
 
-const addproductBtn = document.querySelector("#addproductBtn");
+const addproductBtn = document.querySelector("#editBtn");
 const cancelBtn = document.querySelector("#cancelBtn");
 
 //이미지 preview
