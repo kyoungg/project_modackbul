@@ -1,98 +1,126 @@
 export function productForm() {
     const field =
-    `<div class="addproduct-form-container">
+    `<div class="container">
+    <div class="addproduct-form-container">
         <form id="productForm">
             <div>
-                <label for="nameInput">상품이름</label>
-                <div>
+                <div class="mb-3">
+                    <label for="nameInput" class="form-label">Product Name</label>
                     <input
-                    type="text"
-                    id="nameInput"
-                    required
-                    >
+                        type="text"
+                        class="form-control"
+                        id="nameInput"
+                        placeholder="상품명 입력"
+                        required
+                        >
                 </div>
             </div>
             <div>
-                <label for="priceInput">상품가격</label>
-                <div>
+                <div class="mb-3">
+                    <label for="priceInput" class="form-label">Product Pcice</label>
                     <input
-                    type="number"
-                    id="priceInput"
-                    required
-                    >
+                        type="number"
+                        class="form-control"
+                        id="priceInput"
+                        placeholder="상품가격 입력"
+                        required
+                        >
                 </div>
             </div>
             <div>
-                <label for="summaryInput">상품소개</label>
-                <div>
+                <div class="mb-3">
+                    <label for="summaryInput" class="form-label">Product Summary</label>
                     <input
-                    type="text"
-                    id="summaryInput"
-                    required
-                    >
+                        type="text"
+                        class="form-control"
+                        id="summaryInput"
+                        placeholder="상품소개 작성"
+                        required
+                        >
                 </div>
             </div>
             <div>
-                <label for="companyInput">제조회사</label>
-                <div>
+                <div class="mb-3">
+                    <label for="companyInput" class="form-label">Company</label>
                     <input
-                    type="text"
-                    id="companyInput"
-                    required
-                    >
+                        type="text"
+                        class="form-control"
+                        id="companyInput"
+                        placeholder="상품 제조회사"
+                        required
+                        >
                 </div>
             </div>
             <!-- 카테고리 대분류, 소분류 드롭다운 버튼?-->
             <!-- 어떻게 구현해야하는지,, -->
             <div>
-                <label for="category">카테고리</label>
+                <label for="category">Category</label>
                 <div>
-                    <input
-                    type="text"
-                    id="category_big"
-                    required
-                    >
-                </div>
-                <div>
-                    <input
-                    type="text"
-                    id="category_small"
-                    required
-                    >
+                    <div class="form-floating">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                        </select>
+                        <label for="floatingSelect">대분류</label>
+                    </div>
+                    <div class="form-floating">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                        </select>
+                        <label for="floatingSelect">소분류</label>
+                    </div>
                 </div>
             </div>
             <div>
-                <label for="stockInput">재고</label>
-                <div>
+                <div class="mb-3">
+                    <label for="stockInput" class="form-label">Product Stock</label>
                     <input
-                    type="number"
-                    id="stockInput"
-                    required
-                    >
+                        type="number"
+                        class="form-control"
+                        id="stockInput"
+                        placeholder="재고입력"
+                        required
+                        >
                 </div>
             </div>
-            <!-- 이미지를 받아와서 삽입해야함. img의 src가 변경되어야합니다! -->
             <div>
-                <img src="#" class="image-box" />
-                <label for="file" class="upload-btn">
-                <input id="file" type="file" accept="image/*" />
-                </label>
-            </div>
-            </div>
-
-            <div>
-                <label for="descriptionInput">상품상세</label>
-                <div>
+                <div class="mb-3">
+                    <label for="file" class="form-label upload-btn">
+                        <div><img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/file_upload_icon_136628.png" class="image-box" /><div>
+                        </label>
                     <input
-                    type="text"
-                    id="descriptionInput"
-                    required
-                    >
+                        class="form-control"
+                        type="file"
+                        id="file"
+                        >
+                </div>
+              </div>
+            </div>
+            <div>
+                <div class="mb-3">
+                    <label for="descriptionInput" class="form-label">Product Description</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="descriptionInput"
+                        placeholder=""
+                        required
+                        >
+                </div>
+                <div class="d-flex  justify-content-center">
+                    <button id="addproductBtn" type="submit" class="btn btn-secondary ms-2">Edit</button>
+                    <button id="cancelBtn" type="button"  class="btn btn-danger ms-2">Cancle</button>
                 </div>
             </div>
-            <div id="editBtn"><button type="submit">등록</div>
-        </form>
-        </div>`;
+        </div>
+        </form> 
+    </div>
+`;
   
     return field;
   }

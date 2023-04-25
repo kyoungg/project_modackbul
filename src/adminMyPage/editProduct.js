@@ -12,7 +12,7 @@ const companyInput = document.querySelector("#companyInput");
 const stockInput = document.querySelector("#stockInput");
 const descriptionInput = document.querySelector("#descriptionInput");
 
-const editBtn = document.querySelector("#editBtn");
+const editBtn = document.querySelector("#addproductBtn");
 const cancelBtn = document.querySelector("#cancelBtn");
 
 //이미지 preview
