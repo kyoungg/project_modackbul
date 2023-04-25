@@ -84,7 +84,7 @@ async function addMember(e) {
     body: dataJson,
   });
 
-  if (res.status === "응답성공시") {
+  if (res.status === 201) {
     alert("회원가입에 성공하였습니다!");
   } else {
     alert("회원가입에 실패하였습니다...");
