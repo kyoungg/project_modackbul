@@ -1,50 +1,63 @@
 import { CART_KEY_LIST, CART_VALUE_LIST } from "./const.js";
 import { chageNumberToLocaleString } from "../utils/index.js";
+import { checkAuth } from "../utils/index.js";
 
-// let cartData = null;
+const { isLoggedIn, token } = checkAuth();
+
+let cartData = [
+  {
+    id: 1,
+    src: "https://bellenuit.kr/web/product/medium/202210/9c781c64ee97abde8109dc1c860c4076.jpg",
+    number: 4,
+    name: "쫄깃쫄깃 텐트",
+    company: "모닥불 컴퍼니",
+    price: 1000000,
+    summary: "요약입니다~~",
+  },
+  {
+    id: 2,
+    src: "https://bellenuit.kr/web/product/medium/202210/9c781c64ee97abde8109dc1c860c4076.jpg",
+    number: 1,
+    name: "통통한 모닥불",
+    company: "통통 컴퍼니",
+    price: 30000,
+    summary: "요약입니다~~",
+  },
+  {
+    id: 3,
+    src: "https://bellenuit.kr/web/product/medium/202210/9c781c64ee97abde8109dc1c860c4076.jpg",
+    number: 2,
+    name: "한국 모기장",
+    company: "한국 컴퍼니",
+    price: 1000,
+    summary: "요약입니다~~",
+  },
+  {
+    id: 4,
+    src: "https://bellenuit.kr/web/product/medium/202210/9c781c64ee97abde8109dc1c860c4076.jpg",
+    number: 3,
+    name: "야호 야호",
+    company: "야호 컴퍼니",
+    price: 124000,
+    summary: "요약입니다~~",
+  },
+];
 
 /**
  * 로그인한 유저의 장바구니 데이터를 얻기 위한 API 통신 함수
  */
 async function getCartData() {
   // 장바구니 데이터 API 통신
-  // cartData = await fetch("url");
-}
+  const response = await fetch("http://localhost:5000/api/carts/view", {
+    method: "GET",
+    headers: {
+      Authorization: "bearer " + token,
+    },
+  });
 
-let cartData = [
-  {
-    id: 1,
-    src: "test",
-    number: 4,
-    name: "쫄깃쫄깃 텐트",
-    company: "모닥불 컴퍼니",
-    price: 1000000,
-  },
-  {
-    id: 2,
-    src: "test",
-    number: 1,
-    name: "통통한 모닥불",
-    company: "통통 컴퍼니",
-    price: 30000,
-  },
-  {
-    id: 3,
-    src: "test",
-    number: 2,
-    name: "한국 모기장",
-    company: "한국 컴퍼니",
-    price: 1000,
-  },
-  {
-    id: 4,
-    src: "test",
-    number: 3,
-    name: "야호 야호",
-    company: "야호 컴퍼니",
-    price: 124000,
-  },
-];
+  cartData = await response.json();
+  console.log(cartData);
+}
 
 // 생각해보니까 비회원 유저도 장바구니를 쓸 수 있잖아?
 // localStorage에 담겨져 있는 장바구니에 대해서 프론트 팀과 논의 필요
@@ -60,22 +73,35 @@ async function renderCarts() {
   // 리렌더링이 트리거된 경우 자식 노드를 모두 삭제하고 새로운 데이터로 다시 렌더링.
   cartsDiv.replaceChildren();
 
-  // 로그인/비로그인 분기 처리를 통한 장바구니 데이터 할당
-  // const isLoggedIn = false;
-  // if (isLoggedIn) {
-  //   getCartData();
-  // } else {
-  //   cartData = localStorage.getItem("cartData");
-  // }
+  // 회원/비회원 분기 처리를 통한 장바구니 데이터 할당
+  if (isLoggedIn) {
+    getCartData();
+  } else {
+    cartData = localStorage.getItem("cartData");
+  }
 
   for (let i = 0; i < cartData.length; i++) {
     const cartDiv = document.createElement("div");
+    cartDiv.classList.add(
+      "d-flex",
+      "border",
+      "border-success",
+      "justify-content-between",
+      "mb-4",
+      "p-2",
+      "rounded"
+    );
 
-    // const img = document.createElement("img");
-    // img.src = `${cartData[i].src}`;
-    // img.alt = `${cartData[i].summary}`;
+    const productDiv = document.createElement("div");
+    productDiv.classList.add("d-flex", "w-75", "align-items-center");
+
+    const img = document.createElement("img");
+    img.src = `${cartData[i].src}`;
+    img.alt = `${cartData[i].summary}`;
+    img.classList.add("rounded", "w-25", "pe-2");
 
     const ul = document.createElement("ul");
+    ul.classList.add("m-0", "p-0");
 
     CART_KEY_LIST.forEach((key, index) => {
       const li = document.createElement("li");
@@ -94,51 +120,81 @@ async function renderCarts() {
 
         ul.appendChild(input);
       } else {
-        // li.innerText = `${key} : ${cartData[i][CART_VALUE_LIST[index]]}`;
-        li.innerText = `${
+        li.innerText = `${key} : ${
           typeof cartData[i][CART_VALUE_LIST[index]] === "number"
             ? `${chageNumberToLocaleString(
                 cartData[i][CART_VALUE_LIST[index]]
               )} 원`
             : cartData[i][CART_VALUE_LIST[index]]
         }`;
+
         ul.appendChild(li);
       }
     });
 
+    productDiv.appendChild(img);
+    productDiv.appendChild(ul);
+    cartDiv.appendChild(productDiv);
+
+    const buttonDiv = document.createElement("div");
+    buttonDiv.classList.add("d-flex", "align-items-end");
+
     const button = document.createElement("button");
     button.type = "button";
     button.innerText = "제거";
-    button.classList.add(`delete_button_${cartData[i].id}`);
+    button.classList.add(
+      `delete_button_${cartData[i].id}`,
+      "btn",
+      "btn-outline-danger"
+    );
 
     // 제거 버튼 클릭 시 API 통신 진행
     button.addEventListener("click", () => cartDeleteHandler(cartData[i].id));
 
+    buttonDiv.appendChild(button);
+
     // cartDiv.appendChild(img);
-    cartDiv.appendChild(ul);
-    cartDiv.appendChild(button);
+    // cartDiv.appendChild(ul);
+    // cartDiv.appendChild(button);
+    cartDiv.appendChild(buttonDiv);
     cartsDiv.appendChild(cartDiv);
   }
 
   renderTotalPrice();
 }
 
+/**
+ * 장바구니에서 데이터 하나를 제거하는 함수
+ * @param {String} id 장바구니에 담긴 데이터 하나의 id
+ */
 async function cartDeleteHandler(id) {
-  // 장바구니 삭제 API 통신
-  // 삭제할 제품의 id를 body로 보낸다.
-  // await fetch("url", {
-  //   method: "DELETE",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: {
-  //     id,
-  //   },
-  // });
+  // 회원의 경우
+  if (isLoggedIn) {
+    // 장바구니 삭제 API 통신
+    // 삭제할 제품의 id를 body로 보낸다.
+    // await fetch("url", {
+    //   method: "DELETE",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: {
+    //     id,
+    //   },
+    // });
 
-  // 화면에서 지우기
-  // API 통신 성공 시 삭제 / 실패 시 alert 후 return
-  cartData = cartData.filter((item) => item.id !== id);
+    // 화면에서 지우기
+    // API 통신 성공 시 삭제 / 실패 시 alert 후 return
+    cartData = cartData.filter((item) => item.id !== id);
+  }
+
+  // 비회원의 경우
+  if (!isLoggedIn) {
+    // 화면에서 지우기
+    cartData = cartData.filter((item) => item.id !== id);
+
+    // 변경된 데이터를 localStorage의 cartData에 반영
+    localStorage.setItem("cartData", JSON.stringify(cartData));
+  }
 
   // 리렌더링
   renderCarts();
@@ -150,7 +206,7 @@ async function cartDeleteHandler(id) {
 function renderTotalPrice() {
   const totalPrice = chageNumberToLocaleString(calculateTotalPrice());
 
-  const h2 = document.getElementsByClassName("total_price")[0];
+  const h2 = document.querySelector(".total_price");
   h2.innerText = `총 금액 : ${totalPrice} 원`;
 }
 
@@ -168,7 +224,7 @@ function calculateTotalPrice() {
   return totalPrice;
 }
 
-const orderButton = document.getElementsByClassName("order_button")[0];
+const orderButton = document.querySelector(".order_button");
 
 // 주문하기 버튼을 누르면 주문 진행 페이지로 이동한다.
 orderButton.addEventListener("click", orderHandler);
@@ -192,6 +248,8 @@ function orderHandler() {
         name: item.name,
         number: parseInt(input[index].value),
         company: item.company,
+        img: item.src,
+        summary: item.summary,
       },
     ];
   });
@@ -205,4 +263,4 @@ function orderHandler() {
   window.location.href = "orderingPage.html";
 }
 
-await renderCarts();
+renderCarts();

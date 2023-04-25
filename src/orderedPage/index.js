@@ -10,9 +10,16 @@ import {
  */
 function getOrderData() {
   // 비회원인 경우, 회원인 경우 관계없이 모두 DB에서 받아와야함.
-  // API가 없으므로, 목업 데이터로 받아온 상황을 가정하고 진행.
   // async 붙여줘야함.
-  // const orderData = await fetch("url");
+  // const orderData = await fetch("url", {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type" : "application/json"
+  //   },
+  //   body: {
+  //     // 회원/비회원 모두 주문 번호
+  //   }
+  // });
 
   const orderData = JSON.parse(localStorage.getItem(STORAGE_NAME));
 
@@ -28,14 +35,17 @@ function renderOrder() {
 
   const summaryDiv = document.getElementsByClassName("order_summary")[0];
 
-  // const img = document.createElement("img");
-  // img.src = "";
-  // img.alt = "";
+  const img = document.createElement("img");
+  img.src = orderData.data[0].img;
+  img.alt = orderData.data[0].summary;
+  img.classList.add("rounded", "w-25", "pe-2");
 
   const ul = document.createElement("ul");
+  ul.classList.add("m-0", "p-0");
 
   for (let i = 0; i < SUMMARY_PHRASE_LIST(orderData).length; i++) {
     const li = document.createElement("li");
+    li.classList.add("mb-2");
 
     li.innerText = `${SUMMARY_KEY_LIST[i]} : ${
       SUMMARY_PHRASE_LIST(orderData)[i]
@@ -43,7 +53,7 @@ function renderOrder() {
     ul.appendChild(li);
   }
 
-  // summaryDiv.appendChild(img);
+  summaryDiv.appendChild(img);
   summaryDiv.appendChild(ul);
 }
 

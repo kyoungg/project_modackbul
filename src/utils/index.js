@@ -96,3 +96,45 @@ export function chageNumberToLocaleString(num) {
 
   return localedNum;
 }
+
+/**
+ * 로그인 여부, 관리자 여부를 체크하는 함수
+ * @returns {Boolean} 로그인 상태라면 isLoggedIn이 true, 관리자라면 isAdmin이 true
+ */
+export function checkAuth() {
+  // 로그인 여부 판단
+  let isLoggedIn = false;
+
+  // 관리자 여부 판단
+  let isAdmin = false;
+
+  // 토큰 정보
+  let token = null;
+
+  const userData = localStorage.getItem("userData");
+
+  // 로그인하지 않은 유저는 userData가 null이다.
+  if (!userData) {
+    return { isLoggedIn, isAdmin, token };
+  }
+
+  // 토큰이 있는 경우 로그인 상태임.
+  if (userData) {
+    isLoggedIn = true;
+    token = userData;
+  }
+
+  // role은 관리자 로그인일 때만 존재한다. role이 admin인 경우 관리자임.
+  if (userData.role === "admin") {
+    isAdmin = true;
+  }
+
+  return { isLoggedIn, isAdmin, token };
+}
+
+/**
+ * localStorage에서 token을 삭제하여 로그아웃을 진행하는 함수
+ */
+export function logout() {
+  localStorage.removeItem("userData");
+}
