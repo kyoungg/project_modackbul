@@ -1,9 +1,7 @@
 import { chageNumberToLocaleString } from "../utils/index.js" 
 
 const productBox = document.querySelector(".productBox")
-const productList = document.querySelector("#productList-container")
-
-const productcontainer = document.querySelector('#productList-container')
+const productListContainer = document.querySelector("#productList-container")
 
 // 데이터를 받아 요소를 만든 후, html에 삽입
 insertProductElement()
@@ -17,17 +15,20 @@ const addproductBtn = document.querySelector("#addproductBtn")
 //근데 그 name을 버튼에 어떻게 할당하지..
 //for문을 돌려서 "#deledBtn-${name}" 이런식으로 만들어야 하나..?
 
-addproductBtn.addEventListener("click", () =>window.location.href = "admin-addProductPage.html" )
+addproductBtn.addEventListener("click", () =>window.location.href = "/admin-addProductPage.html" )
 
 const ActionFunctions = {
   edit: () => window.location.href = "admin-editProductPage.html",
   delete: () => deleteProduct(),
 }
 
-productList.addEventListener('click', e => {
+productListContainer.addEventListener('click', e => {
+  const name = e.target.closet(".container").dataset[name]
   const action = e.target.dataset.action
   if (action) {
-    ActionFunctions[action]()
+    ActionFunctions[action]({
+      name
+    })
   }
 })
 
@@ -66,8 +67,8 @@ function insertProductElement() {
 
 
   //요소 만들기
-  productcontainer.insertAdjacentHTML('beforeend',`
-    <div class="container rounded border border-secondary">
+  productListContainer.insertAdjacentHTML('beforeend',`
+    <div class="container rounded border border-secondary" data-id="${name}">
       <div class="row">
         <img class="productImg col" src="${img}">
         <div class="table-box col">
@@ -106,7 +107,7 @@ function insertProductElement() {
 //상품 삭제 함수
 //그런데 삭제할 상품의 Btn들을 어떻게 구분할지..?
 function deleteProduct() {
-  const apiUrl = "/api/products/:name" //삭제하고싶은 상품의 name
+  const apiUrl = `/api/products/:${name}` //삭제하고싶은 상품의 name
 
 
   const answer = confirm(
