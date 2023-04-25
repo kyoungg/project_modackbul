@@ -3,13 +3,17 @@ import {
   SUMMARY_KEY_LIST,
   SUMMARY_PHRASE_LIST,
 } from "./const.js";
-import { checkEmail, checkName, checkPhoneNumber } from "../utils/index.js";
+import {
+  checkEmail,
+  checkName,
+  checkPhoneNumber,
+  findAddress,
+} from "../utils/index.js";
+import { checkAuth } from "../utils/index.js";
 
-// localStorage에서 데이터 전달 받고, 바로 localStorage 삭제
-// 그런데, 이러면 새로고침했을 때 데이터가 없어진 상태라서 문제가 발생...
+// const { isLoggedIn } = checkAuth();
+
 const orderData = JSON.parse(localStorage.getItem(STORAGE_NAME));
-console.log(orderData);
-// localStorage.removeItem(STORAGE_NAME);
 
 /**
  * 주문 진행을 위한 구매 예정 데이터를 렌더링하는 함수
@@ -17,10 +21,22 @@ console.log(orderData);
 function renderOrder() {
   // 주문 요약 보여주기
   const summaryDiv = document.getElementsByClassName("order_summary")[0];
+  summaryDiv.classList.add(
+    "d-flex",
+    "border",
+    "border-success",
+    "justify-content-start",
+    "align-items-center",
+    "mb-4",
+    "p-2",
+    "rounded",
+    "w-75"
+  );
 
-  // const img = document.createElement("img");
-  // img.src = "";
-  // img.alt = "";
+  const img = document.createElement("img");
+  img.src = orderData.data[0].img;
+  img.alt = orderData.data[0].summary;
+  img.classList.add("rounded", "w-25");
 
   const ul = document.createElement("ul");
 
@@ -33,7 +49,7 @@ function renderOrder() {
     ul.appendChild(li);
   }
 
-  // summaryDiv.appendChild(img);
+  summaryDiv.appendChild(img);
   summaryDiv.appendChild(ul);
 
   // 로그인 여부에 따라 getUserData를 할지 말지 분기 처리
@@ -72,9 +88,7 @@ function renderOrder() {
 function getUserData() {
   // async 앞에 붙여주기
   // 유저 데이터를 얻기 위한 API 통신
-  // const { email, id, phoneNumber, name } = await fetch("url", {
-  //   method: "GET",
-  // });
+  // const { email, id, phoneNumber, name } = await fetch("url");
 
   // 더미 데이터
   const data = {
@@ -89,7 +103,7 @@ function getUserData() {
   return { email, id, phoneNumber, name };
 }
 
-const orderBtn = document.getElementsByClassName("order_btn")[0];
+const orderBtn = document.querySelector(".order_btn");
 
 orderBtn.addEventListener("click", orderHandler);
 
@@ -101,9 +115,18 @@ function orderHandler() {
   const email = document.getElementById("email_input").value;
   const name = document.getElementById("name_input").value;
   const phoneNumber = document.getElementById("phone_input").value;
-  const address = document.getElementById("address_input").value;
+  const postNumber = document.getElementById("postNumber").value;
+  const address1 = document.getElementById("addInput1").value;
+  const address2 = document.getElementById("addInput2").value;
 
-  if (email === "" || name === "" || phoneNumber === "" || address === "") {
+  if (
+    email === "" ||
+    name === "" ||
+    phoneNumber === "" ||
+    postNumber === "" ||
+    address1 === "" ||
+    address2 === ""
+  ) {
     return alert("모든 정보를 입력해주세요.");
   }
 
@@ -116,14 +139,15 @@ function orderHandler() {
     return;
   }
 
-  // 주소 검증
-
   const purchaseData = {
-    orderNumber: createOrderNumber(),
     email,
     name,
     phoneNumber,
-    address,
+    address: {
+      postNumber,
+      address1,
+      address2,
+    },
     orderData,
   };
 
@@ -141,78 +165,24 @@ function orderHandler() {
   // });
 
   // 주문 완료 페이지로 이동
-  // window.location.href = "orderedPage.html";
+  window.location.href = "orderedPage.html";
 }
 
-/**
- * 오늘의 날짜를 YYMMDD 형태로 생성하는 함수
- * @returns {String} YYMMDD 형태의 년/월/일
- */
-function createDateYYMMDD() {
-  const date = new Date();
-  const year = String(date.getFullYear() - 2000);
-  const month = String(date.getMonth() + 1).padStart(2, 0);
-  const day = String(date.getDate()).padStart(2, 0);
-
-  return `${year}${month}${day}`;
-}
-
-// 그런데 이렇게 하면 이 페이지를 새로 들어올 때마다 num이 1이 되지 않나?
-// 24시간 체크 함수가 의미가 없잖아....
-let num = 1;
-
-/**
- *
- * @returns {String} 001 ~ 999 사이의 숫자
- */
-function createThreeDigitNumber() {
-  // num이 999가 넘어가면 1로 초기화
-  if (num > 999) {
-    num = 1;
-  }
-
-  // 하루가 지나면 num을 1로 초기화
-  if (true) {
-  }
-
-  const threeDigitNum = String(num).padStart(3, 0);
-
-  num++;
-
-  return String(threeDigitNum);
-}
-
-// 24시가 지났는지 판별하는 함수
-// function checkDateIsToday(curDate) {
-//   var today, resultDate;
-//   today = new Date();
-//   resultDate = new Date(curDate);
-
-//   // Time (minutes * seconds * millisecond)
-//   if ((today - resultDate) / (60 * 60 * 1000) <= 24) {
-//     // 하루 이전 글인 경우 여기에 코드 작성
-//   } else {
-//     // 하루 이후 글인 경우 여기에 코드 작성
-//   }
-// }
-
-/**
- * 주문 번호를 생성하는 함수
- * @returns {String} 주문번호 YYMMDD + (001 ~ 999 사이의 숫자)
- */
-function createOrderNumber() {
-  const YYMMDD = createDateYYMMDD();
-  const THREE_DIGIT_NUM = createThreeDigitNumber();
-
-  return `${YYMMDD}${THREE_DIGIT_NUM}`;
-}
-
-const cancelBtn = document.getElementsByClassName("cancel_btn")[0];
+const cancelBtn = document.querySelector(".cancel_btn");
 
 cancelBtn.addEventListener("click", cancelHandler);
 
+/**
+ * 취소하기 버튼 클릭 시, 이전 페이지로 이동하는 함수
+ */
 function cancelHandler() {
-  // 뒤로 이동?
+  // 이전 페이지로 이동
+  // 장바구니 페이지에서 접근했을 수도 있고, 제품 상세 페이지에서 접근했을 수도 있다.
+  window.location.href = document.referrer;
 }
+
+const findAddressBtn = document.querySelector(".find_address_btn");
+
+findAddressBtn.addEventListener("click", findAddress);
 
 renderOrder();
