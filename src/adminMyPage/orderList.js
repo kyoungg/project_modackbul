@@ -1,4 +1,6 @@
-import { chageNumberToLocaleString } from "../utils/index.js" 
+import { chageNumberToLocaleString, checkAuth } from "../utils/index.js" 
+
+const { isLoggedIn, token } = checkAuth()
 
 const orderListContainer = document.querySelector("#oderList-container")
 
@@ -26,22 +28,26 @@ orderListContainer.addEventListener('click', e => {
   console.log(targetStatus)
 })
 
+//API 통신 함수
+async function getOrderdata(){
+    const apiUrl = `http://localhost:5000/api/orders/admin`
+    const res = await fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+        Authorization : "bearer " + token,
+    },
+  });
+  
+  const Data = await res.json()
+  return Data;
+}
+
 async function insertOderElement() {
 
-  // const apiUrl = `http://localhost:5000/api/orders/admin`
-  // const res = await fetch(apiUrl, {
-  //   method: 'GET',
-  //   headers: {
-  //       'Content-Type': 'application/json',
-  //   }, //관리자 토큰 필요함..body에 넣어서 보내고 데이터를 받나..?
-  //   body: adminId,
-  // });
-  //   if (res.status == 200) {
-  //     const Data = await res.json()
-  //   } else {
-  //     alert(`페이지 로딩에 실패하였습니다...`)
-  //   }
-  
+  if(isLoggedIn){
+    getOrderdata()
+  }
+
   //난 더미데이터! 나중에 지워주세요!
   const Data=[{
     "customerId" : "imhoho@gmail.com",
@@ -58,7 +64,7 @@ async function insertOderElement() {
     "orderStatus" : "배송중",
     "cart" : "주문상품목록들",
     "total" : 300800,
-    "orderNumber" : "230422001"
+    "orderNumber" : "230400001"
   }]
 
 
@@ -91,10 +97,10 @@ async function insertOderElement() {
                   <td><div class="totalprice">${totalprice} 원</div></td>
                   <td><div class="orderStatus">
                       <input type="text" readonly class="form-control-plaintext text-center" id="orderStatus" value="${status}">
-                      <button id="editStatusBtn" data-action="edit" class="btn btn-secondary">발송완료</button>
+                      ${status === "상품 준비중" ? `<button id="editStatusBtn" data-action="edit" class="btn btn-secondary">발송완료</button>` : `<div></div>`}
                   <td>
                   <div class="gap-2 d-md-flex justify-content-md-end">
-                    <button type="button" id="orderCancelBtn" data-action="cancel" class="btn btn-danger">주문취소</button>
+                   ${ status === "상품 준비중" ? `<button type="button" id="orderCancelBtn" data-action="cancel" class="btn btn-danger">주문취소</button>`: `<div></div>`}
                   </div>
                   </td>
                 </tr>
@@ -108,6 +114,7 @@ async function insertOderElement() {
 //주문 취소 함수
 //주문 취소되면 페이지 내에서도 삭제해야함
 async function deleteOrder(e) {
+
   const targetNum = e.targetNum
   const orderNum = JSON.stringify(targetNum)
 
@@ -122,7 +129,8 @@ async function deleteOrder(e) {
       method: 'DELETE',
       headers: {
           'Content-Type': 'application/json',
-      }, //관리자 토큰 필요함..body에 넣어서 보내나
+          Authorization : "bearer " + token,
+      },
       body: orderNum,
     });
     
@@ -157,7 +165,8 @@ async function editOrerstatusHandler(e){
       method: 'PATCH',
       headers: {
           'Content-Type': 'application/json',
-      }, //관리자 토큰 + 수정 내용을 보내줘야함
+          Authorization : "bearer " + token,
+      },
       body: orderNum,
     });
     
