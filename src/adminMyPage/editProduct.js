@@ -48,9 +48,19 @@ const Data = [
 
 //기존 데이터 받아와서 보여주는 함수
 async function insertProductElement() {
+  //로컬에 상품 정보가 같이 넘어왔다면
+  if(localStorage.getItem('targetName')){
+    const targetName = localStorage.getItem('targetName')
+    
     //특정 상품 정보 조회하는 부분입니다~ im GET!
-    // const res = await fetch(`/api/products/:name`)
-    // const data = await res.json()
+    // const res = await fetch(`/api/products/:${targetName}`)
+    // const Data = await res.json()
+
+  } else{ //로컬에 상품 정보가 들어있지 않다면
+    alert('잘못된 경로입니다!')
+    window.location.href = "/index.html"
+  }
+
 
     const data = Data[0]
 

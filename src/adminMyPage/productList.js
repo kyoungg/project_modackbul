@@ -28,8 +28,10 @@ productListContainer.addEventListener('click', e => {
 })
 
 function insertProductElement() {
+  //
   // const res = await fetch(`/api/products`) //GET요청으로 사용
   // const Data = await res.json()
+
   const dummyData= [{
     "name" : "난 버너",
     "price" : 18000,
@@ -97,7 +99,7 @@ function insertProductElement() {
 
 //페이지 전환 + targetName 넘기는 함수
 function editPagehandler(e){
-  localStorage.setItem('targetName',e.targetName)
+  localStorage.setItem('targetName', e.targetName)
   window.location.href = "/admin-editProductPage.html"
 }
 
