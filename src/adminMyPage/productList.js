@@ -1,9 +1,7 @@
 import { chageNumberToLocaleString } from "../utils/index.js" 
 
-const productBox = document.querySelector(".productBox")
-const productList = document.querySelector("#productList-container")
-
-const productcontainer = document.querySelector('#productList-container')
+//const productBox = document.querySelector(".productBox")
+const productListContainer = document.querySelector("#productList-container")
 
 // 데이터를 받아 요소를 만든 후, html에 삽입
 insertProductElement()
@@ -12,31 +10,28 @@ const editBtn = document.querySelector("#editBtn")
 const deleteBtn = document.querySelector("#deleteBtn")
 const addproductBtn = document.querySelector("#addproductBtn")
 
-//해당 상품의 수정 페이지로 이동 -> 상품 name을 넘겨줘야함
-//버튼들 중에서, 특정 버튼을 어떻게 구분하지 -> name으로 구분해야지
-//근데 그 name을 버튼에 어떻게 할당하지..
-//for문을 돌려서 "#deledBtn-${name}" 이런식으로 만들어야 하나..?
-
-addproductBtn.addEventListener("click", () =>window.location.href = "admin-addProductPage.html" )
+addproductBtn.addEventListener("click", () =>window.location.href = "/admin-addProductPage.html" )
 
 const ActionFunctions = {
-  edit: () => window.location.href = "admin-editProductPage.html",
-  delete: () => deleteProduct(),
+  edit: (e) => editPagehandler(e),
+  delete: (e) => deleteProduct(e),
 }
 
-productList.addEventListener('click', e => {
+productListContainer.addEventListener('click', e => {
+  const targetName = e.target.closest(".container").dataset.name
   const action = e.target.dataset.action
   if (action) {
-    ActionFunctions[action]()
+    ActionFunctions[action]({
+      targetName
+    })
   }
 })
 
 function insertProductElement() {
   // const res = await fetch(`/api/products`) //GET요청으로 사용
   // const Data = await res.json()
-  
-  //난 더미데이터! 나중에 지워주세요!
-  const productData=[{
+
+  const dummyData= [{
     "name" : "난 버너",
     "price" : 18000,
     //카테고리
@@ -55,21 +50,20 @@ function insertProductElement() {
     "stock" : 10,
     "img" :"https://as2.ftcdn.net/v2/jpg/05/91/06/49/1000_F_591064973_ewRXNLyJqEBgY0ftnhWwzZ5cexrKUg2n.jpg"
   }]
+  
+  for (let i=0; i<dummyData.length; i++){
+  const data = dummyData[i]
 
-  for (let i=0; i<productData.length; i++){
-  const data = productData[i]
-
-  const name = data.name
-  const stock = data.stock
-  const price = chageNumberToLocaleString(data.price)
-  const img = data.img
-
+  const Productname = data.name
+  const Productstock = data.stock
+  const Productprice = chageNumberToLocaleString(data.price)
+  const Productimg = data.img
 
   //요소 만들기
-  productcontainer.insertAdjacentHTML('beforeend',`
-    <div class="container rounded border border-secondary">
+  productListContainer.insertAdjacentHTML('beforeend',`
+    <div class="container rounded border border-secondary" data-name="${Productname}">
       <div class="row">
-        <img class="productImg col" src="${img}">
+        <img class="productImg col" src="${Productimg}">
         <div class="table-box col">
           <table class="table table-borderless text-center">
             <thead  class="border-bottom">
@@ -82,13 +76,12 @@ function insertProductElement() {
             </thead>
             <tbody>
               <tr class="align-middle">
-                <td><div class="name ">${name}</div></td>
+                <td><div class="name ">${Productname}</div></td>
                 <td>
-                  <div>대분류</div>
-                  <div>소분류</div>
+                  <div>카테고리</div>
                 </td>
-                <td><div class="price">${price}원</div></td>
-                <td><div class="stock">${stock}개</div></td>
+                <td><div class="price">${Productprice}원</div></td>
+                <td><div class="stock">${Productstock}개</div></td>
                 </tr>
             </tbody> 
           </table>
@@ -103,34 +96,38 @@ function insertProductElement() {
   }
 }
 
-//상품 삭제 함수
-//그런데 삭제할 상품의 Btn들을 어떻게 구분할지..?
-function deleteProduct() {
-  const apiUrl = "/api/products/:name" //삭제하고싶은 상품의 name
+//페이지 전환 + targetName 넘기는 함수
+function editPagehandler(e){
+  localStorage.setItem('targetName', e.targetName)
+  window.location.href = "/admin-editProductPage.html"
+}
 
+//상품 삭제 함수
+async function deleteProduct(e) {
+  const targetName = e.targetName
+  const productName = JSON.stringify(targetName)
+
+  const apiUrl = `http://localhost:5000/api/products/:${productName}` //삭제하고자 하는 상품의 name
 
   const answer = confirm(
-    `정말 상품을 삭제하시겠습니까?`
+    `정말 [${targetName}]상품을 삭제하시겠습니까?`
   )
   if (answer) {
-    fetch (apiUrl, {
-      method: 'DELETE'
-    })
-      .then(async (res) => {
-        const json = await res.json();
-
-        if (res.ok) {
-          return json;
-        }
-
-        return Promise.reject(json);
-      })
-      .then((data) => {
-        alert("상품 삭제에 성공하였습니다!");
-        window.location.href = "/";
-      })
-      .catch((err) =>
-        alert(`삭제에 실패하였습니다...`)
-      );
+    //API 통신으로 DB에서 상품 삭제
+    const res = await fetch(apiUrl, {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: productName,
+    });
+    
+    if (res.status == 200) {
+        //상품 삭제 성공시
+        alert(`[${targetName}]상품 삭제에 성공하였습니다!`)
+        //페이지에서도 삭제되어야함
+      } else {
+        alert(`상품 삭제에 실패하였습니다...`)
+      }
   }
 }
