@@ -28,7 +28,6 @@ productListContainer.addEventListener('click', e => {
 })
 
 function insertProductElement() {
-  //
   // const res = await fetch(`/api/products`) //GET요청으로 사용
   // const Data = await res.json()
 
@@ -109,9 +108,6 @@ async function deleteProduct(e) {
   const productName = JSON.stringify(targetName)
 
   const apiUrl = `http://localhost:5000/api/products/:${productName}` //삭제하고자 하는 상품의 name
-
-  
-
 
   const answer = confirm(
     `정말 [${targetName}]상품을 삭제하시겠습니까?`

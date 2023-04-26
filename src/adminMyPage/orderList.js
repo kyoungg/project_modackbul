@@ -1,7 +1,6 @@
 import { chageNumberToLocaleString } from "../utils/index.js" 
 
-const orderBox = document.querySelector('.orderBox')
-const orderList = document.querySelector("#oderList-container")
+const orderListContainer = document.querySelector("#oderList-container")
 
 // 데이터를 받아 요소를 만든 후, html에 삽입
 insertOderElement()
@@ -9,32 +8,46 @@ insertOderElement()
 const editStatusBtn = document.querySelector("#editStatusBtn")
 const orderCancelBtn = document.querySelector("#orderCancelBtn")
 
-//버튼들 중에서, 특정 버튼을 어떻게 구분하지 -> name으로 구분해야지
-//근데 그 name을 버튼에 어떻게 할당하지..
-//for문을 돌려서 "#deledBtn-${name}" 이런식으로 만들어야 하나..
-
 const ActionFunctions = {
-  save: () => window.location.href = "admin-editPage.html",
-  cancel: () => { deleteOrder() },
+  edit: (e) => editOrerstatusHandler(e),
+  cancel: (e) => deleteOrder(e) ,
 }
 
-orderList.addEventListener('click', e => {
+orderListContainer.addEventListener('click', e => {
+  const targetNum = e.target.closest(".container").dataset.name
+  const targetStatus = targetNum.value
   const action = e.target.dataset.action
   if (action) {
-    ActionFunctions[action]()
+    ActionFunctions[action]({
+      targetNum
+    })
   }
+  console.log(targetNum)
+  console.log(targetStatus)
 })
 
-function insertOderElement() {
-  // const res = await fetch(`/api/products`) //GET요청으로 사용
-  // const Data = await res.json()
+async function insertOderElement() {
+
+  // const apiUrl = `http://localhost:5000/api/orders/admin`
+  // const res = await fetch(apiUrl, {
+  //   method: 'GET',
+  //   headers: {
+  //       'Content-Type': 'application/json',
+  //   }, //관리자 토큰 필요함..body에 넣어서 보내고 데이터를 받나..?
+  //   body: adminId,
+  // });
+  //   if (res.status == 200) {
+  //     const Data = await res.json()
+  //   } else {
+  //     alert(`페이지 로딩에 실패하였습니다...`)
+  //   }
   
   //난 더미데이터! 나중에 지워주세요!
   const Data=[{
     "customerId" : "imhoho@gmail.com",
     "customerPhoneNumber" : "010-2000-1300",
     "customerAddress" : "성수 낙낙대로 어쩌구동 어쩌구호",
-    "orderStatus" : "배송준비중",
+    "orderStatus" : "상품 준비중",
     "cart" : "주문상품목록",
     "total" : 3000000,
     "orderNumber" : "230422001"
@@ -48,6 +61,7 @@ function insertOderElement() {
     "orderNumber" : "230422001"
   }]
 
+
   for (let i=0; i<Data.length; i++){
   const orderData = Data[i]
 
@@ -57,8 +71,8 @@ function insertOderElement() {
   const status = orderData.orderStatus
 
   //요소 만들기
-  orderList.insertAdjacentHTML('beforeend',`
-      <div class="container rounded border border-secondary">
+  orderListContainer.insertAdjacentHTML('beforeend',`
+      <div class="container rounded border border-secondary" data-name="${orderNumber}">
         <div class="table-box col">
           <table class="table table-borderless text-center">
             <thead  class="border-bottom">
@@ -76,18 +90,8 @@ function insertOderElement() {
                   <td><div class="orderid">${id}</div></td>
                   <td><div class="totalprice">${totalprice} 원</div></td>
                   <td><div class="orderStatus">
-                    <div class="dropdown">
-                      <button class="btn btn-light dropdown-toggle btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      ${status}
-                      </button>
-                      <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">배송준비중</a></li>
-                        <li><a class="dropdown-item" href="#">배송중</a></li>
-                        <li><a class="dropdown-item" href="#">배송완료</a></li>
-                      </ul>
-                        <button type="button" data-action="save" class="btn btn-secondary">등록</button>
-                    </div>
-                  </div></td>
+                      <input type="text" readonly class="form-control-plaintext text-center" id="orderStatus" value="${status}">
+                      <button id="editStatusBtn" data-action="edit" class="btn btn-secondary">발송완료</button>
                   <td>
                   <div class="gap-2 d-md-flex justify-content-md-end">
                     <button type="button" id="orderCancelBtn" data-action="cancel" class="btn btn-danger">주문취소</button>
@@ -98,44 +102,73 @@ function insertOderElement() {
           </table>
         </div>
   `)
-  //주문 상태 status가 "배송준비중"이 아닐 경우, 버튼 비활성화 필요
   }
 }
 
 //주문 취소 함수
-//주문 취소할 할당 함수를 어떻게 구현할지..
-//주문 취소되면 페이지 내에서도 삭제되어야함
-function deleteOrder(orderNumber) {
-  const apiUrl = "/api/orders/:adminId/:orderId" //삭제할 주문정보
+//주문 취소되면 페이지 내에서도 삭제해야함
+async function deleteOrder(e) {
+  const targetNum = e.targetNum
+  const orderNum = JSON.stringify(targetNum)
+
+  const apiUrl = `http://localhost:5000/api/users/admin/:${orderNum}` //삭제할 주문정보
 
   const answer = confirm(
-    `정말 주문을 취소하시겠습니까?`
+    `정말 [주문번호:${targetNum}] 주문을 취소하시겠습니까?`
   )
   if (answer) {
-    fetch (apiUrl, {
-      method: 'DELETE'
-    })
-      .then(async (res) => {
-        const json = await res.json();
-
-        if (res.ok) {
-          return json;
-        }
-
-        return Promise.reject(json);
-      })
-      .then((data) => {
-        alert(`${orderNumber} 주문 취소에 성공하였습니다!`);
-        window.location.href = "/";
-      })
-      .catch((err) =>
+    //API 통신으로 DB에서 주문 삭제
+    const res = await fetch(apiUrl, {
+      method: 'DELETE',
+      headers: {
+          'Content-Type': 'application/json',
+      }, //관리자 토큰 필요함..body에 넣어서 보내나
+      body: orderNum,
+    });
+    
+    if (res.status == 200) {
+        //상품 삭제 성공시
+        alert(`[주문번호:${targetNum}] 주문 취소에 성공하였습니다!`)
+        //페이지에서도 삭제되어야함-> 새로고침 시키기?
+      } else {
         alert(`주문 취소에 실패하였습니다...`)
-      );
+      }
   }
 }
 
-//배송상태 변경 함수
-function editOrderStatus(){
-  const apiUrl = "/api/orders/:adminId/:status"//수정하고 싶은 주문 정보:stauts
+//주문상태 수정 함수
+//발송 완료 버튼을 누르면 주문 취소버튼 비활성화
+//db에 API 통신을 통해 주문 상태 변경
+async function editOrerstatusHandler(e){
+  const targetNum = e.targetNum
+  const orderNum = JSON.stringify(targetNum)
+
+  //배송상태가 상품 준비중이 아니면
+  //alert로 "이미 발송 완료된 주문입니다!" 띄우기
+
+  const apiUrl = `http://localhost:5000/api/users/admin/:${orderNum}`
+
+  const answer = confirm(
+    `[주문번호:${targetNum}] 발송을 완료하시겠습니까?`
+  )
+  if (answer) {
+    //API 통신으로 DB에서 상품 배송상태 변경
+    const res = await fetch(apiUrl, {
+      method: 'PATCH',
+      headers: {
+          'Content-Type': 'application/json',
+      }, //관리자 토큰 + 수정 내용을 보내줘야함
+      body: orderNum,
+    });
+    
+    if (res.status == 200) {
+        alert(`[주문번호:${targetNum}] 배송상태 변경을 완료하였습니다!`)
+        orderCancelBtn.disabled = true; //주문취소 버튼 비활성화
+        editStatusBtn.ariaDisabled = true; //or페이지에서 발송완료 버튼 숨기기?음..
+      } else {
+        alert(`배송상태 변경에 실패하였습니다...`)
+      }
+  }
+    
 
 }
