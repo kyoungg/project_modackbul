@@ -13,8 +13,8 @@ const addproductBtn = document.querySelector("#addproductBtn")
 addproductBtn.addEventListener("click", () =>window.location.href = "/admin-addProductPage.html" )
 
 const ActionFunctions = {
-  edit: () => window.location.href = "admin-editProductPage.html",
-  delete: () => deleteProduct(),
+  edit: (e) => editPagehandler(e),
+  delete: (e) => deleteProduct(e),
 }
 
 productListContainer.addEventListener('click', e => {
@@ -25,7 +25,6 @@ productListContainer.addEventListener('click', e => {
       targetName
     })
   }
-  console.log(targetName)
 })
 
 function insertProductElement() {
@@ -96,11 +95,21 @@ function insertProductElement() {
   }
 }
 
-//상품 삭제 함수
-async function deleteProduct(targetName) {
-  const apiUrl = `http://localhost:5000/api/products/:${targetName}` //삭제하고자 하는 상품의 name
+//페이지 전환 + targetName 넘기는 함수
+function editPagehandler(e){
+  localStorage.setItem('targetName',e.targetName)
+  window.location.href = "/admin-editProductPage.html"
+}
 
-  console.log(targetName)
+//상품 삭제 함수
+async function deleteProduct(e) {
+  const targetName = e.targetName
+  const productName = JSON.stringify(targetName)
+
+  const apiUrl = `http://localhost:5000/api/products/:${productName}` //삭제하고자 하는 상품의 name
+
+  
+
 
   const answer = confirm(
     `정말 [${targetName}]상품을 삭제하시겠습니까?`
@@ -112,7 +121,7 @@ async function deleteProduct(targetName) {
       headers: {
           'Content-Type': 'application/json',
       },
-      body: targetName,
+      body: productName,
     });
     
     if (res.status == 200) {
