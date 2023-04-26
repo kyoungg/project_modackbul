@@ -1,4 +1,6 @@
-import { chageNumberToLocaleString } from "../utils/index.js" 
+import { chageNumberToLocaleString, checkAuth} from "../utils/index.js" 
+
+const { isAdmin, token } = checkAuth()
 
 //const productBox = document.querySelector(".productBox")
 const productListContainer = document.querySelector("#productList-container")
@@ -26,38 +28,43 @@ productListContainer.addEventListener('click', e => {
     })
   }
 })
+async function getOrderData(){
+  const apiUrl = "http://localhost:5000/api/products"
 
-function insertProductElement() {
-  // const res = await fetch(`/api/products`) //GET요청으로 사용
-  // const Data = await res.json()
+  const res = await fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        Authorization : "bearer " + token,
+    },
+  });
 
-  const dummyData= [{
-    "name" : "난 버너",
-    "price" : 18000,
-    //카테고리
-    "description" : "맥주처럼 보이지만 버너입니다. 위에 조리도구를 올려 사용하세요!",
-    "summary" : "맥주모양 담요입니다",
-    "company" : "happy fire",
-    "stock" : 89,
-    "img" : "https://as2.ftcdn.net/v2/jpg/05/91/78/95/1000_F_591789500_vRd3qnI9kBZUzWyh2VSNZL61jf4AnJFL.jpg"
-  },{
-    "name" : "난 물병",
-    "price" : 18000,
-    //카테고리
-    "description" : "향수처럼 보이지만 물병입니다. 마실 수 있어요!",
-    "summary" : "향수모양 유리 물병입니다",
-    "company" : "아임텀블러",
-    "stock" : 10,
-    "img" :"https://as2.ftcdn.net/v2/jpg/05/91/06/49/1000_F_591064973_ewRXNLyJqEBgY0ftnhWwzZ5cexrKUg2n.jpg"
-  }]
+  if (res.status == 200) {
+    const data = await res.json()
+    return data;
+  } else {
+    alert(`페이지 로딩이 실패했습니다...`)
+  }
+}
+
+
+async function insertProductElement() {
   
-  for (let i=0; i<dummyData.length; i++){
-  const data = dummyData[i]
+  //관리자일때만
+//if(isAdmin){
+  const data =  await getOrderData()
+  const productdata = data.data
+  console.log(productdata[0].imgPath)
+//}
+  
+  for (let i=0; i< productdata.length; i++){
+  const data = productdata[i]
 
   const Productname = data.name
   const Productstock = data.stock
   const Productprice = chageNumberToLocaleString(data.price)
-  const Productimg = data.img
+  const Productimg = data.imgPath
+  const productcategory = data.category
 
   //요소 만들기
   productListContainer.insertAdjacentHTML('beforeend',`
@@ -78,7 +85,7 @@ function insertProductElement() {
               <tr class="align-middle">
                 <td><div class="name ">${Productname}</div></td>
                 <td>
-                  <div>카테고리</div>
+                  <div>${productcategory}</div>
                 </td>
                 <td><div class="price">${Productprice}원</div></td>
                 <td><div class="stock">${Productstock}개</div></td>
@@ -119,7 +126,7 @@ async function deleteProduct(e) {
       headers: {
           'Content-Type': 'application/json',
       },
-      body: productName,
+    //  body: productName,
     });
     
     if (res.status == 200) {

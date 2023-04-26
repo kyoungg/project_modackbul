@@ -1,6 +1,6 @@
 import { chageNumberToLocaleString, checkAuth } from "../utils/index.js" 
 
-const { isLoggedIn, token } = checkAuth()
+const { isAdmin, token } = checkAuth()
 
 const orderListContainer = document.querySelector("#oderList-container")
 
@@ -29,7 +29,7 @@ orderListContainer.addEventListener('click', e => {
 })
 
 //API 통신 함수
-async function getOrderdata(){
+async function getOrderData(){
     const apiUrl = `http://localhost:5000/api/orders/admin`
     const res = await fetch(apiUrl, {
     method: 'GET',
@@ -37,41 +37,40 @@ async function getOrderdata(){
         Authorization : "bearer " + token,
     },
   });
-  
   const Data = await res.json()
-  return Data;
+  console.log(Data)
 }
 
 async function insertOderElement() {
 
-  if(isLoggedIn){
-    getOrderdata()
+  if(isAdmin){
+    getOrderData()
   }
 
-  //난 더미데이터! 나중에 지워주세요!
-  const Data=[{
-    "customerId" : "imhoho@gmail.com",
-    "customerPhoneNumber" : "010-2000-1300",
-    "customerAddress" : "성수 낙낙대로 어쩌구동 어쩌구호",
-    "orderStatus" : "상품 준비중",
-    "cart" : "주문상품목록",
-    "total" : 3000000,
-    "orderNumber" : "230422001"
-  },{
-    "customerId" : "soso@gmail.com",
-    "customerPhoneNumber" : "010-0010-0001",
-    "customerAddress" : "강남 악악대로 어쩌구동 어쩌구호",
-    "orderStatus" : "배송중",
-    "cart" : "주문상품목록들",
-    "total" : 300800,
-    "orderNumber" : "230400001"
-  }]
+  // //난 더미데이터! 나중에 지워주세요!
+  // const Data=[{
+  //   "customerId" : "imhoho@gmail.com",
+  //   "customerPhoneNumber" : "010-2000-1300",
+  //   "customerAddress" : "성수 낙낙대로 어쩌구동 어쩌구호",
+  //   "orderStatus" : "상품 준비중",
+  //   "cart" : "주문상품목록",
+  //   "total" : 3000000,
+  //   "orderNumber" : "230422001"
+  // },{
+  //   "customerId" : "soso@gmail.com",
+  //   "customerPhoneNumber" : "010-0010-0001",
+  //   "customerAddress" : "강남 악악대로 어쩌구동 어쩌구호",
+  //   "orderStatus" : "배송중",
+  //   "cart" : "주문상품목록들",
+  //   "total" : 300800,
+  //   "orderNumber" : "230400001"
+  // }]
 
 
   for (let i=0; i<Data.length; i++){
   const orderData = Data[i]
 
-  const orderNumber = orderData.orderNumber
+  const orderNumber = orderData.orderNumbers
   const id = orderData.customerId
   const totalprice = chageNumberToLocaleString(orderData.total)
   const status = orderData.orderStatus

@@ -1,18 +1,21 @@
 import { productForm } from "./form.js";
+import { checkAuth } from "../utils/index.js" 
 
-const main = document.querySelector('.common')
+const { isAdmin, token } = checkAuth()
 
-main.innerHTML = productForm();
+//const main = document.querySelector('.common')
+//main.innerHTML = productForm();
 
 const nameInput = document.querySelector("#nameInput")
 const priceInput = document.querySelector("#priceInput")
 const summaryInput = document.querySelector("#summaryInput")
 const companyInput = document.querySelector("#companyInput")
+const fileInput = document.querySelector("#file")
 
 const stockInput = document.querySelector("#stockInput")
 const descriptionInput = document.querySelector("#descriptionInput")
 
-const addproductBtn = document.querySelector("#editBtn")
+const addproductBtn = document.querySelector("#addproductBtn")
 const cancelBtn = document.querySelector("#cancelBtn")
 
 //이미지 preview
@@ -26,7 +29,6 @@ fileDOM.addEventListener('change', () => {
 
 //관리자 페이지로 이동
 cancelBtn.addEventListener("click", () => {window.location.href = "./adminMyPage";})
-
 addproductBtn.addEventListener("click", addProductSubmit)
 
 async function addProductSubmit(e) {
@@ -36,37 +38,44 @@ async function addProductSubmit(e) {
     const price = priceInput.value
     const summary = summaryInput.value
     const company = companyInput.value
-    //카테고리
+    const category = "나 버너"
     const stock = stockInput.value
-    //이미지
+    const imagePath = fileInput.name
     const description = descriptionInput.value
 
     const productdata = {
         name,
         price,
-        //카테고리
+        category,
         description,
         summary,
         company,
         stock,
-        //이미지
-    };
+        imagePath,
+    }
+
+    console.log(productdata)
+    console.log(JSON.stringify(productdata))
+
     
-    const dataJson = JSON.stringify(productdata)
+    if(isAdmin){
+      const dataJson = JSON.stringify(productdata)
+      
+      const apiUrl = `http://localhost:5000/api/products/add`
     
-    const apiUrl = `http://localhost:5000/api/products/add`
-  
-    const res = await fetch(apiUrl, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: dataJson,
-    });
-    
-    if (res.status == 200) {
-        alert(`[${name}] 상품 등록에 성공하였습니다!`)
-      } else {
-        alert(`[${name}] 상품 등록에 실패하였습니다...`)
-      }
+      const res = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: dataJson,
+      });
+      
+      if (res.ok) {
+          alert(`[${name}] 상품 등록에 성공하였습니다!`)
+        } else {
+          alert(`상품 등록에 실패하였습니다...`)
+        }
+    } 
   }
+
