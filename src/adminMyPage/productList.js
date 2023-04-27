@@ -20,13 +20,17 @@ const ActionFunctions = {
 }
 
 productListContainer.addEventListener('click', e => {
-  const targetName = e.target.closest(".container").dataset.name
+  const target = e.target.closest(".container")
+  const targetNum = target.id
+  const targetName = target.dataset.name
   const action = e.target.dataset.action
   if (action) {
     ActionFunctions[action]({
-      targetName
+      targetNum
     })
   }
+  console.log(targetNum)
+  console.log(targetName)
 })
 
 //모든상품 API로 조회하는 함수
@@ -41,7 +45,7 @@ async function getProductData(){
     },
   });
 
-  if (res.status == 200) {
+  if (res.ok) {
     const data = await res.json()
     return data;
   } else {
@@ -58,10 +62,13 @@ async function insertProductElement() {
   const productdata = data.data
   console.log(productdata[1].imgPath)
 //}
+
+console.log(productdata)
   
   for (let i=0; i< productdata.length; i++){
   const data = productdata[i]
 
+  const productId = data._id
   const Productname = data.name
   const Productstock = data.stock
   const Productprice = chageNumberToLocaleString(data.price)
@@ -70,7 +77,7 @@ async function insertProductElement() {
 
   //요소 만들기
   productListContainer.insertAdjacentHTML('beforeend',`
-    <div class="container rounded border border-secondary" data-name="${Productname}">
+    <div class="container rounded border border-secondary" id="${productId}" name="${Productname}" data-name="${data.name}">
       <div class="row">
         <img class="productImg col" src="http://localhost:5000/${Productimg}">
         <div class="table-box col">
@@ -107,7 +114,7 @@ async function insertProductElement() {
 
 //페이지 전환 + targetName 넘기는 함수
 function editPagehandler(e){
-  localStorage.setItem('targetName', e.targetName)
+  localStorage.setItem('targetName', e.targetNum)
   window.location.href = "/admin-editProductPage.html"
 }
 
@@ -131,7 +138,7 @@ async function deleteProduct(e) {
     //  body: productName,
     });
     
-    if (res.status == 200) {
+    if (res.ok) {
         //상품 삭제 성공시
         alert(`[${targetName}]상품 삭제에 성공하였습니다!`)
         //페이지에서도 삭제되어야함
