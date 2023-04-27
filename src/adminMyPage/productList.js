@@ -26,7 +26,7 @@ productListContainer.addEventListener('click', e => {
   const action = e.target.dataset.action
   if (action) {
     ActionFunctions[action]({
-      targetNum
+      targetName
     })
   }
   console.log(targetNum)
@@ -47,7 +47,7 @@ async function getProductData(){
 
   if (res.ok) {
     const data = await res.json()
-    return data;
+    return data
   } else {
     alert(`페이지 로딩이 실패했습니다...`)
   }
@@ -62,8 +62,6 @@ async function insertProductElement() {
   const productdata = data.data
   console.log(productdata[1].imgPath)
 //}
-
-console.log(productdata)
   
   for (let i=0; i< productdata.length; i++){
   const data = productdata[i]
@@ -75,9 +73,10 @@ console.log(productdata)
   const Productimg = data.imgPath
   const productcategory = data.category
 
+
   //요소 만들기
   productListContainer.insertAdjacentHTML('beforeend',`
-    <div class="container rounded border border-secondary" id="${productId}" name="${Productname}" data-name="${data.name}">
+  <div class="container rounded border border-secondary" id="${productId}" name="${Productname}" data-name="${data.name}">
       <div class="row">
         <img class="productImg col" src="http://localhost:5000/${Productimg}">
         <div class="table-box col">
@@ -114,7 +113,7 @@ console.log(productdata)
 
 //페이지 전환 + targetName 넘기는 함수
 function editPagehandler(e){
-  localStorage.setItem('targetName', e.targetNum)
+  localStorage.setItem('targetName',e.targetName)
   window.location.href = "/admin-editProductPage.html"
 }
 
@@ -123,7 +122,7 @@ async function deleteProduct(e) {
   const targetName = e.targetName
   const productName = JSON.stringify(targetName)
 
-  const apiUrl = `http://localhost:5000/api/products/:${productName}` //삭제하고자 하는 상품의 name
+  const apiUrl = `http://localhost:5000/api/products/${productName}` //삭제하고자 하는 상품의 name
 
   const answer = confirm(
     `정말 [${targetName}]상품을 삭제하시겠습니까?`
@@ -135,13 +134,12 @@ async function deleteProduct(e) {
       headers: {
           'Content-Type': 'application/json',
       },
-    //  body: productName,
     });
     
     if (res.ok) {
         //상품 삭제 성공시
         alert(`[${targetName}]상품 삭제에 성공하였습니다!`)
-        //페이지에서도 삭제되어야함
+        window.location.reload();
       } else {
         alert(`상품 삭제에 실패하였습니다...`)
       }

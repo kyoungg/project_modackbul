@@ -1,4 +1,7 @@
 import { productForm } from "./form.js";
+import {checkAuth} from "../utils/index.js" 
+
+const { isAdmin, token } = checkAuth()
 
 const main = document.querySelector('.common')
 
@@ -34,22 +37,6 @@ cancelBtn.addEventListener('click', () => {
 })
 
 
-//난 더미데이터, 나중에 지워주세용
-const Data = [
-    {
-      name: "포근 담요",
-      price: 12000,
-      //category: 대분류,소분류
-      description: "뉴질랜드 양 티미의 털로 만든 가로세로 1cm 양털 담요입니다",
-      summary: "양털로 만든 담요",
-      company: "sad sheep",
-      stock: 20,
-      img : "https://stock.adobe.com/kr/templates/can-mockup/591789500"
-    },
-  ];
-
-  insertProductElement();
-
 //기존 데이터 받아와서 보여주는 함수
 async function insertProductElement() {
 
@@ -58,93 +45,56 @@ async function insertProductElement() {
     const targetName = localStorage.getItem('targetName')
     
     //특정 상품 정보 조회
-    if(isAdmin){
+    //if(isAdmin){
       const data = await getProductData()
+      console.log(data.data)
       const productdata = data.data
-      console.log(productdata.imgPath) //이미지 출력 안됨
-    }
+      const productId = productdata._id
 
-  } else{ //로컬에 상품 정보가 들어있지 않다면
+      nameInput.value = productdata.name
+      priceInput.value = productdata.price
+      summaryInput.value = productdata.summary
+      companyInput.value = productdata.company
+      stockInput.value = productdata.stock
+      descriptionInput.value = productdata.description
+      categoryInput.value = productdata.category
+      preview.src = productdata.imgPath //이미지
+      
+      sessionStorage.setItem('productId', productId);
+    //}
+    } else{ //로컬에 상품 정보가 들어있지 않다면
     alert('잘못된 경로입니다!')
     window.location.href = "/index.html"
   }
-  const productdata = Data[0]
-
-  nameInput.value = productdata.name
-  priceInput.value = productdata.price
-  summaryInput.value = productdata.summary
-  companyInput.value = productdata.company
-  stockInput.value = productdata.stock
-  descriptionInput.value = productdata.description
-  companyInput.value = productdata.category
-  preview.src = productdata.imgPath //기존 이미지 프리뷰가 안됨...어째서?
 }
 
-async function editProduct(e) {
-        e.preventDefault
-    
-        const name = nameInput.value
-        const price = priceInput.value
-        const summary = summaryInput.value
-        const company = companyInput.value
-        const category = categoryInput.value
-        const stock = stockInput.value
-        const imagePath = fileInput.name
-        const description = descriptionInput.value
+insertProductElement();
 
-        const productdata = {
-            name,
-            price,
-            category,
-            description,
-            summary,
-            company,
-            stock,
-            imagePath,
-        }
-    
-        const dataJson = JSON.stringify(productdata)
-    
-        const apiUrl = `/api/products/:productId`
-    
-        const res = await fetch(apiUrl, {
-        method: 'PATCH',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-        body: dataJson,
-        });
-    
-        if (res.status === "응답성공시") {
-        alert("상품 수정에 성공하였습니다!")
-        } else {
-        alert("상품 수정에 실패하였습니다...")
-        }
-    
-    }
 
-  //특정상품 API통신으로 조회하는 함수
-async function getProductData(){
-  const apiUrl = `http://localhost:5000/api/products/${targetName}`
+   //특정상품 API통신으로 조회하는 함수
+ async function getProductData(){
+   const targetName = localStorage.getItem('targetName')
+   const apiUrl = `http://localhost:5000/api/products/${targetName}`
 
-  const res = await fetch(apiUrl, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization : "bearer " + token,
-    },
-  });
+   const res = await fetch(apiUrl, {
+     method: 'GET',
+     headers: {
+       'Content-Type': 'application/json',
+       Authorization : "bearer " + token,
+     },
+   });
 
-  if (res.ok) {
-    const data = await res.json()
-    return data;
-  } else {
-    alert(`페이지 로딩이 실패했습니다...`)
-  }
-}
+   if (res.ok) {
+     const data = await res.json()
+     return data;
+   } else {
+     alert(`페이지 로딩이 실패했습니다...`)
+   }
+ }
 
-  //특정상품 정보 수정하는 함수
+//특정상품 정보 수정하는 함수
 async function editProductData(){
+  const productId = sessionStorage.getItem('productId')
 
   const updatedata = {
         name : nameInput.value,
@@ -159,6 +109,7 @@ async function editProductData(){
 
     const updateData = JSON.stringify(updatedata)
     const apiUrl = `http://localhost:5000/api/products/${productId}`
+    console.log(productId)
 
     const res = await fetch(apiUrl, {
       method: 'PATCH',

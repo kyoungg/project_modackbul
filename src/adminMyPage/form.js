@@ -51,30 +51,17 @@ export function productForm() {
                         >
                 </div>
             </div>
-            <!-- 카테고리 대분류, 소분류 드롭다운 버튼?-->
-            <!-- 어떻게 구현해야하는지,, -->
             <div>
-                <label for="category">Category</label>
-                <div>
-                    <div class="form-floating">
-                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                        </select>
-                        <label for="floatingSelect">대분류</label>
-                    </div>
-                    <div class="form-floating">
-                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                        </select>
-                        <label for="floatingSelect">소분류</label>
-                    </div>
-                </div>
+                <div class="mb-3"></div>
+                <label for="categoryInput">Category</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="categoryInput"
+                    placeholder="상품 카테고리 입력"
+                    required
+                    >
+        </div>
             </div>
             <div>
                 <div class="mb-3">
