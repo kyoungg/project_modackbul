@@ -3,7 +3,6 @@ export function productForm() {
 `<div class="container">
     <div class="addproduct-form-container">
         <form id="productForm">
-            <h2>add Product</h2>
             <div>
                 <div class="mb-3">
                     <label for="nameInput" class="form-label">Product Name</label>

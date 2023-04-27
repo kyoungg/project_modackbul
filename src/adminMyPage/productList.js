@@ -21,7 +21,6 @@ const ActionFunctions = {
 
 productListContainer.addEventListener('click', e => {
   const target = e.target.closest(".container")
-  const targetNum = target.id
   const targetName = target.dataset.name
   const action = e.target.dataset.action
   if (action) {
@@ -29,8 +28,6 @@ productListContainer.addEventListener('click', e => {
       targetName
     })
   }
-  console.log(targetNum)
-  console.log(targetName)
 })
 
 //모든상품 API로 조회하는 함수
@@ -120,9 +117,9 @@ function editPagehandler(e){
 //상품 삭제 함수
 async function deleteProduct(e) {
   const targetName = e.targetName
-  const productName = JSON.stringify(targetName)
+  console.log(productName)
 
-  const apiUrl = `http://localhost:5000/api/products/${productName}` //삭제하고자 하는 상품의 name
+  const apiUrl = `http://localhost:5000/api/products/${targetName}` //삭제하고자 하는 상품의 name
 
   const answer = confirm(
     `정말 [${targetName}]상품을 삭제하시겠습니까?`
@@ -135,8 +132,6 @@ async function deleteProduct(e) {
           'Content-Type': 'application/json',
       },
     });
-
-    console.log(res)
     
     if (res.ok) {
         //상품 삭제 성공시
