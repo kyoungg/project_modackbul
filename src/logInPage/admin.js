@@ -42,19 +42,22 @@ async function loginSubmit(e) {
     body: dataJson,
   })
 
-  const userData = await response.json();
-  console.log(userData)
+  const responseData = await response.json();
+  console.log(responseData.data)
 
-  localStorage.setItem("userData", userData.data.token);
-  localStorage.setItem("userData", userData.data.role);
-  console.log(userData.data.role)
+  localStorage.setItem("userData", responseData.data.data.token);
+  localStorage.setItem("role", responseData.data.role);
 
-  const getuserData = {
-    email: userData.data.email,
-    fullName: userData.data.fullName,
-    phoneNumber: userData.data.phoneNumber,
-    address: userData.data.address,
+  const userData = {
+    email: responseData.data.data.email,
+    fullName: responseData.data.data.fullName,
+    phoneNumber: responseData.data.data.phoneNumber,
+    address: responseData.data.data.address,
+    token: responseData.data.data.token,
+    role: responseData.data.data.role,
   };
+
+  console.log(userData)
 
   sessionStorage.setItem("userData", JSON.stringify(userData));
 

@@ -45,21 +45,20 @@ async function loginSubmit(e) {
     body: dataJson,
   })
 
-  const userData = await response.json();
-  console.log(userData)
+  const responseData = await response.json();
+  console.log(responseData)
 
-  localStorage.setItem("userData", userData.data.token);
+  localStorage.setItem("userData", responseData.data.token);
 
-  const getuserData = {
-    email: userData.data.email,
-    fullName: userData.data.fullName,
-    phoneNumber: userData.data.phoneNumber,
-    address: userData.data.address,
+  const userData = {
+    email: responseData.data.email,
+    fullName: responseData.data.fullName,
+    phoneNumber: responseData.data.phoneNumber,
+    address: responseData.data.address,
   };
 
   sessionStorage.setItem("userData", JSON.stringify(userData));
 
-  
 
   if (response.ok) {
     alert("로그인에 성공하였습니다!");
