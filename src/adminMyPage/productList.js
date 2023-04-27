@@ -12,7 +12,7 @@ const editBtn = document.querySelector("#editBtn")
 const deleteBtn = document.querySelector("#deleteBtn")
 const addproductBtn = document.querySelector("#addproductBtn")
 
-addproductBtn.addEventListener("click", () =>window.location.href = "/admin-addProductPage.html" )
+addproductBtn.addEventListener("click", () => window.location.href = "/admin-addProductPage.html" )
 
 const ActionFunctions = {
   edit: (e) => editPagehandler(e),
@@ -135,8 +135,10 @@ async function deleteProduct(e) {
           'Content-Type': 'application/json',
       },
     });
+
+    console.log(res)
     
-    if (res.status === 200) {
+    if (res.ok) {
         //상품 삭제 성공시
         alert(`[${targetName}]상품 삭제에 성공하였습니다!`)
         window.location.reload();
