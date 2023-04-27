@@ -26,7 +26,7 @@ const preview = document.querySelector('.image-box')
 //해결해야 할 것들..
 const fileInput = document.querySelector("#file")
 const categoryInput = document.querySelector("#categoryInput")
-const categoryBox = document.querySelector("#categoryBox")
+
 
 const fileUploadBtn = document.querySelector("#fileUploadBtn")
 
@@ -56,19 +56,14 @@ async function addcreateOption(){
     //통신으로 category 받아오기
     const data =  await getcategoryData()
     const categorydata = data.data
-    console.log(categorydata)
 
     for (let i=0; i<categorydata.length; i++){
         const data = categorydata[i]
         const categoryName = data.name
-        console.log(categoryName)
 
         categoryInput.insertAdjacentHTML('beforeend',
           `<option name="category" value="${categoryName}">${categoryName}</option>`)
-
     }
-    
-
 }
 
 //카테고리 통신으로 받아오는 함수

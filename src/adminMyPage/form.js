@@ -1,8 +1,8 @@
 export function productForm() {
     const field =
-`    <div class="container">
+`<div class="container">
 <div class="addproduct-form-container">
-    <form id="productForm">
+    <form id="productForm" enctype="multipart/form-data">
         <div>
             <div class="mb-3">
                 <label for="nameInput" class="form-label">Product Name</label>
@@ -10,6 +10,7 @@ export function productForm() {
                     type="text"
                     class="form-control"
                     id="nameInput"
+                    name="name"
                     placeholder="상품명 입력"
                     required
                     >
@@ -22,6 +23,7 @@ export function productForm() {
                     type="number"
                     class="form-control"
                     id="priceInput"
+                    name="price"
                     placeholder="상품가격 입력"
                     required
                     >
@@ -34,6 +36,7 @@ export function productForm() {
                     type="text"
                     class="form-control"
                     id="summaryInput"
+                    name="summary"
                     placeholder="상품소개 작성"
                     required
                     >
@@ -46,27 +49,21 @@ export function productForm() {
                     type="text"
                     class="form-control"
                     id="companyInput"
+                    name="company"
                     placeholder="상품 제조회사"
                     required
                     >
             </div>
         </div>
 
-
-        <!-- 카테고리 버튼 들어갑니다 -->
-        <div class="imcategory">
-            <div class="mb-3">
-                <label for="categoryInput">Category</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="categoryInput"
-                    placeholder="상품 카테고리 입력"
-                    required
-                    >
+        <div>
+            <label for="companyInput" class="form-label">Category</label>
+            <div class="mb-3 input-group category">
+            <select class="form-select" id="categoryInput" aria-label="Example select with button addon">
+                <option selected>Choose...</option>
+            </select>
             </div>
         </div>
-
         <div>
             <div class="mb-3">
                 <label for="stockInput" class="form-label">Product Stock</label>
@@ -74,6 +71,7 @@ export function productForm() {
                     type="number"
                     class="form-control"
                     id="stockInput"
+                    name="stock"
                     placeholder="재고입력"
                     required
                     >
@@ -82,22 +80,23 @@ export function productForm() {
 
         <div>
             <div class="mb-3">
-                <form action="/upload" method="post" enctype="multipart/form-data">
-                    <label for="file" class="form-label upload-btn">
+                <!-- <form> -->
+                    <label>
                         <div><img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/file_upload_icon_136628.png" class="image-box" /></div>
                     </label>
+
                     <div class="input-group fileInput">
                         <input
                             type="file"
                             class="form-control"
                             id="file"
-                            name="file"
+                            name="imgPath"
                             aria-describedby="inputGroupFileAddon04"
                             aria-label="Upload"
                             >
-                        <button class="btn btn-outline-secondary" type="button" id="fileUploadBtn">이미지 등록</button>
+                        <button class="btn btn-outline-secondary" type="submt" id="fileUploadBtn">이미지 등록</button>
                     </div>
-                </form>
+                <!-- </form> -->
             </div>
         </div>
 
@@ -108,6 +107,7 @@ export function productForm() {
                     type="text"
                     class="form-control"
                     id="descriptionInput"
+                    name="description"
                     placeholder="상품상세 입력"
                     required
                     >

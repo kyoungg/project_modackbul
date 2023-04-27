@@ -3,6 +3,8 @@ import {checkAuth} from "../utils/index.js"
 
 const { isAdmin, token } = checkAuth()
 
+addcreateOption()
+
 const main = document.querySelector('.common')
 
 main.innerHTML = productForm();
@@ -37,7 +39,42 @@ cancelBtn.addEventListener('click', () => {
     window.location.href = "/admin-productListPage";
 })
 
-insertProductElement();
+insertProductElement()
+
+//카테고리 추가 함수
+async function addcreateOption(){
+  //통신으로 category 받아오기
+  const data =  await getcategoryData()
+  const categorydata = data.data
+
+  for (let i=0; i<categorydata.length; i++){
+      const data = categorydata[i]
+      const categoryName = data.name
+
+      categoryInput.insertAdjacentHTML('beforeend',
+        `<option name="category" value="${categoryName}">${categoryName}</option>`)
+  }
+}
+
+//카테고리 통신으로 받아오는 함수
+async function getcategoryData(){
+  const apiUrl = "http://localhost:5000/api/categories"
+
+  const res = await fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json()
+    return data
+  } else {
+    alert(`카테고리 로딩이 실패했습니다...`)
+  }
+}
+
 
 //기존 데이터 받아와서 화면에 표시
 async function insertProductElement() {
@@ -58,6 +95,7 @@ async function insertProductElement() {
       stockInput.value = productdata.stock
       descriptionInput.value = productdata.description
       categoryInput.value = productdata.category
+      console.log(productdata.category)
       preview.src = productdata.imgPath //이미지
       console.log(productdata.imgPath) //경로는 나옴 preivew에는 안보임
       
@@ -67,6 +105,7 @@ async function insertProductElement() {
     alert('잘못된 경로입니다!')
     window.location.href = "/index.html"
   }
+  return 
 }
 
 
