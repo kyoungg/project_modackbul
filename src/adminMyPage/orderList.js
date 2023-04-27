@@ -29,17 +29,22 @@ orderListContainer.addEventListener('click', e => {
 })
 
 
-//API 통신 으로 주문정보 받아오는 함수
+//API 통신으로 주문정보 받아오는 함수
 async function getOrderData(){
+   const userdata = sessionStorage.getItem('userData')
+   const adminId = JSON.parse(userdata)._id
+   console.log(adminId)
 
-    const apiUrl = `http://localhost:5000/api/orders/admin`
+  const apiUrl = `http://localhost:5000/api/orders/admin?adminId=${adminId}`
+
 
     const res = await fetch(apiUrl, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
-        Authorization : "bearer " + token,
+        Authorization : "bearer " + token ,
     },
+    body: JSON.stringify(adminId),
   });
 
   if (res.ok) {
