@@ -27,19 +27,24 @@ const categoryInput = document.querySelector("#categoryInput")
 
 const fileUploadBtn = document.querySelector("#fileUploadBtn")
 
-fileUploadBtn.addEventListener("click", (e) => {
-  const file = e.target.closest(".fileInput").file
-  console.log(file)
-})
-
-//관리자 페이지로 이동
-cancelBtn.addEventListener("click", () => {window.location.href = "./adminMyPage";})
-addproductBtn.addEventListener("click", addProductSubmit)
-
+//이미지 프리뷰 기능
 fileDOM.addEventListener('change', () => {
   const imageSrc = URL.createObjectURL(fileDOM.files[0])
   preview.src = imageSrc
 });
+
+//file 저장
+fileUploadBtn.addEventListener("click", () => {
+  const formData = new FormData();
+  // form Data 객체 생성
+
+  formData.append("attachedImage", fileInput.files[0])
+  console.log(fileInput.files[0])
+})
+
+//취소버튼 -> 관리자 페이지로 이동
+cancelBtn.addEventListener("click", () => {window.location.href = "./adminMyPage";})
+saveProductBtn.addEventListener("click", addProductSubmit)
 
 async function addProductSubmit(e) {
     e.preventDefault()
