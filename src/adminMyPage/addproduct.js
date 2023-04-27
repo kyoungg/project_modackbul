@@ -10,12 +10,10 @@ const nameInput = document.querySelector("#nameInput")
 const priceInput = document.querySelector("#priceInput")
 const summaryInput = document.querySelector("#summaryInput")
 const companyInput = document.querySelector("#companyInput")
-const fileInput = document.querySelector("#file")
-const categoryInput = document.querySelector("#categoryInput")
-
 const stockInput = document.querySelector("#stockInput")
 const descriptionInput = document.querySelector("#descriptionInput")
 
+//등록, 취소버튼
 const addproductBtn = document.querySelector("#addproductBtn")
 const cancelBtn = document.querySelector("#cancelBtn")
 
@@ -23,14 +21,25 @@ const cancelBtn = document.querySelector("#cancelBtn")
 const fileDOM = document.querySelector('#file')
 const preview = document.querySelector('.image-box')
 
-fileDOM.addEventListener('change', () => {
-  const imageSrc = URL.createObjectURL(fileDOM.files[0])
-  preview.src = imageSrc
-});
+//해결해야 할 것들..
+const fileInput = document.querySelector("#file")
+const categoryInput = document.querySelector("#categoryInput")
+
+const fileUploadBtn = document.querySelector("#fileUploadBtn")
+
+fileUploadBtn.addEventListener("click", (e) => {
+  const file = e.target.closest(".fileInput").file
+  console.log(file)
+})
 
 //관리자 페이지로 이동
 cancelBtn.addEventListener("click", () => {window.location.href = "./adminMyPage";})
 addproductBtn.addEventListener("click", addProductSubmit)
+
+fileDOM.addEventListener('change', () => {
+  const imageSrc = URL.createObjectURL(fileDOM.files[0])
+  preview.src = imageSrc
+});
 
 async function addProductSubmit(e) {
     e.preventDefault()

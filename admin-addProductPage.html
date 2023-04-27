@@ -67,10 +67,11 @@
                         >
                 </div>
             </div>
-            <!-- 카테고리 대분류, 소분류 드롭다운 버튼?-->
-            <!-- 어떻게 구현해야하는지,, -->
-            <div>
-                <div class="mb-3"></div>
+
+
+            <!-- 카테고리 버튼 들어갑니다 -->
+            <div class="imcategory">
+                <div class="mb-3">
                     <label for="categoryInput">Category</label>
                     <input
                         type="text"
@@ -81,6 +82,7 @@
                         >
                 </div>
             </div>
+
             <div>
                 <div class="mb-3">
                     <label for="stockInput" class="form-label">Product Stock</label>
@@ -93,23 +95,28 @@
                         >
                 </div>
             </div>
+
             <div>
                 <div class="mb-3">
                     <form action="/upload" method="post" enctype="multipart/form-data">
                         <label for="file" class="form-label upload-btn">
-                            <div><img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/file_upload_icon_136628.png" class="image-box" /><div>
-                            </label>
-                        <input
-                            class="form-control"
-                            type="file"
-                            id="file"
-                            name="file"
-                            accept="application/JSON"
-                            >
+                            <div><img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/file_upload_icon_136628.png" class="image-box" /></div>
+                        </label>
+                        <div class="input-group fileInput">
+                            <input
+                                type="file"
+                                class="form-control"
+                                id="file"
+                                name="file"
+                                aria-describedby="inputGroupFileAddon04"
+                                aria-label="Upload"
+                                >
+                            <button class="btn btn-outline-secondary" type="button" id="fileUploadBtn">이미지 등록</button>
+                        </div>
                     </form>
                 </div>
-              </div>
             </div>
+
             <div>
                 <div class="mb-3">
                     <label for="descriptionInput" class="form-label">Product Description</label>
@@ -117,20 +124,19 @@
                         type="text"
                         class="form-control"
                         id="descriptionInput"
-                        placeholder=""
+                        placeholder="상품상세 입력"
                         required
                         >
                 </div>
+            </div>
+
                 <div class="d-flex  justify-content-center">
                     <button id="addproductBtn" type="submit" class="btn btn-secondary ms-2">Add</button>
                     <button id="cancelBtn" type="button"  class="btn btn-danger ms-2">Cancle</button>
                 </div>
-            </div>
-        </div>
-        </form> 
+        </form>
     </div>
-
-
+    </div>
 
     <script src="./src/adminMyPage/addproduct.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
