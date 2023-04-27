@@ -16,8 +16,9 @@ const stockInput = document.querySelector("#stockInput");
 const fileInput = document.querySelector("#file")
 const descriptionInput = document.querySelector("#descriptionInput");
 
-const editBtn = document.querySelector("#addproductBtn");
+const saveProductBtn = document.querySelector("#saveProductBtn");
 const cancelBtn = document.querySelector("#cancelBtn");
+const fileUploadBtn = document.querySelector("#fileUploadBtn")
 
 //이미지 preview
 const fileDOM = document.querySelector('#file');
@@ -29,7 +30,7 @@ fileDOM.addEventListener('change', () => {
 });
 
 //수정버튼 클릭시
-editBtn.addEventListener('click', editProductData)
+saveProductBtn.addEventListener('click', editProductData)
 
 //취소버튼 클릭시
 cancelBtn.addEventListener('click', () => {
@@ -38,10 +39,10 @@ cancelBtn.addEventListener('click', () => {
 
 insertProductElement();
 
-//기존 데이터 받아와서 보여주는 함수
+//기존 데이터 받아와서 화면에 표시
 async function insertProductElement() {
 
-  //로컬에 상품 정보가 같이 넘어왔다면
+  //로컬에 상품 정보가 같이 넘어온 상태라면
   if(sessionStorage.getItem('targetName')){
     const targetName = sessionStorage.getItem('targetName')
     
@@ -61,7 +62,8 @@ async function insertProductElement() {
       console.log(productdata.imgPath) //경로는 나옴 preivew에는 안보임
       
       sessionStorage.setItem('productId', productId);
-    } else{
+      
+    } else {
     alert('잘못된 경로입니다!')
     window.location.href = "/index.html"
   }
@@ -95,6 +97,17 @@ async function editProductData(){
   const productId = sessionStorage.getItem('productId')
   console.log(productId)
 
+  //입력된 file 받아오는 이벤트
+  sendButton.addEventListener("click",function(){
+ 
+    var formData = new FormData();
+    // form Data 객체 생성
+    formData.append("attachedImage", fileInput.files[0]);
+    // 파일 인풋에 들어간 파일들은 files 라는 리스트로 저장된다.
+    // input에 multiple을 선언해 여러개의 파일을 선택한 경우가 아니라면 files[0] 으로 input에 추가한 파일 객체를 찾을 수 있다.
+    
+  });
+
   const form = document.querySelector('#productForm')
   const updateData = new FormData(form)
 
@@ -112,7 +125,7 @@ async function editProductData(){
   console.log(res)
 
     if (res.ok) {
-      alert('상품 정보가 수정되었습니다!');
+ //     alert('상품 정보가 수정되었습니다!');
   } else {
 //    alert('상품 정보 수정에 실패하였습니다...');
   }

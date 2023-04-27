@@ -14,7 +14,7 @@ const stockInput = document.querySelector("#stockInput")
 const descriptionInput = document.querySelector("#descriptionInput")
 
 //등록, 취소버튼
-const addproductBtn = document.querySelector("#addproductBtn")
+const saveProductBtn = document.querySelector("#saveProductBtn")
 const cancelBtn = document.querySelector("#cancelBtn")
 
 //이미지 preview
