@@ -74,19 +74,14 @@
 
 
             <!-- 카테고리 버튼 들어갑니다 -->
-            <div class="imcategory">
-                <div class="mb-3">
-                    <label for="categoryInput">Category</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="categoryInput"
-                        name="category"
-                        placeholder="상품 카테고리 입력"
-                        required
-                        >
-                </div>
-            </div>
+            <div class="input-group category">
+                <select class="form-select" id="categoryInput" aria-label="Example select with button addon">
+                  <option selected>Choose...</option>
+                  <div id="categoryBox"></div>
+
+                </select>
+                <button class="btn btn-outline-secondary" type="button">Button</button>
+              </div>
             <!-- 여기까지 -->
 
             <div>

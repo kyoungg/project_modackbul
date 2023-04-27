@@ -3,6 +3,8 @@ import { checkAuth } from "../utils/index.js"
 
 const { isAdmin, token } = checkAuth()
 
+addcreateOption()
+
 //const main = document.querySelector('.common')
 //main.innerHTML = productForm();
 
@@ -24,6 +26,7 @@ const preview = document.querySelector('.image-box')
 //해결해야 할 것들..
 const fileInput = document.querySelector("#file")
 const categoryInput = document.querySelector("#categoryInput")
+const categoryBox = document.querySelector("#categoryBox")
 
 const fileUploadBtn = document.querySelector("#fileUploadBtn")
 
@@ -46,6 +49,46 @@ fileUploadBtn.addEventListener("click", () => {
 //취소버튼 -> 관리자 페이지로 이동
 cancelBtn.addEventListener("click", () => {window.location.href = "./adminMyPage";})
 saveProductBtn.addEventListener("click", addProductSubmit)
+
+
+//카테고리 추가 함수
+async function addcreateOption(){
+    //통신으로 category 받아오기
+    const data =  await getcategoryData()
+    const categorydata = data.data
+    console.log(categorydata)
+
+    for (let i=0; i<categorydata.length; i++){
+        const data = categorydata[i]
+        const categoryName = data.name
+        console.log(categoryName)
+
+        categoryInput.insertAdjacentHTML('beforeend',
+          `<option name="category" value="${categoryName}">${categoryName}</option>`)
+
+    }
+    
+
+}
+
+//카테고리 통신으로 받아오는 함수
+async function getcategoryData(){
+    const apiUrl = "http://localhost:5000/api/categories"
+
+    const res = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+    });
+  
+    if (res.ok) {
+      const data = await res.json()
+      return data
+    } else {
+      alert(`카테고리 로딩이 실패했습니다...`)
+    }
+}
 
 //상품 추가 함수
 async function addProductSubmit(e) {
