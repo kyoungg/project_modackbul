@@ -36,16 +36,15 @@ cancelBtn.addEventListener('click', () => {
     window.location.href = "/admin-productListPage";
 })
 
+insertProductElement();
 
 //기존 데이터 받아와서 보여주는 함수
 async function insertProductElement() {
 
   //로컬에 상품 정보가 같이 넘어왔다면
-  if(localStorage.getItem('targetName')){
-    const targetName = localStorage.getItem('targetName')
+  if(sessionStorage.getItem('targetName')){
+    const targetName = sessionStorage.getItem('targetName')
     
-    //특정 상품 정보 조회
-    //if(isAdmin){
       const data = await getProductData()
       console.log(data.data)
       const productdata = data.data
@@ -59,21 +58,20 @@ async function insertProductElement() {
       descriptionInput.value = productdata.description
       categoryInput.value = productdata.category
       preview.src = productdata.imgPath //이미지
+      console.log(productdata.imgPath) //경로는 나옴 preivew에는 안보임
       
       sessionStorage.setItem('productId', productId);
-    //}
-    } else{ //로컬에 상품 정보가 들어있지 않다면
+    } else{
     alert('잘못된 경로입니다!')
     window.location.href = "/index.html"
   }
 }
 
-insertProductElement();
 
+//특정상품 API통신으로 조회하는 함수
+async function getProductData(){
+   const targetName = sessionStorage.getItem('targetName')
 
-   //특정상품 API통신으로 조회하는 함수
- async function getProductData(){
-   const targetName = localStorage.getItem('targetName')
    const apiUrl = `http://localhost:5000/api/products/${targetName}`
 
    const res = await fetch(apiUrl, {
@@ -95,36 +93,28 @@ insertProductElement();
 //특정상품 정보 수정하는 함수
 async function editProductData(){
   const productId = sessionStorage.getItem('productId')
+  console.log(productId)
 
-  const updatedata = {
-        name : nameInput.value,
-        price : priceInput.value,
-        category: categoryInput.value,
-        description : descriptionInput.value,
-        summary :summaryInput.value ,
-        company : companyInput.value,
-        stock : stockInput.value,
-        imagePath: fileInput.name,
-    }
+  const form = document.querySelector('#productForm')
+  const updateData = new FormData(form)
 
-    const updateData = JSON.stringify(updatedata)
-    const apiUrl = `http://localhost:5000/api/products/${productId}`
-    console.log(productId)
+  console.log([...updateData])
 
-    const res = await fetch(apiUrl, {
+  const apiUrl = `http://localhost:5000/api/products/${productId}`
+
+  const res = await fetch(apiUrl, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json',
         Authorization : "bearer " + token,
       },
-      body: updateData,
-    });
+      body: { updateData } ,
+  });
+  console.log(res)
 
     if (res.ok) {
       alert('상품 정보가 수정되었습니다!');
-      window.location.reload();
   } else {
-    alert('상품 정보 수정에 실패하였습니다...');
+//    alert('상품 정보 수정에 실패하였습니다...');
   }
 
 }

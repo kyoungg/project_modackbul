@@ -31,25 +31,28 @@ orderListContainer.addEventListener('click', e => {
 
 //API 통신으로 주문정보 받아오는 함수
 async function getOrderData(){
-   const userdata = sessionStorage.getItem('userData')
-   const adminId = JSON.parse(userdata)._id
-   console.log(adminId)
 
-  const apiUrl = `http://localhost:5000/api/orders/admin?adminId=${adminId}`
+  const userdata = sessionStorage.getItem('userData')
+  const adminId = JSON.parse(userdata)._id
+  const targetId = JSON.stringify(adminId)
 
+  console.log(adminId)
+
+  const apiUrl = `http://localhost:5000/api/orders/admin`
 
     const res = await fetch(apiUrl, {
     method: 'GET',
     headers: {
-        'Content-Type': 'application/json',
         Authorization : "bearer " + token ,
     },
-    body: JSON.stringify(adminId),
   });
+
+  console.log(res)
 
   if (res.ok) {
     alert(`페이지 로딩이 성공했습니다!`)
     const data = await res.json()
+    console.log(data)
     return data;
   } else {
     alert(`페이지 로딩이 실패했습니다...`)
@@ -127,66 +130,66 @@ async function insertOrderElement() {
 
  //주문 취소 함수
  //주문 취소되면 페이지 내에서도 삭제해야함
- async function deleteOrder(e) {
+//  async function deleteOrder(e) {
 
-   const targetNum = e.targetNum
-   const orderNum = JSON.stringify(targetNum)
+//    const targetNum = e.targetNum
+//    const orderNum = JSON.stringify(targetNum)
 
-   const apiUrl = `http://localhost:5000/api/users/admin/:${orderNum}` //삭제할 주문정보
+//    const apiUrl = `http://localhost:5000/api/orders/admin/${orderNum}` //삭제할 주문정보
 
-   const answer = confirm(
-     `정말 [주문번호:${targetNum}] 주문을 취소하시겠습니까?`
-   )
-   if (answer) {
-     //API 통신으로 DB에서 주문 삭제
-     const res = await fetch(apiUrl, {
-       method: 'DELETE',
-       headers: {
-           'Content-Type': 'application/json',
-           Authorization : "bearer " + token + role,
-       },
-     });
+//    const answer = confirm(
+//      `정말 [주문번호:${targetNum}] 주문을 취소하시겠습니까?`
+//    )
+//    if (answer) {
+//      //API 통신으로 DB에서 주문 삭제
+//      const res = await fetch(apiUrl, {
+//        method: 'DELETE',
+//        headers: {
+//            'Content-Type': 'application/json',
+//            Authorization : "bearer " + token + role,
+//        },
+//      });
     
-     if (res.ok) {
-         //상품 삭제 성공시
-         alert(`[주문번호:${targetNum}] 주문 취소에 성공하였습니다!`)
-         window.location.reload();
-       } else {
-         alert(`주문 취소에 실패하였습니다...`)
-       }
-   }
- }
+//      if (res.ok) {
+//          //상품 삭제 성공시
+//          alert(`[주문번호:${targetNum}] 주문 취소에 성공하였습니다!`)
+//          window.location.reload();
+//        } else {
+//          alert(`주문 취소에 실패하였습니다...`)
+//        }
+//    }
+//  }
 
- async function editOrerstatusHandler(e){
-   const targetNum = e.targetNum
-   const orderNum = JSON.stringify(targetNum)
+//  async function editOrerstatusHandler(e){
+//    const targetNum = e.targetNum
+//    const orderNum = JSON.stringify(targetNum)
 
-   //서버에 변경값 전송
-   const updateData = {
-     orderStatus : "배송중"
-   }
+//    //서버에 변경값 전송
+//    const updateData = {
+//      orderStatus : "배송중"
+//    }
 
-   const apiUrl = `http://localhost:5000/api/users/admin/:${orderNum}`
+//    const apiUrl = `http://localhost:5000/api/users/admin/:${orderNum}`
 
-   const answer = confirm(
-     `[주문번호:${targetNum}] 발송을 완료하시겠습니까?`
-   )
-   if (answer) {
-     //API 통신으로 DB에서 상품 배송상태 변경
-     const res = await fetch(apiUrl, {
-       method: 'PATCH',
-       headers: {
-           'Content-Type': 'application/json',
-           Authorization : "bearer " + token,
-       },
-       body: JSON.stringify(updateData),
-     });
+//    const answer = confirm(
+//      `[주문번호:${targetNum}] 발송을 완료하시겠습니까?`
+//    )
+//    if (answer) {
+//      //API 통신으로 DB에서 상품 배송상태 변경
+//      const res = await fetch(apiUrl, {
+//        method: 'PATCH',
+//        headers: {
+//            'Content-Type': 'application/json',
+//            Authorization : "bearer " + token,
+//        },
+//        body: JSON.stringify(updateData),
+//      });
     
-     if (res.ok) {
-         alert(`[주문번호:${targetNum}] 배송상태 변경을 완료하였습니다!`)
-         window.location.reload();
-       } else {
-         alert(`배송상태 변경에 실패하였습니다...`)
-       }
-   }
- }
+//      if (res.ok) {
+//          alert(`[주문번호:${targetNum}] 배송상태 변경을 완료하였습니다!`)
+//          window.location.reload();
+//        } else {
+//          alert(`배송상태 변경에 실패하였습니다...`)
+//        }
+//    }
+//  }

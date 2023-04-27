@@ -113,7 +113,7 @@ async function insertProductElement() {
 
 //페이지 전환 + targetName 넘기는 함수
 function editPagehandler(e){
-  localStorage.setItem('targetName',e.targetName)
+  sessionStorage.setItem('targetName',e.targetName)
   window.location.href = "/admin-editProductPage.html"
 }
 
@@ -136,7 +136,7 @@ async function deleteProduct(e) {
       },
     });
     
-    if (res.ok) {
+    if (res.status === 200) {
         //상품 삭제 성공시
         alert(`[${targetName}]상품 삭제에 성공하였습니다!`)
         window.location.reload();

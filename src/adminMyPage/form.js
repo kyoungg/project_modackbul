@@ -1,8 +1,8 @@
 export function productForm() {
     const field =
-    `<div class="container">
-    <div class="addproduct-form-container">
-        <form id="productForm">
+`<div class="container">
+    <div class="addproduct-form-container" >
+        <form id="productForm" encType="multipart/form-data">
             <div>
                 <div class="mb-3">
                     <label for="nameInput" class="form-label">Product Name</label>
@@ -10,6 +10,7 @@ export function productForm() {
                         type="text"
                         class="form-control"
                         id="nameInput"
+                        name="name"
                         placeholder="상품명 입력"
                         required
                         >
@@ -22,6 +23,7 @@ export function productForm() {
                         type="number"
                         class="form-control"
                         id="priceInput"
+                        name="price"
                         placeholder="상품가격 입력"
                         required
                         >
@@ -34,6 +36,7 @@ export function productForm() {
                         type="text"
                         class="form-control"
                         id="summaryInput"
+                        name="summary"
                         placeholder="상품소개 작성"
                         required
                         >
@@ -46,22 +49,24 @@ export function productForm() {
                         type="text"
                         class="form-control"
                         id="companyInput"
+                        name="company"
                         placeholder="상품 제조회사"
                         required
                         >
                 </div>
             </div>
             <div>
-                <div class="mb-3"></div>
+                <div class="mb-3">
                 <label for="categoryInput">Category</label>
                 <input
                     type="text"
                     class="form-control"
                     id="categoryInput"
+                    name="category"
                     placeholder="상품 카테고리 입력"
                     required
                     >
-        </div>
+                </div>
             </div>
             <div>
                 <div class="mb-3">
@@ -70,6 +75,7 @@ export function productForm() {
                         type="number"
                         class="form-control"
                         id="stockInput"
+                        name="stock"
                         placeholder="재고입력"
                         required
                         >
@@ -84,8 +90,9 @@ export function productForm() {
                         class="form-control"
                         type="file"
                         id="file"
+                        name="imagePath"
                         >
-                </div>
+                        </div>
               </div>
             </div>
             <div>
@@ -96,9 +103,10 @@ export function productForm() {
                         class="form-control"
                         id="descriptionInput"
                         placeholder=""
+                        name="description"
                         required
                         >
-                </div>
+                    </div>
                 <div class="d-flex  justify-content-center">
                     <button id="addproductBtn" type="submit" class="btn btn-secondary ms-2">Edit</button>
                     <button id="cancelBtn" type="button"  class="btn btn-danger ms-2">Cancle</button>
@@ -106,7 +114,9 @@ export function productForm() {
             </div>
         </div>
         </form> 
+        </div>
     </div>
+</div>
 `;
   
     return field;
