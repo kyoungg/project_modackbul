@@ -28,24 +28,33 @@ orderListContainer.addEventListener('click', e => {
   console.log(targetStatus)
 })
 
-//API 통신 함수
+//API 통신 으로 주문정보 받아오는 함수
 async function getOrderData(){
     const apiUrl = `http://localhost:5000/api/orders/admin`
+
     const res = await fetch(apiUrl, {
     method: 'GET',
     headers: {
+        'Content-Type': 'application/json',
         Authorization : "bearer " + token,
     },
   });
-  const Data = await res.json()
-  console.log(Data)
+  if (res.ok) {
+    const data = await res.json()
+    return data;
+  } else {
+    alert(`페이지 로딩이 실패했습니다...`)
+  }
 }
 
 async function insertOderElement() {
 
-  if(isAdmin){
-    getOrderData()
-  }
+//관리자일때만
+//if(isAdmin){
+  const data =  await getOrderData()
+  const orderdata = data.data
+  console.log(orderdata)
+//}
 
   // //난 더미데이터! 나중에 지워주세요!
   // const Data=[{
@@ -67,13 +76,13 @@ async function insertOderElement() {
   // }]
 
 
-  for (let i=0; i<Data.length; i++){
-  const orderData = Data[i]
+  for (let i=0; i<orderdata.length; i++){
+  const data = orderdata[i]
 
-  const orderNumber = orderData.orderNumbers
-  const id = orderData.customerId
-  const totalprice = chageNumberToLocaleString(orderData.total)
-  const status = orderData.orderStatus
+  const orderNumber = data.orderNumbers
+  const id = data.customerId
+  const totalprice = chageNumberToLocaleString(data.total)
+  const status = data.orderStatus
 
   //요소 만들기
   orderListContainer.insertAdjacentHTML('beforeend',`
@@ -130,28 +139,26 @@ async function deleteOrder(e) {
           'Content-Type': 'application/json',
           Authorization : "bearer " + token,
       },
-      body: orderNum,
     });
     
-    if (res.status == 200) {
+    if (res.ok) {
         //상품 삭제 성공시
         alert(`[주문번호:${targetNum}] 주문 취소에 성공하였습니다!`)
-        //페이지에서도 삭제되어야함-> 새로고침 시키기?
+        window.location.reload();
       } else {
         alert(`주문 취소에 실패하였습니다...`)
       }
   }
 }
 
-//주문상태 수정 함수
-//발송 완료 버튼을 누르면 주문 취소버튼 비활성화
-//db에 API 통신을 통해 주문 상태 변경
 async function editOrerstatusHandler(e){
   const targetNum = e.targetNum
   const orderNum = JSON.stringify(targetNum)
 
-  //배송상태가 상품 준비중이 아니면
-  //alert로 "이미 발송 완료된 주문입니다!" 띄우기
+  //서버에 변경값 전송
+  const updateData = {
+    orderStatus : "배송중"
+  }
 
   const apiUrl = `http://localhost:5000/api/users/admin/:${orderNum}`
 
@@ -166,17 +173,14 @@ async function editOrerstatusHandler(e){
           'Content-Type': 'application/json',
           Authorization : "bearer " + token,
       },
-      body: orderNum,
+      body: JSON.stringify(updateData),
     });
     
-    if (res.status == 200) {
+    if (res.ok) {
         alert(`[주문번호:${targetNum}] 배송상태 변경을 완료하였습니다!`)
-        orderCancelBtn.disabled = true; //주문취소 버튼 비활성화
-        editStatusBtn.ariaDisabled = true; //or페이지에서 발송완료 버튼 숨기기?음..
+        window.location.reload();
       } else {
         alert(`배송상태 변경에 실패하였습니다...`)
       }
   }
-    
-
 }

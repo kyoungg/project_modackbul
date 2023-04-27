@@ -47,7 +47,7 @@ async function loginSubmit(e) {
   const userData = await response.json()
   console.log(userData)
 
-  localStorage.setItem("userData", userData.data)
+  localStorage.setItem("userData", JSON.stringify(userData.data))
 
   if (response.ok) {
     alert("로그인에 성공하였습니다!")

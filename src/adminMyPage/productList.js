@@ -28,7 +28,9 @@ productListContainer.addEventListener('click', e => {
     })
   }
 })
-async function getOrderData(){
+
+//모든상품 API로 조회하는 함수
+async function getProductData(){
   const apiUrl = "http://localhost:5000/api/products"
 
   const res = await fetch(apiUrl, {
@@ -52,9 +54,9 @@ async function insertProductElement() {
   
   //관리자일때만
 //if(isAdmin){
-  const data =  await getOrderData()
+  const data =  await getProductData()
   const productdata = data.data
-  console.log(productdata[0].imgPath)
+  console.log(productdata[1].imgPath)
 //}
   
   for (let i=0; i< productdata.length; i++){
@@ -70,7 +72,7 @@ async function insertProductElement() {
   productListContainer.insertAdjacentHTML('beforeend',`
     <div class="container rounded border border-secondary" data-name="${Productname}">
       <div class="row">
-        <img class="productImg col" src="${Productimg}">
+        <img class="productImg col" src="http://localhost:5000/${Productimg}">
         <div class="table-box col">
           <table class="table table-borderless text-center">
             <thead  class="border-bottom">

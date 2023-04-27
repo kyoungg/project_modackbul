@@ -11,6 +11,7 @@ const priceInput = document.querySelector("#priceInput")
 const summaryInput = document.querySelector("#summaryInput")
 const companyInput = document.querySelector("#companyInput")
 const fileInput = document.querySelector("#file")
+const categoryInput = document.querySelector("#categoryInput")
 
 const stockInput = document.querySelector("#stockInput")
 const descriptionInput = document.querySelector("#descriptionInput")
@@ -38,7 +39,7 @@ async function addProductSubmit(e) {
     const price = priceInput.value
     const summary = summaryInput.value
     const company = companyInput.value
-    const category = "나 버너"
+    const category = categoryInput.value
     const stock = stockInput.value
     const imagePath = fileInput.name
     const description = descriptionInput.value
