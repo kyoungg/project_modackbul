@@ -142,19 +142,23 @@ async function insertOrderElement() {
  }
 
  async function editOrerstatusHandler(e){
-   const targetNum = e.targetNum
-   const orderNum = JSON.stringify(targetNum)
+  const targetId = e.targetId
+  const targetNum = e.targetNum
+
+  const userdata = sessionStorage.getItem('userData') //세션에 저장되어있던 유저id
+  const adminId = JSON.parse(userdata)._id
+  console.log(adminId)
 
    //서버에 변경값 전송
    const updateData = {
      orderStatus : "배송중"
    }
 
-   const apiUrl = `http://localhost:5000/api/orders/${adminId}/${targetNum}`
+   const apiUrl = `http://localhost:5000/api/orders/${adminId}/${targetId}`
 
    const answer = confirm(
      `[주문번호:${targetNum}] 발송을 완료하시겠습니까?`
-   )
+   ) 
    if (answer) {
      //API 통신으로 DB에서 상품 배송상태 변경
      const res = await fetch(apiUrl, {
