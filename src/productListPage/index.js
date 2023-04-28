@@ -75,7 +75,7 @@ async function addcategory(e) {
     nav.insertAdjacentHTML(
       "beforeend",
       `<li class="nav-item">
-    <a class="nav-link active test" aria-current="page" href="#">${name}</a>
+    <a class="nav-link active tab test" aria-current="page" href="#">${name}</a>
   </li>`
     );
   });
