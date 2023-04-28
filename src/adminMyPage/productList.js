@@ -1,4 +1,6 @@
-import { chageNumberToLocaleString } from "../utils/index.js" 
+import { chageNumberToLocaleString, checkAuth} from "../utils/index.js" 
+
+const { isAdmin, token } = checkAuth()
 
 //const productBox = document.querySelector(".productBox")
 const productListContainer = document.querySelector("#productList-container")
@@ -10,7 +12,7 @@ const editBtn = document.querySelector("#editBtn")
 const deleteBtn = document.querySelector("#deleteBtn")
 const addproductBtn = document.querySelector("#addproductBtn")
 
-addproductBtn.addEventListener("click", () =>window.location.href = "/admin-addProductPage.html" )
+addproductBtn.addEventListener("click", () => window.location.href = "/admin-addProductPage.html" )
 
 const ActionFunctions = {
   edit: (e) => editPagehandler(e),
@@ -18,7 +20,8 @@ const ActionFunctions = {
 }
 
 productListContainer.addEventListener('click', e => {
-  const targetName = e.target.closest(".container").dataset.name
+  const target = e.target.closest(".container")
+  const targetName = target.dataset.name
   const action = e.target.dataset.action
   if (action) {
     ActionFunctions[action]({
@@ -27,43 +30,53 @@ productListContainer.addEventListener('click', e => {
   }
 })
 
-function insertProductElement() {
-  // const res = await fetch(`/api/products`) //GET요청으로 사용
-  // const Data = await res.json()
+//모든상품 API로 조회하는 함수
+async function getProductData(){
+  const apiUrl = "http://localhost:5000/api/products"
 
-  const dummyData= [{
-    "name" : "난 버너",
-    "price" : 18000,
-    //카테고리
-    "description" : "맥주처럼 보이지만 버너입니다. 위에 조리도구를 올려 사용하세요!",
-    "summary" : "맥주모양 담요입니다",
-    "company" : "happy fire",
-    "stock" : 89,
-    "img" : "https://as2.ftcdn.net/v2/jpg/05/91/78/95/1000_F_591789500_vRd3qnI9kBZUzWyh2VSNZL61jf4AnJFL.jpg"
-  },{
-    "name" : "난 물병",
-    "price" : 18000,
-    //카테고리
-    "description" : "향수처럼 보이지만 물병입니다. 마실 수 있어요!",
-    "summary" : "향수모양 유리 물병입니다",
-    "company" : "아임텀블러",
-    "stock" : 10,
-    "img" :"https://as2.ftcdn.net/v2/jpg/05/91/06/49/1000_F_591064973_ewRXNLyJqEBgY0ftnhWwzZ5cexrKUg2n.jpg"
-  }]
+  const res = await fetch(apiUrl, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        Authorization : "bearer " + token,
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json()
+    return data
+  } else {
+    alert(`페이지 로딩이 실패했습니다...`)
+  }
+}
+
+
+async function insertProductElement() {
   
-  for (let i=0; i<dummyData.length; i++){
-  const data = dummyData[i]
+  //관리자일때만
+//if(isAdmin){
+  const data =  await getProductData()
+  const productdata = data.data
+  console.log(productdata[1].imgPath)
+//}
+  
+  for (let i=0; i< productdata.length; i++){
+  const data = productdata[i]
 
+  const productId = data._id
   const Productname = data.name
   const Productstock = data.stock
   const Productprice = chageNumberToLocaleString(data.price)
-  const Productimg = data.img
+  const Productimg = data.imgPath
+  console.log(data.imgPath)
+  const productcategory = data.category
+
 
   //요소 만들기
   productListContainer.insertAdjacentHTML('beforeend',`
-    <div class="container rounded border border-secondary" data-name="${Productname}">
+  <div class="container rounded border border-secondary" id="${productId}" name="${Productname}" data-name="${data.name}">
       <div class="row">
-        <img class="productImg col" src="${Productimg}">
+        <img class="productImg col" src="http://localhost:5000/${Productimg}">
         <div class="table-box col">
           <table class="table table-borderless text-center">
             <thead  class="border-bottom">
@@ -78,7 +91,7 @@ function insertProductElement() {
               <tr class="align-middle">
                 <td><div class="name ">${Productname}</div></td>
                 <td>
-                  <div>카테고리</div>
+                  <div>${productcategory}</div>
                 </td>
                 <td><div class="price">${Productprice}원</div></td>
                 <td><div class="stock">${Productstock}개</div></td>
@@ -98,16 +111,15 @@ function insertProductElement() {
 
 //페이지 전환 + targetName 넘기는 함수
 function editPagehandler(e){
-  localStorage.setItem('targetName', e.targetName)
+  sessionStorage.setItem('targetName',e.targetName)
   window.location.href = "/admin-editProductPage.html"
 }
 
 //상품 삭제 함수
 async function deleteProduct(e) {
   const targetName = e.targetName
-  const productName = JSON.stringify(targetName)
 
-  const apiUrl = `http://localhost:5000/api/products/:${productName}` //삭제하고자 하는 상품의 name
+  const apiUrl = `http://localhost:5000/api/products/${targetName}` //삭제하고자 하는 상품의 name
 
   const answer = confirm(
     `정말 [${targetName}]상품을 삭제하시겠습니까?`
@@ -119,13 +131,12 @@ async function deleteProduct(e) {
       headers: {
           'Content-Type': 'application/json',
       },
-      body: productName,
     });
     
-    if (res.status == 200) {
+    if (res.ok) {
         //상품 삭제 성공시
         alert(`[${targetName}]상품 삭제에 성공하였습니다!`)
-        //페이지에서도 삭제되어야함
+        window.location.reload();
       } else {
         alert(`상품 삭제에 실패하였습니다...`)
       }
