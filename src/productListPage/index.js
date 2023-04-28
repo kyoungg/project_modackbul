@@ -1,96 +1,73 @@
 import { chageNumberToLocaleString } from "../utils/index.js";
 const productList = document.querySelector(".product-content");
-const productItem = document.querySelector(".productItem");
+const nav = document.querySelector(".category");
 
-const products = [
-  {
-    _id: "1",
-    imgPath:
-      "https://images.pexels.com/photos/9849124/pexels-photo-9849124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    company: "company 1",
-    name: "Product 1",
-    price: 1000,
-  },
-  {
-    _id: "2",
-    imgPath:
-      "https://images.pexels.com/photos/9849124/pexels-photo-9849124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    company: "company 2",
-    name: "Product 2",
-    price: 2000,
-  },
-  {
-    _id: "2",
-    imgPath:
-      "https://images.pexels.com/photos/9849124/pexels-photo-9849124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    company: "company 2",
-    name: "Product 2",
-    price: 2000,
-  },
-  {
-    _id: "2",
-    imgPath:
-      "https://images.pexels.com/photos/9849124/pexels-photo-9849124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    company: "company 2",
-    name: "Product 2",
-    price: 2000,
-  },
-  {
-    _id: "2",
-    imgPath:
-      "https://images.pexels.com/photos/9849124/pexels-photo-9849124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    company: "company 2",
-    name: "Product 2",
-    price: 2000,
-  },
-  {
-    _id: "2",
-    imgPath:
-      "https://images.pexels.com/photos/9849124/pexels-photo-9849124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    company: "company 2",
-    name: "Product 2",
-    price: 2000,
-  },
-];
-
+// 상품 가져오기
 async function addProductItems() {
-  // const res = await fetch(`http://localhost:5000/api/categories/${name}`, {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // const products = await res.json();
-  // console.log(data);
+  const res = await fetch("http://localhost:5000/api/products", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const products = await res.json();
+  console.log(products);
+  sessionStorage.setItem("productData", JSON.stringify(products));
 
-  products.forEach((product) => {
+  products.data.forEach((product) => {
     const name = product.name;
     const price = product.price;
     const company = product.company;
     const image = product.imgPath;
-    const category = product.category;
 
     productList.insertAdjacentHTML(
-      "beforeend",
+      "afterbegin",
       `<div class="product col">
+      <a href="./productDetailPage.html" class="productItem">
       <div class="card">
-      <a href="productDetailPage.html" class="productItem"><img src="${image}" class="product_img card-img-top" alt="" /></a>
+      <img src="${image}" class="product_img card-img-top" alt="" />
         <div class="card-body">
           <h6 class="company card-title">${company}</h6>
           <h6 class="name card-title">${name}</h6>
           <h5 class="price card-text">${chageNumberToLocaleString(price)}</h5>
         </div>
       </div>
+      </a>
     </div>
     `
+    );
+
+    const productItem = productList.querySelector(".productItem");
+    productItem.addEventListener("click", () => {
+      sessionStorage.setItem("name", JSON.stringify(product));
+    });
+  });
+}
+addProductItems();
+
+// 카테고리 가져오기
+async function addcategory(e) {
+  const res = await fetch("http://localhost:5000/api/categories", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const category = await res.json();
+  console.log(category);
+  sessionStorage.setItem("categoryData", JSON.stringify(category));
+
+  category.data.forEach((tab) => {
+    const id = tab._id;
+    const name = tab.name;
+
+    nav.insertAdjacentHTML(
+      "beforeend",
+      `<li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="#">${name}</a>
+  </li>`
     );
   });
 }
 
-addProductItems();
-
-// productItem.addEventListener("click", navigate);
-
-// function navigate() {
-//   window.location.href = `${_id}`;
-// }
+addcategory();
