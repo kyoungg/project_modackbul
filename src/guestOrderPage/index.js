@@ -28,7 +28,9 @@ async function handleSubmit(e) {
       return alert("요청하신 주문 내역이 없습니다.");
     }
     const orderInfo = await res.json();
-    localStorage.setItem("orderNumber", JSON.stringify(orderInfo));
+
+    localStorage.setItem("nonmemberData", JSON.stringify(orderInfo));
+
     window.location.href = "orderedPage.html";
   } catch (err) {
     console.error(err);
