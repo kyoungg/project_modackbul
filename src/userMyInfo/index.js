@@ -52,7 +52,11 @@ async function getUserData() {
     // currentPasswordInput.value = data.data.password;
     // passwordInput.value = data.data.password;
     // postNumber.value = data.address.post;
-    addInput1.value = data.data.address;
+
+    const [post, address1, address2] = data.data.address.split("##");
+    postNumber.value = post;
+    addInput1.value = address1;
+    addInput2.value = address2;
     // addInput2.value = data.address.address2;
     phoneNumInput.value = data.data.phoneNumber;
     emailInput.value = data.data.email;
@@ -99,8 +103,10 @@ async function doCheckout(e) {
     currentPassword,
     password,
     phoneNumber,
-    address,
+    address: `${post}##${address}##${address2}`,
   };
+
+  console.log(updatedInfo);
 
   // 정보 변경
   try {
