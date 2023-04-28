@@ -29,7 +29,7 @@ signInBtn.addEventListener("click", addMember);
 // 이벤트에 사용할 함수
 async function addMember(e) {
   // preventDefault 안 하면 새로고침됨.
-  e.preventDefault;
+  e.preventDefault()
 
   // 입력값 가져오기
   const email = emailInput.value;
@@ -68,7 +68,6 @@ async function addMember(e) {
     password,
     phoneNumber,
     address,
-    // role, 관리자, 일반유저를 나눔-> 값을 어떻게 넣어야하죠ㅜ
   };
 
   // JSON 만듦

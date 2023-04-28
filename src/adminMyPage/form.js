@@ -1,24 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="./style/adminMyPage/addProduct.css" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="./style/adminPage/addproduct.css"
-    />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <title>🏕️모닥불</title>
-  </head>
-
-  <body>
-    <div class="container">
+export function productForm() {
+    const field =
+    `<div class="container">
     <div class="addproduct-form-container">
         <form id="productForm">
-            <h2>add Product</h2>
             <div>
                 <div class="mb-3">
                     <label for="nameInput" class="form-label">Product Name</label>
@@ -81,6 +65,15 @@
                         </select>
                         <label for="floatingSelect">대분류</label>
                     </div>
+                    <div class="form-floating">
+                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                        </select>
+                        <label for="floatingSelect">소분류</label>
+                    </div>
                 </div>
             </div>
             <div>
@@ -120,17 +113,14 @@
                         >
                 </div>
                 <div class="d-flex  justify-content-center">
-                    <button id="addproductBtn" type="submit" class="btn btn-secondary ms-2">Add</button>
+                    <button id="addproductBtn" type="submit" class="btn btn-secondary ms-2">Edit</button>
                     <button id="cancelBtn" type="button"  class="btn btn-danger ms-2">Cancle</button>
                 </div>
             </div>
         </div>
         </form> 
     </div>
-
-
-
-    <script src="./src/adminMyPage/addproduct.js" type="module"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-  </body>
-</html>
+`;
+  
+    return field;
+  }

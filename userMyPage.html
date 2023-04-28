@@ -11,38 +11,50 @@
       href="./style/userMyPage/index.css"
     />
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      type="text/css"
-      href="./style/landingPage/index.css"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
     />
+
     <title>🏕️모닥불</title>
   </head>
   <body>
-    <h1>MY PAGE</h1>
-    <div>
-      <ul>
-        <a href="orderedPage.html">
-          <li>
-            <h2>주문내역조회</h2>
+    <div class="container">
+      <div class="title mb-5">
+        <h1>MY PAGE</h1>
+      </div>
+
+      <div
+        class="mypageMain row position-absolute top-50 start-50 translate-middle"
+      >
+        <button class="orderBtn col btn btn-outline-dark">
+          <div class="main_item">
+            <h3>주문내역조회</h3>
             <p>주문내역을 확인하실 수 있습니다.</p>
-          </li>
-        </a>
+          </div>
+        </button>
 
-        <a href="userMyInfo.html">
-          <li>
-            <h2>회원 정보</h2>
+        <button class="userInfoBtn col btn btn-outline-dark">
+          <div class="main_item">
+            <h3>회원 정보</h3>
             <p>고객님의 개인정보를 수정할 수 있습니다.</p>
-          </li>
-        </a>
+          </div>
+        </button>
 
-        <a href="cartPage.html">
-          <li>
-            <h2>장바구니</h2>
+        <button class="cartBtn col btn btn-outline-dark">
+          <div class="main_item">
+            <h3>장바구니</h3>
             <p>장바구니에 담은 내역을 확인하실 수 있습니다.</p>
-          </li>
-        </a>
-      </ul>
+          </div>
+        </button>
+      </div>
     </div>
     <script src="./src/userMyPage/index.js" type="module"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>
