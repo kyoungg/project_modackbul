@@ -1,5 +1,6 @@
 import { chageNumberToLocaleString } from "../utils/index.js";
 import { checkAuth } from "../utils/index.js";
+const nav = document.querySelector(".category");
 const { isLoggedIn, token } = checkAuth();
 
 const productImg = document.querySelector(".product_img");
@@ -47,6 +48,16 @@ async function getProduct() {
       quantity,
     };
 
+    const newCart = {
+      _id,
+      name,
+      price,
+      description,
+      company,
+      imgURL: imgPath,
+      quantity,
+    };
+
     let cartData = [];
 
     if (localStorage.getItem("cartData")) {
@@ -76,7 +87,7 @@ async function getProduct() {
             "Content-Type": "application/json",
             Authorization: "bearer " + token,
           },
-          body: JSON.stringify(cartItem),
+          body: JSON.stringify(newCart),
         });
 
         // 장바구니 중복 방지
