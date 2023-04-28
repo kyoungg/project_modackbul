@@ -29,7 +29,7 @@ async function renderCategory() {
       "align-items-center",
       "border-bottom",
       "border-secondary",
-      "py-1"
+      "p-2"
     );
 
     // 상위 카테고리 명을 담을 p 생성
@@ -44,7 +44,8 @@ async function renderCategory() {
     majorModifyInput.classList.add(
       "major_modify_input",
       "form-control",
-      "d-none"
+      "d-none",
+      "w-75"
     );
     majorModifyInput.placeholder = "상위 카테고리 수정";
     majorModifyInput.maxlength = "15";
@@ -59,7 +60,8 @@ async function renderCategory() {
       "major_modify_btn",
       "btn",
       "btn-outline-warning",
-      "w-25"
+      "w-25",
+      "me-2"
     );
 
     modifyBtn.addEventListener("click", modifyMajorHandler);
