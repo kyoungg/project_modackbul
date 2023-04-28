@@ -96,6 +96,8 @@ async function insertProductElement() {
       descriptionInput.value = productdata.description
       categoryInput.value = productdata.category
       preview.src = productdata.imgPath //이미지
+
+      preview.setAttribute('src', `http://localhost:5000/${productdata.imgPath}`);
     } else {
     alert('잘못된 경로입니다!')
     window.location.href = "/index.html"
