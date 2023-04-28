@@ -15,12 +15,10 @@ const summaryInput = document.querySelector("#summaryInput");
 const companyInput = document.querySelector("#companyInput");
 const categoryInput = document.querySelector("#categoryInput")
 const stockInput = document.querySelector("#stockInput");
-const fileInput = document.querySelector("#file")
 const descriptionInput = document.querySelector("#descriptionInput");
 
 const saveProductBtn = document.querySelector("#saveProductBtn");
 const cancelBtn = document.querySelector("#cancelBtn");
-const fileUploadBtn = document.querySelector("#fileUploadBtn")
 
 //이미지 preview
 const fileDOM = document.querySelector('#file');
@@ -84,7 +82,6 @@ async function insertProductElement() {
     const targetName = sessionStorage.getItem('targetName')
     
       const data = await getProductData()
-      console.log(data.data)
       const productdata = data.data
       const productId = productdata._id
 
@@ -95,9 +92,7 @@ async function insertProductElement() {
       stockInput.value = productdata.stock
       descriptionInput.value = productdata.description
       categoryInput.value = productdata.category
-      console.log(productdata.category)
       preview.src = productdata.imgPath //이미지
-      console.log(productdata.imgPath) //경로는 나옴 preivew에는 안보임
       
       sessionStorage.setItem('productId', productId);
       
@@ -136,37 +131,25 @@ async function editProductData(){
   const productId = sessionStorage.getItem('productId')
   console.log(productId)
 
-  //입력된 file 받아오는 이벤트
-  sendButton.addEventListener("click",function(){
- 
-    var formData = new FormData();
-    // form Data 객체 생성
-    formData.append("attachedImage", fileInput.files[0]);
-    // 파일 인풋에 들어간 파일들은 files 라는 리스트로 저장된다.
-    // input에 multiple을 선언해 여러개의 파일을 선택한 경우가 아니라면 files[0] 으로 input에 추가한 파일 객체를 찾을 수 있다.
-    
-  });
+  const formData = new FormData(document.querySelector("#productForm"))
 
-  const form = document.querySelector('#productForm')
-  const updateData = new FormData(form)
-
-  console.log([...updateData])
+  formData.append('category',document.querySelector('#categoryInput').value)
+  console.log(document.querySelector('#categoryInput').value)
 
   const apiUrl = `http://localhost:5000/api/products/${productId}`
 
   const res = await fetch(apiUrl, {
       method: 'PATCH',
-      headers: {
-        Authorization : "bearer " + token,
-      },
-      body: { updateData } ,
+      // headers: {
+      //   Authorization : "bearer " + token,
+      // },
+      body:  formData  ,
   });
-  console.log(res)
 
     if (res.ok) {
- //     alert('상품 정보가 수정되었습니다!');
+     //alert('상품 정보가 수정되었습니다!');
   } else {
-//    alert('상품 정보 수정에 실패하였습니다...');
+   //alert('상품 정보 수정에 실패하였습니다...');
   }
 
 }

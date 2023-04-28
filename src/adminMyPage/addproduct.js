@@ -38,13 +38,13 @@ fileDOM.addEventListener('change', () => {
 });
 
 
-//file 저장
-fileUploadBtn.addEventListener("click", () => {
-  const formData = new FormData();
-  // form Data 객체 생성
+// //file 저장
+// fileUploadBtn.addEventListener("click", () => {
+//   const formData = new FormData();
+//   // form Data 객체 생성
 
-  formData.append("attachedImage", fileInput.files[0])
-})
+//   formData.append("attachedImage", fileInput.files[0])
+// })
 
 //취소버튼 -> 관리자 페이지로 이동
 cancelBtn.addEventListener("click", () => {window.location.href = "./adminMyPage";})
@@ -90,25 +90,6 @@ async function addProductSubmit(e) {
     e.preventDefault()
     
     const name = nameInput.value
-    // const price = priceInput.value
-    // const summary = summaryInput.value
-    // const company = companyInput.value
-    // const category = categoryInput.value
-    // const stock = stockInput.value
-    // const imagePath = fileInput.name
-    // const description = descriptionInput.value
-
-
-    // const productdata = {
-    //     name,
-    //     price,
-    //     category,
-    //     description,
-    //     summary,
-    //     company,
-    //     stock,
-    //     imagePath,
-    // }
 
     const formData = new FormData(document.querySelector("#productForm"))
     console.log(formData)
