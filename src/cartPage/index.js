@@ -68,7 +68,7 @@ async function renderCarts() {
 
     const productDiv = document.createElement("div");
     productDiv.classList.add("d-flex", "w-75", "align-items-center");
-    console.log(cartData);
+
     const img = document.createElement("img");
     img.src = `http://localhost:5000/${cartData[i].imgURL}`;
     img.alt = "상품 이미지";
@@ -79,6 +79,7 @@ async function renderCarts() {
 
     CART_KEY_LIST.forEach((key, index) => {
       const li = document.createElement("li");
+      li.classList.add("mb-1");
 
       if (key === "수량") {
         const input = document.createElement("input");
@@ -92,7 +93,16 @@ async function renderCarts() {
         // input 변경이 있을 때마다 총 금액 계산 실행
         input.addEventListener("click", renderTotalPrice);
 
-        ul.appendChild(input);
+        const p = document.createElement("p");
+        p.classList.add("m-0", "p-0", "me-2");
+        p.innerText = `${key} : `;
+
+        li.appendChild(p);
+        li.appendChild(input);
+
+        li.classList.add("d-flex", "align-items-center");
+
+        ul.appendChild(li);
       } else {
         li.innerText = `${key} : ${
           typeof cartData[i][CART_VALUE_LIST[index]] === "number"

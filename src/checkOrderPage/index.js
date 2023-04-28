@@ -34,8 +34,6 @@ async function getOrderList() {
 
       const responseData = await response.json();
 
-      console.log(responseData);
-
       orderList = responseData.data;
     } catch (err) {
       console.log(err);
@@ -169,17 +167,9 @@ async function renderOrderList() {
 }
 
 /**
- * 주문 수정 페이지로 이동하는 함수
+ * 특정 주문 수정 페이지로 이동하는 함수
  */
 function backToOrderingPage(id) {
-  // 어떤 주문을 클릭해서 이동하는 건지를 알아야지, 주문 진행 페이지에서 데이터를 보여줄 수 있음
-  // 그렇다면 이 함수는 주문의 id를 전달해줘야함.
-  // localStorage에 저장해서 사용하고, 이동 후 삭제하는게 좋을듯
-  // const wantModify = {
-  //   // orderNum: 주문번호,
-  //   orderNum: "fudsfijads;fjasifjaeip1u49812794817240",
-  // };
-
   const wantModify = orderList.filter((eachOrder) => eachOrder._id === id);
 
   localStorage.setItem("modifyOrderData", JSON.stringify(wantModify[0]));
@@ -187,6 +177,11 @@ function backToOrderingPage(id) {
   window.location.href = "modifyOrderPage.html";
 }
 
+/**
+ * 취소 버튼을 누를 경우 주문 취소를 진행하는 함수
+ * @param {String} id 주문 아이디
+ * @returns 주문 취소 모달을 취소하면 종료
+ */
 async function cancelOrderHandler(id) {
   const isCancel = window.confirm("정말 주문을 취소하시겠습니까?");
 

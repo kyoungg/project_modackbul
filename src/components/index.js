@@ -22,7 +22,7 @@ function renderHeader() {
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="productDetailPage.html">상품 목록</a>
+        <a class="nav-link" href="productListPage.html">상품 목록</a>
         <a class="nav-link" href="userMyPage.html">마이페이지</a>
         <a class="nav-link" href="cartPage.html">장바구니</a>
         ${

@@ -3,9 +3,6 @@ import {
   SUMMARY_KEY_LIST,
   SUMMARY_PHRASE_LIST,
 } from "./const.js";
-import { checkAuth } from "../utils/index.js";
-
-const { isLoggedIn, token } = checkAuth();
 
 /**
  * 완료된 주문 정보를 얻기 위한 함수
@@ -22,7 +19,6 @@ function getOrderData() {
  */
 function renderOrder() {
   const orderData = getOrderData();
-  console.log(orderData);
 
   const summaryDiv = document.querySelector(".order_summary");
 
@@ -53,36 +49,11 @@ const btn = document.getElementsByClassName("order_check_btn")[0];
 btn.addEventListener("click", checkOrderList);
 
 /**
- * 주문 내역을 확인하는 페이지로 이동하는 함수. 이동과 동시에 장바구니 데이터를 삭제한다.
+ * 주문 내역을 확인하는 페이지로 이동하는 함수.
  */
-async function checkOrderList() {
-  // 회원인 경우
-  if (isLoggedIn) {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/carts/deleteAll",
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: "bearer " + token,
-          },
-        }
-      );
-
-      if (response.ok) {
-        // 주문 내역 페이지로 이동
-        window.location.href = "checkOrderPage.html";
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  // 비회원인 경우
-  if (!isLoggedIn) {
-    // 로컬에서 장바구니 삭제
-    localStorage.removeItem("cartData");
-  }
+function checkOrderList() {
+  // 주문 내역 페이지로 이동
+  window.location.href = "checkOrderPage.html";
 }
 
 renderOrder();

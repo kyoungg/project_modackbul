@@ -151,7 +151,6 @@ async function orderHandler() {
       });
 
       const responseData = await response.json();
-      console.log(responseData);
 
       localStorage.setItem("orderedData", JSON.stringify(responseData.data));
 
@@ -189,7 +188,6 @@ async function orderHandler() {
       );
 
       const responseData = await response.json();
-      console.log(responseData);
 
       localStorage.setItem("orderedData", JSON.stringify(responseData.data));
 
