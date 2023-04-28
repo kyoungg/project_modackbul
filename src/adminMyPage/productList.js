@@ -32,6 +32,7 @@ productListContainer.addEventListener('click', e => {
 
 //모든상품 API로 조회하는 함수
 async function getProductData(){
+
   const apiUrl = "http://localhost:5000/api/products"
 
   const res = await fetch(apiUrl, {
@@ -57,7 +58,6 @@ async function insertProductElement() {
 //if(isAdmin){
   const data =  await getProductData()
   const productdata = data.data
-  console.log(productdata[1].imgPath)
 //}
   
   for (let i=0; i< productdata.length; i++){
@@ -68,7 +68,6 @@ async function insertProductElement() {
   const Productstock = data.stock
   const Productprice = chageNumberToLocaleString(data.price)
   const Productimg = data.imgPath
-  console.log(data.imgPath)
   const productcategory = data.category
 
 

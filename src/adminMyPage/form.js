@@ -56,11 +56,16 @@ export function productForm() {
             </div>
         </div>
         <div>
-            <label for="companyInput" class="form-label">Category</label>
-            <div class="mb-3 input-group category">
-            <select class="form-select" id="categoryInput" aria-label="Example select with button addon">
-                <option selected>Choose...</option>
-            </select>
+        <div class="mb-3">
+            <label for="categoryInput" class="form-label">Category</label>
+            <input
+                type="text"
+                class="form-control"
+                id="categoryInput"
+                name="category"
+                disabled readonly
+                required
+                >
             </div>
         </div>
         <div>

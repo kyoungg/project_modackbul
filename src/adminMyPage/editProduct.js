@@ -139,8 +139,6 @@ async function editProductData(e){
   //변경된 수정사항 updateData에 저장
   const updateData = new FormData(document.querySelector("#productForm"))
 
-  //카테고리 값 updateData에 넣음
-  updateData.append('category',document.querySelector('#categoryInput').value)
   console.log([...updateData])
 
   const apiUrl = `http://localhost:5000/api/products/${productId}`
@@ -154,6 +152,7 @@ async function editProductData(e){
   });
     if (res.ok) {
      alert('상품 정보가 수정되었습니다!');
+     window.location.href = "/admin-ProductListPage.html"
   } else {
    alert('상품 정보 수정에 실패하였습니다...');
   }
