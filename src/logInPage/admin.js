@@ -65,7 +65,7 @@ async function loginSubmit(e) {
 
   if (response.ok) {
     alert("로그인에 성공하였습니다!")
-    window.location.href = "/index.html"
+    window.location.href = "admin-myPage.html"
   } else {
     alert("로그인에 실패하였습니다...")
     window.location.href = "/logInPage.html"
