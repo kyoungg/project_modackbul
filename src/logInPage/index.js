@@ -45,14 +45,23 @@ async function loginSubmit(e) {
     body: dataJson,
   });
 
-  const userData = await response.json();
-  console.log(userData);
+  const responseData = await response.json();
 
-  localStorage.setItem("userData", userData.Token);
+  localStorage.setItem("userData", responseData.data.token);
+
+  const userData = {
+    email: responseData.data.email,
+    fullName: responseData.data.fullName,
+    phoneNumber: responseData.data.phoneNumber,
+    address: responseData.data.address,
+    _id: responseData.data._id,
+  };
+
+  sessionStorage.setItem("userData", JSON.stringify(userData));
 
   if (response.ok) {
     alert("로그인에 성공하였습니다!");
-    window.location.href = "/index.html";
+    window.location.href = "/productListPage.html";
   } else {
     alert("로그인에 실패하였습니다...");
     window.location.href = "/logInPage.html";
@@ -61,10 +70,10 @@ async function loginSubmit(e) {
 
 //비회원 주문조회 이벤트
 nonmemberBtn.addEventListener("click", () => {
-  window.location.href = "/adminMypage";
+  window.location.href = "guestOrderPage.html";
 });
 
-// 관리자 로그인 페이지 전환 이벤트
-adminlogInBtn.addEventListener("click", () => {
-  window.location.href = "/adminMypage"; 
-});
+// // 관리자 로그인 페이지 전환 이벤트
+// adminlogInBtn.addEventListener("click", () => {
+//   window.location.href = "admin-logInPage.html"
+// })

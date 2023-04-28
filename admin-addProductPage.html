@@ -15,9 +15,13 @@
   </head>
 
   <body>
+
+    <header></header>
+
+    <main>
     <div class="container">
     <div class="addproduct-form-container">
-        <form id="productForm">
+        <form id="productForm" enctype="multipart/form-data">
             <h2>add Product</h2>
             <div>
                 <div class="mb-3">
@@ -26,6 +30,7 @@
                         type="text"
                         class="form-control"
                         id="nameInput"
+                        name="name"
                         placeholder="상품명 입력"
                         required
                         >
@@ -38,6 +43,7 @@
                         type="number"
                         class="form-control"
                         id="priceInput"
+                        name="price"
                         placeholder="상품가격 입력"
                         required
                         >
@@ -50,6 +56,7 @@
                         type="text"
                         class="form-control"
                         id="summaryInput"
+                        name="summary"
                         placeholder="상품소개 작성"
                         required
                         >
@@ -62,25 +69,18 @@
                         type="text"
                         class="form-control"
                         id="companyInput"
+                        name="company"
                         placeholder="상품 제조회사"
                         required
                         >
                 </div>
             </div>
-            <!-- 카테고리 대분류, 소분류 드롭다운 버튼?-->
-            <!-- 어떻게 구현해야하는지,, -->
             <div>
-                <label for="category">Category</label>
-                <div>
-                    <div class="form-floating">
-                        <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                        </select>
-                        <label for="floatingSelect">대분류</label>
-                    </div>
+                <label for="companyInput" class="form-label">Category</label>
+                <div class="mb-3 input-group category">
+                <select class="form-select" id="categoryInput" aria-label="Example select with button addon">
+                    <option selected>Choose...</option>
+                </select>
                 </div>
             </div>
             <div>
@@ -90,24 +90,35 @@
                         type="number"
                         class="form-control"
                         id="stockInput"
+                        name="stock"
                         placeholder="재고입력"
                         required
                         >
                 </div>
             </div>
+
             <div>
                 <div class="mb-3">
-                    <label for="file" class="form-label upload-btn">
-                        <div><img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/file_upload_icon_136628.png" class="image-box" /><div>
+                    <!-- <form> -->
+                        <label>
+                            <div><img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/file_upload_icon_136628.png" class="image-box" /></div>
                         </label>
-                    <input
-                        class="form-control"
-                        type="file"
-                        id="file"
-                        >
+
+                        <div class="input-group fileInput">
+                            <input
+                                type="file"
+                                class="form-control"
+                                id="file"
+                                name="imgPath"
+                                aria-describedby="inputGroupFileAddon04"
+                                aria-label="Upload"
+                                >
+                            <button class="btn btn-outline-secondary" type="submt" id="fileUploadBtn">이미지 등록</button>
+                        </div>
+                    <!-- </form> -->
                 </div>
-              </div>
             </div>
+
             <div>
                 <div class="mb-3">
                     <label for="descriptionInput" class="form-label">Product Description</label>
@@ -115,21 +126,25 @@
                         type="text"
                         class="form-control"
                         id="descriptionInput"
-                        placeholder=""
+                        name="description"
+                        placeholder="상품상세 입력"
                         required
                         >
                 </div>
+            </div>
+
                 <div class="d-flex  justify-content-center">
-                    <button id="addproductBtn" type="submit" class="btn btn-secondary ms-2">Add</button>
+                    <button id="saveProductBtn" type="submit" class="btn btn-secondary ms-2">Save</button>
                     <button id="cancelBtn" type="button"  class="btn btn-danger ms-2">Cancle</button>
                 </div>
-            </div>
-        </div>
-        </form> 
+        </form>
     </div>
+    </div>
+    </main>
 
+    <footer></footer>
 
-
+    <script src="./src/components/index.js" type="module"></script>
     <script src="./src/adminMyPage/addproduct.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
   </body>

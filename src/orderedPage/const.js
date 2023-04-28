@@ -1,4 +1,6 @@
-export const STORAGE_NAME = "orderData";
+import { chageNumberToLocaleString } from "../utils/index.js";
+
+export const STORAGE_NAME = "orderedData";
 
 export const SUMMARY_KEY_LIST = [
   "주문 번호",
@@ -9,12 +11,11 @@ export const SUMMARY_KEY_LIST = [
 ];
 
 export const SUMMARY_PHRASE_LIST = (orderData) => [
-  // `${orderData.orderNumber}`,
-  "YYMMDD001",
-  `${orderData.data[0].name} 외 ${orderData.data.length - 1}개`,
-  `총 ${orderData.data.reduce((acc, curr) => {
-    return acc + curr.number;
+  `${orderData.orderNumber}`,
+  `${orderData.cart[0].name} 외 ${orderData.cart.length - 1}개`,
+  `총 ${orderData.cart.reduce((acc, curr) => {
+    return acc + curr.quantity;
   }, 0)}개`,
-  `총 ${orderData.total} 원`,
-  `${orderData.data[0].company} 외 ${orderData.data.length - 1}개`,
+  `총 ${chageNumberToLocaleString(orderData.total)} 원`,
+  `${orderData.cart[0].company} 외 ${orderData.cart.length - 1}개`,
 ];
