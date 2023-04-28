@@ -16,10 +16,9 @@ async function handleSubmit(e) {
   if (!orderNumber) {
     return alert("주문번호를 입력하세요.");
   }
-  const userId = orderNumber.value;
 
   try {
-    const res = await fetch(`http://localhost:5000/api/orders/${userId}`, {
+    const res = await fetch(`http://localhost:5000/api/orders/${orderNumber}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

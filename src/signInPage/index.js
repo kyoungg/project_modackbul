@@ -29,14 +29,14 @@ signInBtn.addEventListener("click", addMember);
 // 이벤트에 사용할 함수
 async function addMember(e) {
   // preventDefault 안 하면 새로고침됨.
-  e.preventDefault()
+  e.preventDefault();
 
   // 입력값 가져오기
   const email = emailInput.value;
   const fullName = nameInput.value; //스키마 주의
   const password = passwordInput.value;
   const passwordConfirm = passwordConfirmInput.value;
-  const address = addInput1.value + addInput2.value;
+  const address = `${postalCodeInput.value}##${addInput1.value}##${addInput2.value}`;
   const phoneNumber = phoneNumberInput.value;
 
   if (email == "") {
@@ -75,17 +75,22 @@ async function addMember(e) {
 
   const apiUrl = `http://localhost:5000/api/users/sign-up`;
 
-  const res = await fetch(apiUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: dataJson,
-  });
+  try {
+    const res = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: dataJson,
+    });
 
-  if (res.ok) {
-    alert("회원가입에 성공하였습니다!");
-  } else {
-    alert("회원가입에 실패하였습니다...");
+    if (res.ok) {
+      alert("회원가입에 성공하였습니다!");
+      window.location.href = "loginPage.html";
+    } else {
+      alert("회원가입에 실패하였습니다...");
+    }
+  } catch (err) {
+    console.log(err);
   }
 }

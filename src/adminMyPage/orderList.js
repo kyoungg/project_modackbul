@@ -9,6 +9,9 @@ insertOrderElement()
 
 const editStatusBtn = document.querySelector("#editStatusBtn")
 const orderCancelBtn = document.querySelector("#orderCancelBtn")
+const backBtn = document.querySelector("#backBtn")
+
+backBtn.addEventListener("click", ()=>{ window.location.href = "admin-myPage.html" })
 
 const ActionFunctions = {
   edit: (e) => editOrerstatusHandler(e),
@@ -91,10 +94,10 @@ async function insertOrderElement() {
                    <td><div class="totalprice">${totalprice} 원</div></td>
                    <td><div class="orderStatus">
                        <input type="text" readonly class="form-control-plaintext text-center" id="orderStatus" value="${status}">
-                       ${status === "상품 준비중" ? `<button id="editStatusBtn" data-action="edit" class="btn btn-secondary">발송완료</button>` : `<div></div>`}
+                       ${status === "상품 준비중" ? `<button id="editStatusBtn" data-action="edit" class="btn btn-dark">발송완료</button>` : `<div></div>`}
                    <td>
                    <div class="gap-2 d-md-flex justify-content-md-end">
-                    ${ status === "상품 준비중" ? `<button type="button" id="orderCancelBtn" data-action="cancel" class="btn btn-danger">주문취소</button>`: `<div></div>`}
+                    ${ status === "상품 준비중" ? `<button type="button" id="orderCancelBtn" data-action="cancel" class="btn btn-outline-danger">주문취소</button>`: `<div></div>`}
                    </div>
                    </td>
                  </tr>

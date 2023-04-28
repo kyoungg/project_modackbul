@@ -2,7 +2,9 @@ import { chageNumberToLocaleString, checkAuth} from "../utils/index.js"
 
 const { isAdmin, token } = checkAuth()
 
-//const productBox = document.querySelector(".productBox")
+const orderListContainer = document.querySelector("#oderList-container")
+backBtn.addEventListener("click", ()=>{ window.location.href = "admin-myPage.html" })
+
 const productListContainer = document.querySelector("#productList-container")
 
 // 데이터를 받아 요소를 만든 후, html에 삽입
@@ -100,8 +102,8 @@ async function insertProductElement() {
         </div>
       </div>
       <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-        <button type="button" data-action="edit" class="btn btn-secondary">Edit</button>
-        <button type="button" data-action="delete" class="btn btn-danger">Delete</button>
+        <button type="button" data-action="edit" class="btn btn-dark">Edit</button>
+        <button type="button" data-action="delete" class="btn btn-outline-danger">Delete</button>
       </div>
       </div>
   `)
