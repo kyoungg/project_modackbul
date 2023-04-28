@@ -46,21 +46,6 @@ async function loginSubmit(e) {
   })
 
   const responseData = await response.json();
-  console.log(responseData)
-
-  localStorage.setItem("userData", responseData.data.token);
-
-  const userData = {
-    _id:responseData.data._id,
-    email: responseData.data.email,
-    fullName: responseData.data.fullName,
-    phoneNumber: responseData.data.phoneNumber,
-    address: responseData.data.address,
-  };
-
-  const responseData = await response.json();
-
-  console.log(responseData);
 
   localStorage.setItem("userData", responseData.data.token);
 
