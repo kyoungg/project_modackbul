@@ -34,7 +34,6 @@ async function getOrderData(){
 
   const userdata = sessionStorage.getItem('userData')
   const adminId = JSON.parse(userdata)._id
-  const targetId = JSON.stringify(adminId)
   
   const apiUrl = `http://localhost:5000/api/orders/admin/${adminId}`
 
