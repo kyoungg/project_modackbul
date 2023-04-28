@@ -108,8 +108,13 @@ async function getProduct() {
     const quantity = Number(qty.value);
     const cart = { name, price, description, company, imgPath, quantity };
 
+    const data = {
+      data: [cart],
+      total: price * quantity,
+    };
+
     window.location.href = "orderingPage.html";
-    localStorage.setItem("cartData", JSON.stringify([cart]));
+    localStorage.setItem("orderData", JSON.stringify(data));
   }
 
   // 각 데이터를 요소에 삽입하여 화면에 보여주기 (단순 텍스트만 교체할 땐 textContent 사용)
