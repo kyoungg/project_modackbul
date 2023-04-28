@@ -13,21 +13,10 @@ const cartBtn = document.querySelector(".cart_btn");
 const buyBtn = document.querySelector(".buy_btn");
 
 async function getProduct() {
-  // const res = await fetch(`http://localhost:5000/api/products/${name}`, {
-  //   method: "GET",
-  // });
-  // const data = await res.json();
+  const storageName = sessionStorage.getItem("name");
+  const itemTitle = JSON.parse(storageName);
 
-  // mock data
-  const data = {
-    name: "폴라리스 카프리콘 오토캐빈텐트",
-    price: 200000,
-    description: "상품설명입니다.",
-    company: "폴라리스",
-    imgPath:
-      "https://images.pexels.com/photos/9849124/pexels-photo-9849124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  };
-  const { name, price, description, company, imgPath } = data;
+  const { _id, name, price, description, company, imgPath } = itemTitle;
 
   // 최소 수량 1, 최대 수량 10 (html에 적용은 해놨는데 직접 입력 시 적용이 안됐음)
   function updateTotalPrice() {
@@ -46,22 +35,37 @@ async function getProduct() {
     totalPrice.innerHTML = `${chageNumberToLocaleString(price * count)}원`;
   }
 
-  // 빈배열 초기화
-  let cartData = [];
-  //cartData 찾기
-  const cartDataJSON = localStorage.getItem("cartData");
-  if (cartDataJSON) {
-    cartData = JSON.parse(cartDataJSON);
-  }
-
-  function addCartItem(cartItem) {
-    cartData.push(cartItem);
-  }
-
   async function addToCart() {
     const quantity = Number(qty.value);
-    const cartItem = { name, price, description, company, imgPath, quantity };
-    addCartItem(cartItem);
+    const cartItem = {
+      _id,
+      name,
+      price,
+      description,
+      company,
+      imgPath,
+      quantity,
+    };
+
+    let cartData = [];
+
+    if (localStorage.getItem("cartData")) {
+      cartData = JSON.parse(localStorage.getItem("cartData"));
+    }
+
+    const existingItem = cartData.find((item) => item._id === _id);
+
+    if (existingItem) {
+      const confirmed = window.confirm(
+        "이미 장바구니에 추가된 상품입니다.\n장바구니로 페이지로 이동하시겠습니까?"
+      );
+      if (confirmed) {
+        window.location.href = "cartPage.html";
+        return;
+      } else {
+        return;
+      }
+    }
 
     // 로그인 유저 서버 저장
     if (isLoggedIn) {
@@ -70,17 +74,31 @@ async function getProduct() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: "bearer " + token,
           },
           body: JSON.stringify(cartItem),
         });
-        const data = await res.json();
-        console.log(data);
+
+        // 장바구니 중복 방지
+        if (res.status === 400) {
+          const confirmed = window.confirm(
+            "이미 장바구니에 추가된 상품입니다.\n장바구니로 페이지로 이동하시겠습니까?"
+          );
+          if (confirmed) {
+            window.location.href = "cartPage.html";
+            return;
+          } else {
+            return;
+          }
+        }
+        alert("상품을 장바구니에 담았습니다.");
       } catch (error) {
+        console.log(error);
         alert("장바구니 추가 중 문제가 발생했습니다.");
-        console.error(error);
       }
     } else {
       // 비회원 localStorage 저장
+      cartData.push(cartItem);
       localStorage.setItem("cartData", JSON.stringify(cartData));
       alert("상품을 장바구니에 담았습니다.");
     }

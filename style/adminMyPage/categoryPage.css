@@ -1,6 +1,9 @@
+.category_div {
+  height: 500px;
+}
+
 .major_category,
 .minor_category {
-  height: 200px;
   overflow-y: scroll;
 }
 

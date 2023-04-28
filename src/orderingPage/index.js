@@ -8,10 +8,12 @@ import {
   checkName,
   checkPhoneNumber,
   findAddress,
+  getUserData,
+  chageNumberToLocaleString,
+  checkAuth,
 } from "../utils/index.js";
-import { checkAuth } from "../utils/index.js";
 
-// const { isLoggedIn } = checkAuth();
+const { isLoggedIn, token } = checkAuth();
 
 const orderData = JSON.parse(localStorage.getItem(STORAGE_NAME));
 
@@ -20,25 +22,15 @@ const orderData = JSON.parse(localStorage.getItem(STORAGE_NAME));
  */
 function renderOrder() {
   // 주문 요약 보여주기
-  const summaryDiv = document.getElementsByClassName("order_summary")[0];
-  summaryDiv.classList.add(
-    "d-flex",
-    "border",
-    "border-success",
-    "justify-content-start",
-    "align-items-center",
-    "mb-4",
-    "p-2",
-    "rounded",
-    "w-75"
-  );
+  const summaryDiv = document.querySelector(".order_summary");
 
   const img = document.createElement("img");
-  img.src = orderData.data[0].img;
-  img.alt = orderData.data[0].summary;
+  img.src = `http://localhost:5000/${orderData.data[0].imgURL}`;
+  img.alt = "상품 이미지";
   img.classList.add("rounded", "w-25");
 
   const ul = document.createElement("ul");
+  ul.classList.add("m-0", "p-0");
 
   for (let i = 0; i < SUMMARY_PHRASE_LIST(orderData).length; i++) {
     const li = document.createElement("li");
@@ -53,12 +45,11 @@ function renderOrder() {
   summaryDiv.appendChild(ul);
 
   // 로그인 여부에 따라 getUserData를 할지 말지 분기 처리
-  const isLoggedIn = true; // 목업 로그인
   if (isLoggedIn) {
     // 로그인 유저의 경우 DB에서 가져온 유저 데이터를 보여주고, 해당 데이터들의 input 태그는 disabled 처리
-    // 휴대폰 번호와 주소의 경우, 회원가입 시 등록하지 않는다.
-    // 이 부분에 대해서도 분기 처리가 필요하지 않을까?
-    const { email, id, phoneNumber, name } = getUserData();
+    const { email, fullName, phoneNumber, address } = getUserData();
+
+    const [postNumber, address1, address2] = address.split("##");
 
     const input = document.getElementsByTagName("input");
 
@@ -69,7 +60,7 @@ function renderOrder() {
       }
 
       if (input[i].id === "name_input") {
-        input[i].value = name;
+        input[i].value = fullName;
         input[i].disabled = true;
       }
 
@@ -77,30 +68,23 @@ function renderOrder() {
         input[i].value = phoneNumber;
         input[i].disabled = true;
       }
+
+      if (input[i].id === "postNumber") {
+        input[i].value = postNumber;
+        input[i].disabled = true;
+      }
+
+      if (input[i].id === "addInput1") {
+        input[i].value = address1;
+        input[i].disabled = true;
+      }
+
+      if (input[i].id === "addInput2") {
+        input[i].value = address2;
+        input[i].disabled = true;
+      }
     }
   }
-}
-
-/**
- * 로그인한 유저의 기본 정보를 가져오는 함수
- * @returns {String} 이메일, 아이디, 휴대폰 번호, 이름
- */
-function getUserData() {
-  // async 앞에 붙여주기
-  // 유저 데이터를 얻기 위한 API 통신
-  // const { email, id, phoneNumber, name } = await fetch("url");
-
-  // 더미 데이터
-  const data = {
-    email: "hi@hi.com",
-    id: "afsadfefesf",
-    phoneNumber: "010-1234-5678",
-    name: "박기영",
-  };
-
-  const { email, id, phoneNumber, name } = data;
-
-  return { email, id, phoneNumber, name };
 }
 
 const orderBtn = document.querySelector(".order_btn");
@@ -111,7 +95,7 @@ orderBtn.addEventListener("click", orderHandler);
  * 주문하기 버튼 클릭 시, 유저의 데이터와 주문 데이터를 병합하여 API 통신을 진행하는 함수.
  * API 통신으로 주문 번호를 받아온 뒤, 이를 localStorage에 저장하고 주문 완료 페이지로 이동한다.
  */
-function orderHandler() {
+async function orderHandler() {
   const email = document.getElementById("email_input").value;
   const name = document.getElementById("name_input").value;
   const phoneNumber = document.getElementById("phone_input").value;
@@ -139,33 +123,82 @@ function orderHandler() {
     return;
   }
 
-  const purchaseData = {
-    email,
-    name,
-    phoneNumber,
-    address: {
-      postNumber,
-      address1,
-      address2,
-    },
-    orderData,
-  };
+  let cartIdArr = [];
 
-  console.log(purchaseData);
+  for (let i = 0; i < orderData.data.length; i++) {
+    cartIdArr.push(orderData.data[i]._id);
+  }
 
-  // async 추가하기
-  // API 통신으로 주문번호 받아오기
-  // body에 있는 데이터로 해시 암호화?
-  // let orderNumber = await fetch("url", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: purchaseData,
-  // });
+  // 회원 주문 API 통신
+  if (isLoggedIn) {
+    const purchaseData = {
+      customerId: getUserData()._id,
+      customerPhoneNumber: phoneNumber,
+      customerAddress: `${postNumber}##${address1}##${address2}`,
+      cart: cartIdArr,
+      total: orderData.total,
+    };
 
-  // 주문 완료 페이지로 이동
-  window.location.href = "orderedPage.html";
+    try {
+      // API 통신으로 주문번호 받아오기
+      const response = await fetch("http://localhost:5000/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "bearer " + token,
+        },
+        body: JSON.stringify(purchaseData),
+      });
+
+      const responseData = await response.json();
+
+      localStorage.setItem("orderedData", JSON.stringify(responseData.data));
+
+      if (response.ok) {
+        // 주문 완료 페이지로 이동
+        window.location.href = "orderedPage.html";
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  // 비회원 주문 API 통신
+  if (!isLoggedIn) {
+    const purchaseData = {
+      customerName: name,
+      customerEmail: email,
+      customerPhoneNumber: phoneNumber,
+      customerAddress: `${postNumber}##${address1}##${address2}`,
+      cart: cartIdArr,
+      total: orderData.total,
+    };
+
+    try {
+      // API 통신으로 주문번호 받아오기
+      const response = await fetch(
+        "http://localhost:5000/api/orders/nonmember",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(purchaseData),
+        }
+      );
+
+      const responseData = await response.json();
+
+      localStorage.setItem("orderedData", JSON.stringify(responseData.data));
+
+      if (response.ok) {
+        // 주문 완료 페이지로 이동
+        window.location.href = "orderedPage.html";
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
 
 const cancelBtn = document.querySelector(".cancel_btn");

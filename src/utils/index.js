@@ -137,4 +137,18 @@ export function checkAuth() {
  */
 export function logout() {
   localStorage.removeItem("userData");
+
+  window.location.href = "productListPage.html";
+}
+
+/**
+ * 로그인한 유저의 정보를 sessionStorage에서 꺼내오는 함수
+ * @returns {String} 로그인한 유저의 이메일, 이름, 전화번호, 주소
+ */
+export function getUserData() {
+  const { email, fullName, phoneNumber, address, _id } = JSON.parse(
+    sessionStorage.getItem("userData")
+  );
+
+  return { email, fullName, phoneNumber, address, _id };
 }
