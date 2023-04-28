@@ -85,6 +85,9 @@ async function insertProductElement() {
       const productdata = data.data
       const productId = productdata._id
 
+      //상품 오브젝트 id를 받아서 세션에 저장
+      sessionStorage.setItem('productId', productId)
+
       nameInput.value = productdata.name
       priceInput.value = productdata.price
       summaryInput.value = productdata.summary
@@ -93,9 +96,6 @@ async function insertProductElement() {
       descriptionInput.value = productdata.description
       categoryInput.value = productdata.category
       preview.src = productdata.imgPath //이미지
-      
-      sessionStorage.setItem('productId', productId);
-      
     } else {
     alert('잘못된 경로입니다!')
     window.location.href = "/index.html"
@@ -104,7 +104,7 @@ async function insertProductElement() {
 }
 
 
-//특정상품 API통신으로 조회하는 함수
+//특정상품 API통신으로 조회해서 데이터값을 받아옴
 async function getProductData(){
    const targetName = sessionStorage.getItem('targetName')
 
@@ -126,15 +126,20 @@ async function getProductData(){
    }
  }
 
-//특정상품 정보 수정하는 함수
-async function editProductData(){
+//save 버튼을 누르면 기존 값을 변경해서 새로 수정함
+async function editProductData(e){
+  e.preventDefault()
+
+  //수정할 상품의 오브젝id값을 세션에서 가져옴
   const productId = sessionStorage.getItem('productId')
   console.log(productId)
 
-  const formData = new FormData(document.querySelector("#productForm"))
+  //변경된 수정사항 updateData에 저장
+  const updateData = new FormData(document.querySelector("#productForm"))
 
-  formData.append('category',document.querySelector('#categoryInput').value)
-  console.log(document.querySelector('#categoryInput').value)
+  //카테고리 값 updateData에 넣음
+  updateData.append('category',document.querySelector('#categoryInput').value)
+  console.log([...updateData])
 
   const apiUrl = `http://localhost:5000/api/products/${productId}`
 
@@ -143,13 +148,12 @@ async function editProductData(){
       // headers: {
       //   Authorization : "bearer " + token,
       // },
-      body:  formData  ,
+      body:  updateData ,
   });
-
     if (res.ok) {
-     //alert('상품 정보가 수정되었습니다!');
+     alert('상품 정보가 수정되었습니다!');
   } else {
-   //alert('상품 정보 수정에 실패하였습니다...');
+   alert('상품 정보 수정에 실패하였습니다...');
   }
 
 }

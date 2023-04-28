@@ -55,7 +55,6 @@ export function productForm() {
                     >
             </div>
         </div>
-
         <div>
             <label for="companyInput" class="form-label">Category</label>
             <div class="mb-3 input-group category">

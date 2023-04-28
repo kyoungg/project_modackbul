@@ -27,10 +27,6 @@ const preview = document.querySelector('.image-box')
 const fileInput = document.querySelector("#file")
 const categoryInput = document.querySelector("#categoryInput")
 
-
-const fileUploadBtn = document.querySelector("#fileUploadBtn")
-
-
 //이미지 프리뷰 기능
 fileDOM.addEventListener('change', () => {
   const imageSrc = URL.createObjectURL(fileDOM.files[0])
@@ -95,7 +91,6 @@ async function addProductSubmit(e) {
     console.log(formData)
 
     formData.append('category',document.querySelector('#categoryInput').value)
-
     console.log([...formData])
 
     //if(isAdmin){
@@ -112,6 +107,7 @@ async function addProductSubmit(e) {
       
       if (res.ok) {
           alert(`[${name}] 상품 등록에 성공하였습니다!`)
+          window.location.href = "/admin-ProductListPage.html"
         } else {
           alert(`상품 등록에 실패하였습니다...`)
         }
