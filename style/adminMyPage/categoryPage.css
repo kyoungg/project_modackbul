@@ -1,0 +1,15 @@
+.major_category,
+.minor_category {
+  height: 200px;
+  overflow-y: scroll;
+}
+
+.category_text:hover {
+  cursor: pointer;
+}
+
+.major_input,
+.minor_input {
+  all: unset;
+  padding-left: 10px;
+}
