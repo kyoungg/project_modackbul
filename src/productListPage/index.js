@@ -37,7 +37,7 @@ async function addProductItems() {
       `<div class="product col">
       <a href="./productDetailPage.html" class="productItem">
       <div class="card">
-      <img src="${image}" class="product_img card-img-top" alt="" />
+      <img src="http://localhost:5000/${image}" class="product_img card-img-top" alt="" />
         <div class="card-body">
           <h6 class="company card-title">${company}</h6>
           <h6 class="name card-title">${name}</h6>
