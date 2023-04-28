@@ -112,7 +112,10 @@ async function addProductSubmit(e) {
 
     const formData = new FormData(document.querySelector("#productForm"))
     console.log(formData)
-    const addData = JSON.stringify(formData)
+
+    formData.append('category',document.querySelector('#categoryInput').value)
+
+    console.log([...formData])
 
     //if(isAdmin){
       
@@ -123,7 +126,7 @@ async function addProductSubmit(e) {
         // headers: {
         //     'Content-Type': 'application/json',
         // },
-        body:  addData  ,
+        body:  formData  ,
       });
       
       if (res.ok) {

@@ -68,6 +68,7 @@ async function insertProductElement() {
   const Productstock = data.stock
   const Productprice = chageNumberToLocaleString(data.price)
   const Productimg = data.imgPath
+  console.log(data.imgPath)
   const productcategory = data.category
 
 
@@ -117,7 +118,6 @@ function editPagehandler(e){
 //상품 삭제 함수
 async function deleteProduct(e) {
   const targetName = e.targetName
-  console.log(productName)
 
   const apiUrl = `http://localhost:5000/api/products/${targetName}` //삭제하고자 하는 상품의 name
 
