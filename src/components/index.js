@@ -8,7 +8,7 @@ function renderHeader() {
   const content = `
   <nav class="navbar navbar-expand-lg bg-light mb-3">
   <div class="container-fluid">
-    <a class="navbar-brand" href="index.html">🏕️모닥불</a>
+    <a class="navbar-brand" href="productDetailPage.html">🏕️모닥불</a>
     <button
       class="navbar-toggler"
       type="button"
@@ -22,7 +22,7 @@ function renderHeader() {
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="#">상품 목록</a>
+        <a class="nav-link" href="productDetailPage.html">상품 목록</a>
         <a class="nav-link" href="userMyPage.html">마이페이지</a>
         <a class="nav-link" href="cartPage.html">장바구니</a>
         ${
@@ -32,7 +32,7 @@ function renderHeader() {
         }
         ${
           isLoggedIn
-            ? `<a class="nav-link logout_btn btn btn-outline-danger">로그아웃</a>`
+            ? `<a class="nav-link logout_btn" style="cursor:pointer;">로그아웃</a>`
             : `<a class="nav-link" href="loginPage.html">로그인</a>`
         }
       </div>
