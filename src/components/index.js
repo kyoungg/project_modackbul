@@ -8,7 +8,7 @@ function renderHeader() {
   const content = `
   <nav class="navbar navbar-expand-lg bg-light mb-3">
   <div class="container-fluid">
-    <a class="navbar-brand" href="productDetailPage.html">🏕️모닥불</a>
+    <a class="navbar-brand" href="productListPage.html">🏕️모닥불</a>
     <button
       class="navbar-toggler"
       type="button"
