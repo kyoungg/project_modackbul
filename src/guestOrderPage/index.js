@@ -16,23 +16,22 @@ async function handleSubmit(e) {
   if (!orderNumber) {
     return alert("주문번호를 입력하세요.");
   }
+  const userId = orderNumber.value;
 
   try {
-    const res = await fetch(`http://localhost:5000/api/orders/${orderNumber}`, {
+    const res = await fetch(`http://localhost:5000/api/orders/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
-    if (!res.ok) {
-      return alert("요청하신 주문 내역이 없습니다.");
+    const data = await res.json();
+    if (res.ok) {
+      localStorage.setItem("nonmemberData", JSON.stringify(data));
+      window.location.href = "orderedPage.html";
     }
-    const orderInfo = await res.json();
-
-    localStorage.setItem("nonmemberData", JSON.stringify(orderInfo));
-
-    window.location.href = "orderedPage.html";
   } catch (err) {
-    console.error(err);
+    console.log(err);
+    return alert("요청하신 주문 내역이 없습니다.");
   }
 }
