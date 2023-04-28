@@ -13,26 +13,10 @@ const cartBtn = document.querySelector(".cart_btn");
 const buyBtn = document.querySelector(".buy_btn");
 
 async function getProduct() {
-  // const res = await fetch(`http://localhost:5000/api/products/${productName}`, {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // const data = await res.json();
-  // console.log(data);
+  const storageName = sessionStorage.getItem("name");
+  const itemTitle = JSON.parse(storageName);
 
-  const data = {
-    _id: "1",
-    name: "폴라리스 카프리콘 오토캐빈텐트",
-    price: 200000,
-    description: "상품설명입니다.",
-    company: "폴라리스",
-    imgPath:
-      "https://images.pexels.com/photos/9849124/pexels-photo-9849124.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  };
-
-  const { _id, name, price, description, company, imgPath } = data;
+  const { _id, name, price, description, company, imgPath } = itemTitle;
 
   // 최소 수량 1, 최대 수량 10 (html에 적용은 해놨는데 직접 입력 시 적용이 안됐음)
   function updateTotalPrice() {
