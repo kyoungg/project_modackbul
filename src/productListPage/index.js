@@ -14,6 +14,7 @@ async function addProductItems() {
   console.log(products);
   sessionStorage.setItem("productData", JSON.stringify(products));
 
+
   products.data.forEach((product) => {
     const name = product.name;
     const price = product.price;
@@ -22,7 +23,7 @@ async function addProductItems() {
 
     productList.insertAdjacentHTML(
       "afterbegin",
-      `<div class="product col">
+      `<div class="product col" data-category="${category}">
       <a href="./productDetailPage.html" class="productItem">
       <div class="card">
       <img src="${image}" class="product_img card-img-top" alt="" />
