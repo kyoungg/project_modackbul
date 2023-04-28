@@ -83,7 +83,7 @@ async function addMember(e) {
     body: dataJson,
   });
 
-  if (res.status === 201) {
+  if (res.ok) {
     alert("회원가입에 성공하였습니다!");
   } else {
     alert("회원가입에 실패하였습니다...");
