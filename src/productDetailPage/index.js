@@ -100,8 +100,8 @@ async function getProduct() {
       }
     } else {
       // 비회원 localStorage 저장
-      cartData.push(newCart);
-      localStorage.setItem("cartData", JSON.stringify(cartData));
+      // cartData.push(newCart);
+      localStorage.setItem("cartData", JSON.stringify([newCart]));
       alert("상품을 장바구니에 담았습니다.");
     }
   }
