@@ -59,12 +59,6 @@ img {
   color: inherit;
 }
 
-.text-bg-success {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-}
-
 .tab {
   font-weight: bold;
 }
