@@ -109,7 +109,7 @@ async function addProductSubmit(e) {
 
   if (res.ok) {
     alert(`[${name}] 상품 등록에 성공하였습니다!`);
-    window.location.href = "admin-ProductListPage.html";
+    window.location.href = "admin-productListPage.html";
   } else {
     alert(`상품 등록에 실패하였습니다...`);
   }
