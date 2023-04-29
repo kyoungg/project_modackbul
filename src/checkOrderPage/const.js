@@ -11,14 +11,33 @@ export const SUMMARY_KEY_LIST = [
   "배송 상태",
 ];
 
+// export const SUMMARY_PHRASE_LIST = (orderData) => [
+//   `${orderData.orderNumber}`,
+//   `${orderData.cart[0].name} 외 ${orderData.cart.length - 1}개`,
+//   `총 ${orderData.cart.reduce((acc, curr) => {
+//     return acc + curr.quantity;
+//   }, 0)}개`,
+//   `총 ${chageNumberToLocaleString(orderData.total)} 원`,
+//   `${orderData.cart[0].company} 외 ${orderData.cart.length - 1}개`,
+//   `${orderData.orderStatus}`,
+// ];
+
 export const SUMMARY_PHRASE_LIST = (orderData) => [
   `${orderData.orderNumber}`,
-  `${orderData.cart[0].name} 외 ${orderData.cart.length - 1}개`,
+  `${
+    orderData.cart.length === 1
+      ? orderData.cart[0].name
+      : `${orderData.cart[0].name} 외 ${orderData.cart.length - 1}개`
+  }`,
   `총 ${orderData.cart.reduce((acc, curr) => {
     return acc + curr.quantity;
   }, 0)}개`,
   `총 ${chageNumberToLocaleString(orderData.total)} 원`,
-  `${orderData.cart[0].company} 외 ${orderData.cart.length - 1}개`,
+  `${
+    orderData.cart.length === 1
+      ? orderData.cart[0].company
+      : `${orderData.cart[0].company} 외 ${orderData.cart.length - 1}개`
+  }`,
   `${orderData.orderStatus}`,
 ];
 

@@ -22,6 +22,7 @@ async function getCartData() {
     const responseData = await response.json();
 
     cartData = responseData.data;
+    console.log(cartData);
   } catch (err) {
     console.log(err);
   }

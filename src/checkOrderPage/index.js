@@ -34,7 +34,9 @@ async function getOrderList() {
 
       const responseData = await response.json();
 
-      orderList = responseData.data;
+      // orderList = responseData.data;
+
+      orderList = responseData.data.filter((item) => item.cart.length >= 1);
     } catch (err) {
       console.log(err);
     }

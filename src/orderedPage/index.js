@@ -19,6 +19,7 @@ function getOrderData() {
  */
 function renderOrder() {
   const orderData = getOrderData();
+  console.log(orderData);
 
   const summaryDiv = document.querySelector(".order_summary");
 
