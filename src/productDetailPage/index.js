@@ -108,7 +108,14 @@ async function getProduct() {
 
   function buyNow() {
     const quantity = Number(qty.value);
-    const cart = { name, price, description, company, imgPath, quantity };
+    const cart = {
+      name,
+      price,
+      description,
+      company,
+      imgURL: imgPath,
+      quantity,
+    };
 
     const data = {
       data: [cart],
