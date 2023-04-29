@@ -1,25 +1,31 @@
+import { checkAuth } from "../utils/index.js";
 import {
   STORAGE_NAME,
   SUMMARY_KEY_LIST,
   SUMMARY_PHRASE_LIST,
 } from "./const.js";
 
+const { isLoggedIn } = checkAuth();
+
+let orderData = null;
+
 /**
  * 완료된 주문 정보를 얻기 위한 함수
  * @returns 주문 정보를 담고 있는 객체
  */
 function getOrderData() {
-  const orderData = JSON.parse(localStorage.getItem(STORAGE_NAME));
+  orderData = JSON.parse(localStorage.getItem(STORAGE_NAME));
 
-  return orderData;
+  // return orderData;
 }
 
 /**
  * 주문 완료된 정보를 렌더링하는 함수
  */
 function renderOrder() {
-  const orderData = getOrderData();
-  console.log(orderData);
+  getOrderData();
+  // const orderData = getOrderData();
+  // console.log(orderData);
 
   const summaryDiv = document.querySelector(".order_summary");
 
@@ -53,6 +59,14 @@ btn.addEventListener("click", checkOrderList);
  * 주문 내역을 확인하는 페이지로 이동하는 함수.
  */
 function checkOrderList() {
+  if (!isLoggedIn) {
+    const data = {
+      data: [orderData],
+    };
+
+    localStorage.setItem("nonmemberData", JSON.stringify(data));
+  }
+
   // 주문 내역 페이지로 이동
   window.location.href = "checkOrderPage.html";
 }

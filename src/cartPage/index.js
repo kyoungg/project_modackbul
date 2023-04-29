@@ -41,7 +41,7 @@ async function renderCarts() {
   if (isLoggedIn) {
     await getCartData();
   } else {
-    cartData = localStorage.getItem("cartData");
+    cartData = JSON.parse(localStorage.getItem("cartData"));
   }
 
   // 장바구니 데이터가 없는 경우
@@ -73,7 +73,7 @@ async function renderCarts() {
     const img = document.createElement("img");
     img.src = `http://localhost:5000/${cartData[i].imgURL}`;
     img.alt = "상품 이미지";
-    img.classList.add("rounded", "w-25", "pe-2");
+    img.classList.add("rounded", "pe-2");
 
     const ul = document.createElement("ul");
     ul.classList.add("m-0", "p-0");
@@ -172,7 +172,7 @@ async function cartDeleteHandler(id) {
       }
 
       // 화면에서 지우기
-      cartData = cartData.filter((item) => item.id !== id);
+      cartData = cartData.filter((item) => item._id !== id);
     } catch (err) {
       console.log(err);
     }
@@ -181,7 +181,7 @@ async function cartDeleteHandler(id) {
   // 비회원의 경우
   if (!isLoggedIn) {
     // 화면에서 지우기
-    cartData = cartData.filter((item) => item.id !== id);
+    cartData = cartData.filter((item) => item._id !== id);
 
     // 변경된 데이터를 localStorage의 cartData에 반영
     localStorage.setItem("cartData", JSON.stringify(cartData));

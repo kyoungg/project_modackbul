@@ -38,15 +38,6 @@ async function getProduct() {
 
   async function addToCart() {
     const quantity = Number(qty.value);
-    const cartItem = {
-      _id,
-      name,
-      price,
-      description,
-      company,
-      imgPath,
-      quantity,
-    };
 
     const newCart = {
       _id,
@@ -109,7 +100,7 @@ async function getProduct() {
       }
     } else {
       // 비회원 localStorage 저장
-      cartData.push(cartItem);
+      cartData.push(newCart);
       localStorage.setItem("cartData", JSON.stringify(cartData));
       alert("상품을 장바구니에 담았습니다.");
     }

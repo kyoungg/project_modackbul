@@ -27,7 +27,7 @@ function renderOrder() {
   const img = document.createElement("img");
   img.src = `http://localhost:5000/${orderData.data[0].imgURL}`;
   img.alt = "상품 이미지";
-  img.classList.add("rounded", "w-25");
+  img.classList.add("rounded", "me-5");
 
   const ul = document.createElement("ul");
   ul.classList.add("m-0", "p-0");
@@ -170,7 +170,7 @@ async function orderHandler() {
       customerEmail: email,
       customerPhoneNumber: phoneNumber,
       customerAddress: `${postNumber}##${address1}##${address2}`,
-      cart: cartIdArr,
+      // cart: cartIdArr,
       total: orderData.total,
     };
 
@@ -189,7 +189,11 @@ async function orderHandler() {
 
       const responseData = await response.json();
 
-      localStorage.setItem("orderedData", JSON.stringify(responseData.data));
+      const cartData = JSON.parse(localStorage.getItem("cartData"));
+
+      const data = { ...responseData.data, cart: cartData };
+
+      localStorage.setItem("orderedData", JSON.stringify(data));
 
       if (response.ok) {
         // 주문 완료 페이지로 이동

@@ -27,7 +27,7 @@ async function handleSubmit(e) {
     const data = await res.json();
     if (res.ok) {
       localStorage.setItem("nonmemberData", JSON.stringify(data));
-      window.location.href = "orderedPage.html";
+      window.location.href = "checkOrderPage.html";
     }
   } catch (err) {
     console.log(err);

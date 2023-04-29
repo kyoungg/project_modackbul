@@ -34,8 +34,6 @@ async function getOrderList() {
 
       const responseData = await response.json();
 
-      // orderList = responseData.data;
-
       orderList = responseData.data.filter((item) => item.cart.length >= 1);
     } catch (err) {
       console.log(err);
@@ -50,12 +48,14 @@ async function getOrderList() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/orders/${nonmemberOrderNumber}`
+        `http://localhost:5000/api/orders/${nonmemberOrderNumber.data[0].orderNumber}`
       );
 
       const responseData = await response.json();
 
-      orderList = responseData.data;
+      const cartData = JSON.parse(localStorage.getItem("cartData"));
+
+      orderList = [{ ...responseData.data[0], cart: cartData }];
     } catch (err) {
       console.log(err);
     }
