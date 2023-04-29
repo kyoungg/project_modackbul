@@ -4,6 +4,39 @@ const nav = document.querySelector(".category");
 
 let data = null;
 let filteredData = null;
+let category = null;
+
+// 카테고리 가져오기
+async function addcategory(e) {
+  const res = await fetch("http://34.64.164.169/api/categories", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  category = await res.json();
+  sessionStorage.setItem("categoryData", JSON.stringify(category));
+
+  category.data.forEach((tab) => {
+    const id = tab._id;
+    const name = tab.name;
+
+    nav.insertAdjacentHTML(
+      "beforeend",
+      `<li class="nav-item">
+    <a class="nav-link active tab test" aria-current="page" href="#">${name}</a>
+  </li>`
+    );
+  });
+
+  const tag = document.getElementsByClassName("test");
+
+  for (let i = 0; tag.length; i++) {
+    tag[i].addEventListener("click", testFunction);
+  }
+}
+
+addcategory();
 
 // 상품 가져오기
 async function addProductItems() {
@@ -57,36 +90,6 @@ async function addProductItems() {
 }
 addProductItems();
 
-// 카테고리 가져오기
-async function addcategory(e) {
-  const res = await fetch("http://34.64.164.169/api/categories", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const category = await res.json();
-  sessionStorage.setItem("categoryData", JSON.stringify(category));
-
-  category.data.forEach((tab) => {
-    const id = tab._id;
-    const name = tab.name;
-
-    nav.insertAdjacentHTML(
-      "beforeend",
-      `<li class="nav-item">
-    <a class="nav-link active tab test" aria-current="page" href="#">${name}</a>
-  </li>`
-    );
-  });
-
-  const tag = document.getElementsByClassName("test");
-
-  for (let i = 0; tag.length; i++) {
-    tag[i].addEventListener("click", testFunction);
-  }
-}
-
 function testFunction(e) {
   const targetCategory = e.target.innerText;
   console.log(targetCategory);
@@ -100,5 +103,3 @@ function testFunction(e) {
 
   addProductItems();
 }
-
-addcategory();
