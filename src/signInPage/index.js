@@ -73,7 +73,7 @@ async function addMember(e) {
   // JSON 만듦
   const dataJson = JSON.stringify(data);
 
-  const apiUrl = `http://localhost:5000/api/users/sign-up`;
+  const apiUrl = `http://34.64.164.169/api/users/sign-up`;
 
   try {
     const res = await fetch(apiUrl, {

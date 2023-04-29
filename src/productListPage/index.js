@@ -8,7 +8,7 @@ let filteredData = null;
 // 상품 가져오기
 async function addProductItems() {
   if (data === null) {
-    const res = await fetch("http://localhost:5000/api/products", {
+    const res = await fetch("http://34.64.164.169/api/products", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +37,7 @@ async function addProductItems() {
       `<div class="product col" data-category="${category}">
       <a href="./productDetailPage.html" class="productItem">
       <div class="card">
-      <img src="http://localhost:5000/${image}" class="product_img card-img-top" alt=""/>
+      <img src="http://34.64.164.169/${image}" class="product_img card-img-top" alt=""/>
         <div class="card-body">
           <h6 class="company card-title">${company}</h6>
           <h6 class="name card-title">${name}</h6>
@@ -59,7 +59,7 @@ addProductItems();
 
 // 카테고리 가져오기
 async function addcategory(e) {
-  const res = await fetch("http://localhost:5000/api/categories", {
+  const res = await fetch("http://34.64.164.169/api/categories", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

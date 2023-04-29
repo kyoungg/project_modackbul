@@ -35,7 +35,7 @@ async function loginSubmit(e) {
   // JSON 만들기
   const dataJson = JSON.stringify(data);
 
-  const apiUrl = `http://localhost:5000/api/users/login`;
+  const apiUrl = `http://34.64.164.169/api/users/login`;
 
   const response = await fetch(apiUrl, {
     method: "POST",

@@ -23,7 +23,7 @@ async function getOrderList() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/orders/order/${_id}`,
+        `http://34.64.164.169/api/orders/order/${_id}`,
         {
           method: "GET",
           headers: {
@@ -48,7 +48,7 @@ async function getOrderList() {
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/orders/${nonmemberOrderNumber.data[0].orderNumber}`
+        `http://34.64.164.169/api/orders/${nonmemberOrderNumber.data[0].orderNumber}`
       );
 
       const responseData = await response.json();
@@ -84,7 +84,7 @@ function renderOrder(order) {
   productDiv.classList.add("d-flex", "align-items-center", "w-75");
 
   const img = document.createElement("img");
-  img.src = `http://localhost:5000/${order.cart[0].imgURL}`;
+  img.src = `http://34.64.164.169/${order.cart[0].imgURL}`;
   img.alt = "상품 이미지";
   img.classList.add("rounded", "w-25", "pe-2");
 
@@ -193,7 +193,7 @@ async function cancelOrderHandler(id) {
 
   // 주문 데이터 삭제 API 통신
   try {
-    const response = await fetch(`http://localhost:5000/api/orders/${id}`, {
+    const response = await fetch(`http://34.64.164.169/api/orders/${id}`, {
       method: "DELETE",
     });
 

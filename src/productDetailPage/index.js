@@ -72,7 +72,7 @@ async function getProduct() {
     // 로그인 유저 서버 저장
     if (isLoggedIn) {
       try {
-        const res = await fetch("http://localhost:5000/api/carts/new", {
+        const res = await fetch("http://34.64.164.169/api/carts/new", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -120,7 +120,7 @@ async function getProduct() {
   }
 
   // 각 데이터를 요소에 삽입하여 화면에 보여주기 (단순 텍스트만 교체할 땐 textContent 사용)
-  productImg.src = `http://localhost:5000/${imgPath}`;
+  productImg.src = `http://34.64.164.169/${imgPath}`;
   productSeller.textContent = company;
   productDesc.textContent = description;
   productPrice.textContent = `${chageNumberToLocaleString(price)}원`;

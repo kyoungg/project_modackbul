@@ -40,7 +40,7 @@ const userId = userData._id;
 async function getUserData() {
   console.log(userId);
   try {
-    const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
+    const res = await fetch(`http://34.64.164.169/api/users/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -110,7 +110,7 @@ async function doCheckout(e) {
 
   // 정보 변경
   try {
-    const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
+    const res = await fetch(`http://34.64.164.169/api/users/${userId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -134,7 +134,7 @@ async function userDelete(e) {
   e.preventDefault();
   const confirmed = confirm("정말 탈퇴 하시겠습니까?");
   if (confirmed) {
-    const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
+    const res = await fetch(`http://34.64.164.169/api/users/${userId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

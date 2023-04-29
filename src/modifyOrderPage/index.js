@@ -23,7 +23,7 @@ function renderSummary() {
   const summaryDiv = document.querySelector(".order_summary");
 
   const img = document.createElement("img");
-  img.src = `http://localhost:5000/${wantModifyData.cart[0].imgURL}`;
+  img.src = `http://34.64.164.169/${wantModifyData.cart[0].imgURL}`;
   img.alt = "상품 이미지";
   img.classList.add("rounded", "w-25");
 
@@ -142,7 +142,7 @@ async function modifyHandler() {
   if (isLoggedIn) {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/orders/${wantModifyData._id}`,
+        `http://34.64.164.169/api/orders/${wantModifyData._id}`,
         {
           method: "PATCH",
           headers: {
@@ -166,7 +166,7 @@ async function modifyHandler() {
   if (!isLoggedIn) {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/orders/nonmember/${wantModifyData._id}`,
+        `http://34.64.164.169/api/orders/nonmember/${wantModifyData._id}`,
         {
           method: "PATCH",
           headers: {

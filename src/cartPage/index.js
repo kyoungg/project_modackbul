@@ -12,7 +12,7 @@ let cartData = [];
 async function getCartData() {
   try {
     // 장바구니 데이터 API 통신
-    const response = await fetch("http://localhost:5000/api/carts/view", {
+    const response = await fetch("http://34.64.164.169/api/carts/view", {
       method: "GET",
       headers: {
         Authorization: "bearer " + token,
@@ -71,7 +71,7 @@ async function renderCarts() {
     productDiv.classList.add("d-flex", "w-75", "align-items-center");
 
     const img = document.createElement("img");
-    img.src = `http://localhost:5000/${cartData[i].imgURL}`;
+    img.src = `http://34.64.164.169/${cartData[i].imgURL}`;
     img.alt = "상품 이미지";
     img.classList.add("rounded", "pe-2");
 
@@ -155,7 +155,7 @@ async function cartDeleteHandler(id) {
     try {
       // 장바구니 삭제 API 통신
       const response = await fetch(
-        `http://localhost:5000/api/carts/deleteOne/${id}`,
+        `http://34.64.164.169/api/carts/deleteOne/${id}`,
         {
           method: "DELETE",
           headers: {

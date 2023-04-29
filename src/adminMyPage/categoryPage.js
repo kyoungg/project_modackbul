@@ -5,7 +5,7 @@ let category = null;
  */
 async function renderCategory() {
   // 카테고리 데이터를 얻기 위한 API 통신
-  const response = await fetch("http://localhost:5000/api/categories");
+  const response = await fetch("http://34.64.164.169/api/categories");
 
   const responseData = await response.json();
 
@@ -112,7 +112,7 @@ async function addCategoryHandler() {
   };
 
   try {
-    const response = await fetch("http://localhost:5000/api/categories/add", {
+    const response = await fetch("http://34.64.164.169/api/categories/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -151,7 +151,7 @@ async function modifyMajorHandler(e) {
 
     // 수정을 위한 API 통신
     const response = await fetch(
-      `http://localhost:5000/api/categories/${majorP.innerText}`,
+      `http://34.64.164.169/api/categories/${majorP.innerText}`,
       {
         method: "PUT",
         headers: {
@@ -182,7 +182,7 @@ async function deleteCategoryHandler(e) {
 
   try {
     const response = await fetch(
-      `http://localhost:5000/api/categories/${deleteTarget}`,
+      `http://34.64.164.169/api/categories/${deleteTarget}`,
       {
         method: "DELETE",
         headers: {

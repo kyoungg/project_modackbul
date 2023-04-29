@@ -30,7 +30,7 @@ function renderOrder() {
   const summaryDiv = document.querySelector(".order_summary");
 
   const img = document.createElement("img");
-  img.src = `http://localhost:5000/${orderData.cart[0].imgURL}`;
+  img.src = `http://34.64.164.169/${orderData.cart[0].imgURL}`;
   img.alt = "상품 이미지";
   img.classList.add("rounded", "w-25", "pe-2");
 

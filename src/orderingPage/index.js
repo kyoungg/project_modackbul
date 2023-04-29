@@ -25,7 +25,7 @@ function renderOrder() {
   const summaryDiv = document.querySelector(".order_summary");
 
   const img = document.createElement("img");
-  img.src = `http://localhost:5000/${orderData.data[0].imgURL}`;
+  img.src = `http://34.64.164.169/${orderData.data[0].imgURL}`;
   img.alt = "상품 이미지";
   img.classList.add("rounded", "me-5");
 
@@ -141,7 +141,7 @@ async function orderHandler() {
 
     try {
       // API 통신으로 주문번호 받아오기
-      const response = await fetch("http://localhost:5000/api/orders", {
+      const response = await fetch("http://34.64.164.169/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -177,7 +177,7 @@ async function orderHandler() {
     try {
       // API 통신으로 주문번호 받아오기
       const response = await fetch(
-        "http://localhost:5000/api/orders/nonmember",
+        "http://34.64.164.169/api/orders/nonmember",
         {
           method: "POST",
           headers: {

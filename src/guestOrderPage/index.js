@@ -18,7 +18,7 @@ async function handleSubmit(e) {
   }
 
   try {
-    const res = await fetch(`http://localhost:5000/api/orders/${orderNumber}`, {
+    const res = await fetch(`http://34.64.164.169/api/orders/${orderNumber}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

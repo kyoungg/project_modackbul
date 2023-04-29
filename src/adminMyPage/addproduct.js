@@ -64,7 +64,7 @@ async function addcreateOption(){
 
 //카테고리 통신으로 받아오는 함수
 async function getcategoryData(){
-    const apiUrl = "http://localhost:5000/api/categories"
+    const apiUrl = "http://34.64.164.169/api/categories"
 
     const res = await fetch(apiUrl, {
       method: 'GET',
@@ -95,7 +95,7 @@ async function addProductSubmit(e) {
 
     //if(isAdmin){
       
-      const apiUrl = `http://localhost:5000/api/products/add`
+      const apiUrl = `http://34.64.164.169/api/products/add`
     
       const res = await fetch(apiUrl, {
         method: 'POST',
