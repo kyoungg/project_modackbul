@@ -119,8 +119,8 @@ export function productForm() {
         </div>
 
             <div class="d-flex  justify-content-center">
-                <button id="saveProductBtn" type="submit" class="btn btn-secondary ms-2">Save</button>
-                <button id="cancelBtn" type="button"  class="btn btn-danger ms-2">Cancle</button>
+                <button id="saveProductBtn" type="submit" class="btn btn-dark ms-2">Save</button>
+                <button id="cancelBtn" type="button"  class="btn btn-outline-danger ms-2">Cancle</button>
             </div>
     </form>
 </div>

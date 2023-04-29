@@ -34,7 +34,7 @@ async function addProductItems() {
 
     productList.insertAdjacentHTML(
       "afterbegin",
-      `<div class="product col">
+      `<div class="product col" data-category="${category}">
       <a href="./productDetailPage.html" class="productItem">
       <div class="card">
       <img src="http://localhost:5000/${image}" class="product_img card-img-top" alt=""/>
