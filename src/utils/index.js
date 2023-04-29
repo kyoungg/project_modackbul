@@ -138,7 +138,7 @@ export function checkAuth() {
 export function logout() {
   localStorage.removeItem("userData");
 
-  window.location.href = "productListPage.html";
+  window.location.href = "index.html";
 }
 
 /**
