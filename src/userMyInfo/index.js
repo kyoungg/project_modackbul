@@ -3,21 +3,27 @@ import {
   checkName,
   checkPhoneNumber,
   findAddress,
+  logout,
 } from "../utils/index.js";
-import { userForm } from "../commonUI/index.js";
+import { userForm } from "../commonUI/updateForm.js";
+import { checkAuth } from "../utils/index.js";
+const { isLoggedIn, token } = checkAuth();
 
 const userInfoForm = document.querySelector(".userInfo");
 userInfoForm.innerHTML = userForm();
 
+//폼
 const emailInput = document.querySelector("#emailInput");
-const passwdInput = document.querySelector("#passwdInput");
-const passwdConfirmInput = document.querySelector("#passwdConfirmInput");
+const currentPasswordInput = document.querySelector("#currentPasswordInput");
+const passwordInput = document.querySelector("#passwordInput");
 const nameInput = document.querySelector("#nameInput");
 const phoneNumInput = document.querySelector("#phoneNumInput");
 const postNumber = document.querySelector("#postNumber");
 const addInput1 = document.querySelector("#addInput1");
 const addInput2 = document.querySelector("#addInput2");
+nameInput.readOnly = true;
 
+//버튼
 const findAddressBtn = document.querySelector("#findAddressBtn");
 const changeBtn = document.querySelector("#changeBtn");
 const deleteBtn = document.querySelector("#deleteBtn");
@@ -26,88 +32,118 @@ findAddressBtn.addEventListener("click", findAddress);
 changeBtn.addEventListener("click", doCheckout);
 deleteBtn.addEventListener("click", userDelete);
 
-// 로그인 한 유저만 접근 가능하게 하기...
+const userDataString = sessionStorage.getItem("userData");
+const userData = JSON.parse(userDataString);
+const userId = userData._id;
 
-// get 기존 유저 정보 불러오기
-const data = [
-  {
-    email: "abc@elice.com",
-    password: "1234",
-    name: "엘리스",
-    phone: "010-1234-5678",
-    post: "04799",
-    address1: "서울 성동구 아차산로17길 48 (성수동2가)",
-    address2: "성수낙낙 2층 엘리스랩",
-  },
-];
-
-// 기존 정보 값 보여주기
+// 유저 정보 가져와서 input에 값 넣기
 async function getUserData() {
-  const userData = data[0];
+  console.log(userId);
+  try {
+    const res = await fetch(`http://34.64.164.169/api/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "bearer " + token,
+      },
+    });
+    const data = await res.json();
+    nameInput.value = data.data.fullName;
+    // currentPasswordInput.value = data.data.password;
+    // passwordInput.value = data.data.password;
+    // postNumber.value = data.address.post;
 
-  nameInput.value = userData.name;
-  passwdInput.value = userData.password;
-  passwdConfirmInput.value = userData.password;
-  postNumber.value = userData.post;
-  addInput1.value = userData.address1;
-  addInput2.value = userData.address2;
-  phoneNumInput.value = userData.phone;
-  emailInput.value = userData.email;
+    const [post, address1, address2] = data.data.address.split("##");
+    postNumber.value = post;
+    addInput1.value = address1;
+    addInput2.value = address2;
+    // addInput2.value = data.address.address2;
+    phoneNumInput.value = data.data.phoneNumber;
+    emailInput.value = data.data.email;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 getUserData();
 
-//입력 값 가져와서 잘 입력했는지 확인
+// 검증 후 정보변경
 async function doCheckout(e) {
   e.preventDefault();
 
-  const name = nameInput.value;
-  const password = passwdInput.value;
-  const passwdConfirm = passwdConfirmInput.value;
-  const post = postNumber.value;
-  const address1 = addInput1.value;
-  const address2 = addInput2.value;
   const email = emailInput.value;
-  const phoneNum = phoneNumInput.value;
+  const currentPassword = currentPasswordInput.value;
+  const password = passwordInput.value;
+  const fullName = nameInput.value;
+  const phoneNumber = phoneNumInput.value;
+  const post = postNumber.value;
+  const address = addInput1.value;
+  const address2 = addInput2.value;
 
   // 비밀번호 입력 안 했을 때
-  if (!password) {
-    return alert("비밀번호를 입력해 주세요.");
-  }
-  // 비밀번호 확인과 비밀번호와 일치하지 않을 때
-  if (passwdConfirm !== password) {
-    return alert("비밀번호가 일치하지 않습니다.");
+  if (!currentPassword) {
+    alert("현재 비밀번호를 입력해 주세요.");
+    return;
   }
 
-  //이메일, 이름, 전화번호 검증
-  checkEmail(email);
-  checkName(name);
-  checkPhoneNumber(phoneNum);
+  if (!checkEmail(email)) {
+    return;
+  }
+  if (!checkName(fullName)) {
+    return;
+  }
+  if (!checkPhoneNumber(phoneNumber)) {
+    return;
+  }
 
-  // 변경된 정보 객체로 저장
-  const userObject = {
+  // 변경된 정보 추출
+  const updatedInfo = {
     email,
+    fullName,
+    currentPassword,
     password,
-    name,
-    phoneNum,
-    post,
-    address1,
-    address2,
+    phoneNumber,
+    address: `${post}##${address}##${address2}`,
   };
 
-  console.log(userObject);
+  console.log(updatedInfo);
 
-  // 회원정보 수정: PATCH
+  // 정보 변경
   try {
-    // await Api.patch(`/`, userObject);
+    const res = await fetch(`http://34.64.164.169/api/users/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "bearer " + token,
+      },
+      body: JSON.stringify(updatedInfo),
+    });
+
+    const data = await res.json();
+    console.log(data);
     alert("회원 정보가 수정되었습니다.");
     window.location.href = "userMyPage.html";
   } catch (err) {
-    console.err(err);
+    console.log(err);
+    alert("변경할 정보가 입력되지 않았습니다.");
   }
 }
-// 회원 탈퇴: DELETE
-function userDelete() {
-  alert("정말 탈퇴 하시겠습니까?");
-  window.location.href = "/";
+
+// 회원 탈퇴
+async function userDelete(e) {
+  e.preventDefault();
+  const confirmed = confirm("정말 탈퇴 하시겠습니까?");
+  if (confirmed) {
+    const res = await fetch(`http://34.64.164.169/api/users/${userId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "bearer " + token,
+      },
+    });
+
+    logout();
+    alert("이용해주셔서 감사합니다.");
+    window.location.href = "index.html";
+  }
 }

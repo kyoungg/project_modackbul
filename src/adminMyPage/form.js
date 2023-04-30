@@ -1,98 +1,131 @@
 export function productForm() {
     const field =
-    `<div class="addproduct-form-container">
-        <form id="productForm">
-            <div>
-                <label for="nameInput">상품이름</label>
-                <div>
-                    <input
+`<div class="container">
+<div class="addproduct-form-container">
+    <form id="productForm" enctype="multipart/form-data">
+        <div>
+            <div class="mb-3">
+                <label for="nameInput" class="form-label">Product Name</label>
+                <input
                     type="text"
+                    class="form-control"
                     id="nameInput"
+                    name="name"
+                    placeholder="상품명 입력"
                     required
                     >
-                </div>
             </div>
-            <div>
-                <label for="priceInput">상품가격</label>
-                <div>
-                    <input
+        </div>
+        <div>
+            <div class="mb-3">
+                <label for="priceInput" class="form-label">Product Pcice</label>
+                <input
                     type="number"
+                    class="form-control"
                     id="priceInput"
+                    name="price"
+                    placeholder="상품가격 입력"
                     required
                     >
-                </div>
             </div>
-            <div>
-                <label for="summaryInput">상품소개</label>
-                <div>
-                    <input
+        </div>
+        <div>
+            <div class="mb-3">
+                <label for="summaryInput" class="form-label">Product Summary</label>
+                <input
                     type="text"
+                    class="form-control"
                     id="summaryInput"
+                    name="summary"
+                    placeholder="상품소개 작성"
                     required
                     >
-                </div>
             </div>
-            <div>
-                <label for="companyInput">제조회사</label>
-                <div>
-                    <input
+        </div>
+        <div>
+            <div class="mb-3">
+                <label for="companyInput" class="form-label">Company</label>
+                <input
                     type="text"
+                    class="form-control"
                     id="companyInput"
+                    name="company"
+                    placeholder="상품 제조회사"
                     required
                     >
-                </div>
             </div>
-            <!-- 카테고리 대분류, 소분류 드롭다운 버튼?-->
-            <!-- 어떻게 구현해야하는지,, -->
-            <div>
-                <label for="category">카테고리</label>
-                <div>
-                    <input
-                    type="text"
-                    id="category_big"
-                    required
-                    >
-                </div>
-                <div>
-                    <input
-                    type="text"
-                    id="category_small"
-                    required
-                    >
-                </div>
+        </div>
+        <div>
+        <div class="mb-3">
+            <label for="categoryInput" class="form-label">Category</label>
+            <input
+                type="text"
+                class="form-control"
+                id="categoryInput"
+                name="category"
+                disabled readonly
+                required
+                >
             </div>
-            <div>
-                <label for="stockInput">재고</label>
-                <div>
-                    <input
+        </div>
+        <div>
+            <div class="mb-3">
+                <label for="stockInput" class="form-label">Product Stock</label>
+                <input
                     type="number"
+                    class="form-control"
                     id="stockInput"
+                    name="stock"
+                    placeholder="재고입력"
                     required
                     >
-                </div>
             </div>
-            <!-- 이미지를 받아와서 삽입해야함. img의 src가 변경되어야합니다! -->
-            <div>
-                <img src="#" class="image-box" />
-                <label for="file" class="upload-btn">
-                <input id="file" type="file" accept="image/*" />
-                </label>
-            </div>
-            </div>
+        </div>
 
-            <div>
-                <label for="descriptionInput">상품상세</label>
-                <div>
-                    <input
+        <div>
+            <div class="mb-3">
+                <!-- <form> -->
+                    <label>
+                        <div><img src="https://cdn.icon-icons.com/icons2/2248/PNG/512/file_upload_icon_136628.png" class="image-box" /></div>
+                    </label>
+
+                    <div class="input-group fileInput">
+                        <input
+                            type="file"
+                            class="form-control"
+                            id="file"
+                            name="imgPath"
+                            aria-describedby="inputGroupFileAddon04"
+                            aria-label="Upload"
+                            >
+                        <button class="btn btn-outline-secondary" type="submt" id="fileUploadBtn">이미지 등록</button>
+                    </div>
+                <!-- </form> -->
+            </div>
+        </div>
+
+        <div>
+            <div class="mb-3">
+                <label for="descriptionInput" class="form-label">Product Description</label>
+                <input
                     type="text"
+                    class="form-control"
                     id="descriptionInput"
+                    name="description"
+                    placeholder="상품상세 입력"
                     required
                     >
-                </div>
             </div>
-            <div id="editBtn"><button type="submit">등록</div>
-        </form>
-        </div>`;
+        </div>
+
+            <div class="d-flex  justify-content-center">
+                <button id="saveProductBtn" type="submit" class="btn btn-dark ms-2">Save</button>
+                <button id="cancelBtn" type="button"  class="btn btn-outline-danger ms-2">Cancle</button>
+            </div>
+    </form>
+</div>
+</div>
+`;
   
     return field;
   }

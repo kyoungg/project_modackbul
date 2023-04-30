@@ -1,107 +1,158 @@
 import { productForm } from "./form.js";
+import { checkAuth } from "../utils/index.js";
 
-const main = document.querySelector('.common')
+const { isAdmin, token } = checkAuth();
+
+addcreateOption();
+
+const main = document.querySelector(".common");
 
 main.innerHTML = productForm();
 
-const nameInput = document.querySelector("#nameInput")
+const nameInput = document.querySelector("#nameInput");
 const priceInput = document.querySelector("#priceInput");
 const summaryInput = document.querySelector("#summaryInput");
 const companyInput = document.querySelector("#companyInput");
-//카테고리-드롭다운 버튼 구현 방법?
+const categoryInput = document.querySelector("#categoryInput");
 const stockInput = document.querySelector("#stockInput");
 const descriptionInput = document.querySelector("#descriptionInput");
 
-const editBtn = document.querySelector("#editBtn");
+const saveProductBtn = document.querySelector("#saveProductBtn");
 const cancelBtn = document.querySelector("#cancelBtn");
 
 //이미지 preview
-const fileDOM = document.querySelector('#file');
-const preview = document.querySelector('.image-box');
+const fileDOM = document.querySelector("#file");
+const preview = document.querySelector(".image-box");
 
-fileDOM.addEventListener('change', () => {
+fileDOM.addEventListener("change", () => {
   const imageSrc = URL.createObjectURL(fileDOM.files[0]);
   preview.src = imageSrc;
 });
 
-editBtn.addEventListener('click', editProduct)
+//수정버튼 클릭시
+saveProductBtn.addEventListener("click", editProductData);
 
-cancelBtn.addEventListener('click', () => {
-    window.location.href = "/admin-productListPage";
-})
+//취소버튼 클릭시
+cancelBtn.addEventListener("click", () => {
+  window.location.href = "/admin-productListPage";
+});
 
-//난 더미데이터, 나중에 지워주세용
-const Data = [
-    {
-      name: "포근 담요",
-      price: 12000,
-      //category: 대분류,소분류
-      description: "뉴질랜드 양 티미의 털로 만든 가로세로 1cm 양털 담요입니다",
-      summary: "양털로 만든 담요",
-      company: "sad sheep",
-      stock: 20,
-      img : "https://stock.adobe.com/kr/templates/can-mockup/591789500"
-    },
-  ];
+insertProductElement();
 
-  insertProductElement();
+//카테고리 추가 함수
+async function addcreateOption() {
+  //통신으로 category 받아오기
+  const data = await getcategoryData();
+  const categorydata = data.data;
 
-//기존 데이터 받아와서 보여주는 함수
-async function insertProductElement() {
-    //특정 상품 정보 조회하는 부분입니다~ im GET!
-    // const res = await fetch(`/api/products/:name`)
-    // const data = await res.json()
+  for (let i = 0; i < categorydata.length; i++) {
+    const data = categorydata[i];
+    const categoryName = data.name;
 
-    const data = Data[0]
-
-    nameInput.value = data.name;
-    priceInput.value = data.price;
-    summaryInput.value = data.summary;
-    companyInput.value = data.company;
-    stockInput.value = data.stock;
-    descriptionInput.value = data.description;
-    preview.src = data.img; //기존 이미지 프리뷰가 안됨...어째서?
+    categoryInput.insertAdjacentHTML(
+      "beforeend",
+      `<option name="category" value="${categoryName}">${categoryName}</option>`
+    );
+  }
 }
 
-async function editProduct(e) {
-        e.preventDefault
-    
-        const name = nameInput.value;
-        const price = priceInput.value;
-        const summary = summaryInput.value;
-        const company = companyInput.value;
-        //카테고리
-        const stock = stockInput.value;
-        //이미지
-        const description = descriptionInput.value;
+//카테고리 통신으로 받아오는 함수
+async function getcategoryData() {
+  const apiUrl = "http://34.64.164.169/api/categories";
 
-        const productdata = {
-            name,
-            price,
-            //카테고리
-            description,
-            summary,
-            company,
-            stock,
-            //이미지
-        };
-    
-        const dataJson = JSON.stringify(productdata)
-    
-        const apiUrl = `/api/products/:productId`
-    
-        const res = await fetch(apiUrl, {
-        method: 'PATCH',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-        body: dataJson,
-        });
-    
-        if (res.status === "응답성공시") {
-        alert("상품 수정에 성공하였습니다!")
-        } else {
-        alert("상품 수정에 실패하였습니다...")
-        }
-    
-    }
+  const res = await fetch(apiUrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    return data;
+  } else {
+    alert(`카테고리 로딩이 실패했습니다...`);
+  }
+}
+
+//기존 데이터 받아와서 화면에 표시
+async function insertProductElement() {
+  //로컬에 상품 정보가 같이 넘어온 상태라면
+  if (sessionStorage.getItem("targetName")) {
+    const targetName = sessionStorage.getItem("targetName");
+
+    const data = await getProductData();
+    const productdata = data.data;
+    const productId = productdata._id;
+
+    //상품 오브젝트 id를 받아서 세션에 저장
+    sessionStorage.setItem("productId", productId);
+
+    nameInput.value = productdata.name;
+    priceInput.value = productdata.price;
+    summaryInput.value = productdata.summary;
+    companyInput.value = productdata.company;
+    stockInput.value = productdata.stock;
+    descriptionInput.value = productdata.description;
+    categoryInput.value = productdata.category;
+    preview.src = productdata.imgPath; //이미지
+
+    preview.setAttribute("src", `http://34.64.164.169/${productdata.imgPath}`);
+  } else {
+    alert("잘못된 경로입니다!");
+    window.location.href = "/index.html";
+  }
+  return;
+}
+
+//특정상품 API통신으로 조회해서 데이터값을 받아옴
+async function getProductData() {
+  const targetName = sessionStorage.getItem("targetName");
+
+  const apiUrl = `http://34.64.164.169/api/products/${targetName}`;
+
+  const res = await fetch(apiUrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "bearer " + token,
+    },
+  });
+
+  if (res.ok) {
+    const data = await res.json();
+    return data;
+  } else {
+    alert(`페이지 로딩이 실패했습니다...`);
+  }
+}
+
+//save 버튼을 누르면 기존 값을 변경해서 새로 수정함
+async function editProductData(e) {
+  e.preventDefault();
+
+  //수정할 상품의 오브젝id값을 세션에서 가져옴
+  const productId = sessionStorage.getItem("productId");
+  console.log(productId);
+
+  //변경된 수정사항 updateData에 저장
+  const updateData = new FormData(document.querySelector("#productForm"));
+
+  console.log([...updateData]);
+
+  const apiUrl = `http://34.64.164.169/api/products/${productId}`;
+
+  const res = await fetch(apiUrl, {
+    method: "PATCH",
+    // headers: {
+    //   Authorization : "bearer " + token,
+    // },
+    body: updateData,
+  });
+  if (res.ok) {
+    alert("상품 정보가 수정되었습니다!");
+    window.location.href = "/admin-ProductListPage.html";
+  } else {
+    alert("상품 정보 수정에 실패하였습니다...");
+  }
+}

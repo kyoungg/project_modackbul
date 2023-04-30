@@ -3,26 +3,34 @@ import {
   SUMMARY_KEY_LIST,
   SUMMARY_PHRASE_LIST,
 } from "./const.js";
-import { checkEmail, checkName, checkPhoneNumber } from "../utils/index.js";
+import {
+  checkEmail,
+  checkName,
+  checkPhoneNumber,
+  findAddress,
+  getUserData,
+  chageNumberToLocaleString,
+  checkAuth,
+} from "../utils/index.js";
 
-// localStorage에서 데이터 전달 받고, 바로 localStorage 삭제
-// 그런데, 이러면 새로고침했을 때 데이터가 없어진 상태라서 문제가 발생...
+const { isLoggedIn, token } = checkAuth();
+
 const orderData = JSON.parse(localStorage.getItem(STORAGE_NAME));
-console.log(orderData);
-// localStorage.removeItem(STORAGE_NAME);
 
 /**
  * 주문 진행을 위한 구매 예정 데이터를 렌더링하는 함수
  */
 function renderOrder() {
   // 주문 요약 보여주기
-  const summaryDiv = document.getElementsByClassName("order_summary")[0];
+  const summaryDiv = document.querySelector(".order_summary");
 
-  // const img = document.createElement("img");
-  // img.src = "";
-  // img.alt = "";
+  const img = document.createElement("img");
+  img.src = `http://34.64.164.169/${orderData.data[0].imgURL}`;
+  img.alt = "상품 이미지";
+  img.classList.add("rounded", "me-5");
 
   const ul = document.createElement("ul");
+  ul.classList.add("m-0", "p-0");
 
   for (let i = 0; i < SUMMARY_PHRASE_LIST(orderData).length; i++) {
     const li = document.createElement("li");
@@ -33,16 +41,15 @@ function renderOrder() {
     ul.appendChild(li);
   }
 
-  // summaryDiv.appendChild(img);
+  summaryDiv.appendChild(img);
   summaryDiv.appendChild(ul);
 
   // 로그인 여부에 따라 getUserData를 할지 말지 분기 처리
-  const isLoggedIn = true; // 목업 로그인
   if (isLoggedIn) {
     // 로그인 유저의 경우 DB에서 가져온 유저 데이터를 보여주고, 해당 데이터들의 input 태그는 disabled 처리
-    // 휴대폰 번호와 주소의 경우, 회원가입 시 등록하지 않는다.
-    // 이 부분에 대해서도 분기 처리가 필요하지 않을까?
-    const { email, id, phoneNumber, name } = getUserData();
+    const { email, fullName, phoneNumber, address } = getUserData();
+
+    const [postNumber, address1, address2] = address.split("##");
 
     const input = document.getElementsByTagName("input");
 
@@ -53,7 +60,7 @@ function renderOrder() {
       }
 
       if (input[i].id === "name_input") {
-        input[i].value = name;
+        input[i].value = fullName;
         input[i].disabled = true;
       }
 
@@ -61,35 +68,26 @@ function renderOrder() {
         input[i].value = phoneNumber;
         input[i].disabled = true;
       }
+
+      if (input[i].id === "postNumber") {
+        input[i].value = postNumber;
+        input[i].disabled = true;
+      }
+
+      if (input[i].id === "addInput1") {
+        input[i].value = address1;
+        input[i].disabled = true;
+      }
+
+      if (input[i].id === "addInput2") {
+        input[i].value = address2;
+        input[i].disabled = true;
+      }
     }
   }
 }
 
-/**
- * 로그인한 유저의 기본 정보를 가져오는 함수
- * @returns {String} 이메일, 아이디, 휴대폰 번호, 이름
- */
-function getUserData() {
-  // async 앞에 붙여주기
-  // 유저 데이터를 얻기 위한 API 통신
-  // const { email, id, phoneNumber, name } = await fetch("url", {
-  //   method: "GET",
-  // });
-
-  // 더미 데이터
-  const data = {
-    email: "hi@hi.com",
-    id: "afsadfefesf",
-    phoneNumber: "010-1234-5678",
-    name: "박기영",
-  };
-
-  const { email, id, phoneNumber, name } = data;
-
-  return { email, id, phoneNumber, name };
-}
-
-const orderBtn = document.getElementsByClassName("order_btn")[0];
+const orderBtn = document.querySelector(".order_btn");
 
 orderBtn.addEventListener("click", orderHandler);
 
@@ -97,13 +95,22 @@ orderBtn.addEventListener("click", orderHandler);
  * 주문하기 버튼 클릭 시, 유저의 데이터와 주문 데이터를 병합하여 API 통신을 진행하는 함수.
  * API 통신으로 주문 번호를 받아온 뒤, 이를 localStorage에 저장하고 주문 완료 페이지로 이동한다.
  */
-function orderHandler() {
+async function orderHandler() {
   const email = document.getElementById("email_input").value;
   const name = document.getElementById("name_input").value;
   const phoneNumber = document.getElementById("phone_input").value;
-  const address = document.getElementById("address_input").value;
+  const postNumber = document.getElementById("postNumber").value;
+  const address1 = document.getElementById("addInput1").value;
+  const address2 = document.getElementById("addInput2").value;
 
-  if (email === "" || name === "" || phoneNumber === "" || address === "") {
+  if (
+    email === "" ||
+    name === "" ||
+    phoneNumber === "" ||
+    postNumber === "" ||
+    address1 === "" ||
+    address2 === ""
+  ) {
     return alert("모든 정보를 입력해주세요.");
   }
 
@@ -116,103 +123,103 @@ function orderHandler() {
     return;
   }
 
-  // 주소 검증
+  let cartIdArr = [];
 
-  const purchaseData = {
-    orderNumber: createOrderNumber(),
-    email,
-    name,
-    phoneNumber,
-    address,
-    orderData,
-  };
-
-  console.log(purchaseData);
-
-  // async 추가하기
-  // API 통신으로 주문번호 받아오기
-  // body에 있는 데이터로 해시 암호화?
-  // let orderNumber = await fetch("url", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: purchaseData,
-  // });
-
-  // 주문 완료 페이지로 이동
-  // window.location.href = "orderedPage.html";
-}
-
-/**
- * 오늘의 날짜를 YYMMDD 형태로 생성하는 함수
- * @returns {String} YYMMDD 형태의 년/월/일
- */
-function createDateYYMMDD() {
-  const date = new Date();
-  const year = String(date.getFullYear() - 2000);
-  const month = String(date.getMonth() + 1).padStart(2, 0);
-  const day = String(date.getDate()).padStart(2, 0);
-
-  return `${year}${month}${day}`;
-}
-
-// 그런데 이렇게 하면 이 페이지를 새로 들어올 때마다 num이 1이 되지 않나?
-// 24시간 체크 함수가 의미가 없잖아....
-let num = 1;
-
-/**
- *
- * @returns {String} 001 ~ 999 사이의 숫자
- */
-function createThreeDigitNumber() {
-  // num이 999가 넘어가면 1로 초기화
-  if (num > 999) {
-    num = 1;
+  for (let i = 0; i < orderData.data.length; i++) {
+    cartIdArr.push(orderData.data[i]._id);
   }
 
-  // 하루가 지나면 num을 1로 초기화
-  if (true) {
+  // 회원 주문 API 통신
+  if (isLoggedIn) {
+    const purchaseData = {
+      customerId: getUserData()._id,
+      customerPhoneNumber: phoneNumber,
+      customerAddress: `${postNumber}##${address1}##${address2}`,
+      cart: cartIdArr,
+      total: orderData.total,
+    };
+
+    try {
+      // API 통신으로 주문번호 받아오기
+      const response = await fetch("http://34.64.164.169/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "bearer " + token,
+        },
+        body: JSON.stringify(purchaseData),
+      });
+
+      const responseData = await response.json();
+
+      localStorage.setItem("orderedData", JSON.stringify(responseData.data));
+
+      if (response.ok) {
+        // 주문 완료 페이지로 이동
+        window.location.href = "orderedPage.html";
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  const threeDigitNum = String(num).padStart(3, 0);
+  // 비회원 주문 API 통신
+  if (!isLoggedIn) {
+    const purchaseData = {
+      customerName: name,
+      customerEmail: email,
+      customerPhoneNumber: phoneNumber,
+      customerAddress: `${postNumber}##${address1}##${address2}`,
+      // cart: cartIdArr,
+      total: orderData.total,
+    };
 
-  num++;
+    try {
+      // API 통신으로 주문번호 받아오기
+      const response = await fetch(
+        "http://34.64.164.169/api/orders/nonmember",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(purchaseData),
+        }
+      );
 
-  return String(threeDigitNum);
+      const responseData = await response.json();
+
+      const cartData = JSON.parse(localStorage.getItem("cartData"));
+
+      const data = { ...responseData.data, cart: cartData };
+
+      localStorage.setItem("orderedData", JSON.stringify(data));
+
+      if (response.ok) {
+        // 주문 완료 페이지로 이동
+        window.location.href = "orderedPage.html";
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
 
-// 24시가 지났는지 판별하는 함수
-// function checkDateIsToday(curDate) {
-//   var today, resultDate;
-//   today = new Date();
-//   resultDate = new Date(curDate);
-
-//   // Time (minutes * seconds * millisecond)
-//   if ((today - resultDate) / (60 * 60 * 1000) <= 24) {
-//     // 하루 이전 글인 경우 여기에 코드 작성
-//   } else {
-//     // 하루 이후 글인 경우 여기에 코드 작성
-//   }
-// }
-
-/**
- * 주문 번호를 생성하는 함수
- * @returns {String} 주문번호 YYMMDD + (001 ~ 999 사이의 숫자)
- */
-function createOrderNumber() {
-  const YYMMDD = createDateYYMMDD();
-  const THREE_DIGIT_NUM = createThreeDigitNumber();
-
-  return `${YYMMDD}${THREE_DIGIT_NUM}`;
-}
-
-const cancelBtn = document.getElementsByClassName("cancel_btn")[0];
+const cancelBtn = document.querySelector(".cancel_btn");
 
 cancelBtn.addEventListener("click", cancelHandler);
 
+/**
+ * 취소하기 버튼 클릭 시, 이전 페이지로 이동하는 함수
+ */
 function cancelHandler() {
-  // 뒤로 이동?
+  // 이전 페이지로 이동
+  // 장바구니 페이지에서 접근했을 수도 있고, 제품 상세 페이지에서 접근했을 수도 있다.
+  window.location.href = document.referrer;
 }
+
+const findAddressBtn = document.querySelector(".find_address_btn");
+
+findAddressBtn.addEventListener("click", findAddress);
 
 renderOrder();
